@@ -1,11 +1,11 @@
 #include "filter.h"
 #include "path_info.h"
-#include <command/parser.h>
-#include <command/runner.h>
-#include <text/utf8.h>
-#include <regexp/regexp.h>
-#include <settings/settings.h>
-#include <io/path.h>
+#include <command/src/parser.h>
+#include <command/src/runner.h>
+#include <text/src/utf8.h>
+#include <regexp/src/regexp.h>
+#include <settings/src/settings.h>
+#include <io/src/path.h>
 #include <oak/debug.h>
 
 static std::vector<bundles::item_ptr> binary_filters (std::string const& event, std::string const& pathAttributes, io::bytes_ptr content)

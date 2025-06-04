@@ -1,9 +1,9 @@
-#import <text/types.h>
-#import <authorization/authorization.h>
-#import <selection/types.h>
-#import <command/parser.h>
-#import <regexp/find.h> // find::options_t
-#import <scm/scm.h>
+#import <text/src/types.h>
+#import <authorization/src/authorization.h>
+#import <selection/src/types.h>
+#import <command/src/parser.h>
+#import <regexp/src/find.h> // find::options_t
+#import <scm/src/scm.h>
 
 extern NSNotificationName const OakDocumentContentDidChangeNotification;
 extern NSNotificationName const OakDocumentMarksDidChangeNotification;

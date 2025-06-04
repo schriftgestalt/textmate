@@ -186,7 +186,7 @@ namespace utf8
 		}
 	};
 
-	static struct { char mask, expect; } const UTF8LengthCodes[] =
+	static struct { unsigned char mask, expect; } const UTF8LengthCodes[] =
 	{
 		{ 0b10000000, 0b00000000 },
 		{ 0b11100000, 0b11000000 },

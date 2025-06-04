@@ -9,23 +9,23 @@
 #import "OFB/OFBHeaderView.h"
 #import "OFB/OFBActionsView.h"
 #import "OFB/OFBFinderTagsChooser.h"
-#import <MenuBuilder/MenuBuilder.h>
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <OakAppKit/NSImage Additions.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakOpenWithMenu.h>
-#import <OakAppKit/OakFinderTag.h>
-#import <OakAppKit/OakZoomingIcon.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakCommand/OakCommand.h>
-#import <TMFileReference/TMFileReference.h>
-#import <Preferences/Keys.h>
-#import <bundles/bundles.h>
-#import <ns/ns.h>
-#import <regexp/glob.h>
-#import <settings/settings.h>
-#import <text/ctype.h>
-#import <text/utf8.h>
+#import <MenuBuilder/src/MenuBuilder.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakOpenWithMenu.h>
+#import <OakAppKit/src/OakFinderTag.h>
+#import <OakAppKit/src/OakZoomingIcon.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakCommand/src/OakCommand.h>
+#import <TMFileReference/src/TMFileReference.h>
+#import <Preferences/src/Keys.h>
+#import <bundles/src/bundles.h>
+#import <ns/src/ns.h>
+#import <regexp/src/glob.h>
+#import <settings/src/settings.h>
+#import <text/src/my_ctype.h>
+#import <text/src/utf8.h>
 
 static bool is_binary (std::string const& path)
 {

@@ -2,9 +2,9 @@
 #define LAYOUT_H_VWUBRBQ1
 
 #include "paragraph.h"
-#include <buffer/buffer.h>
-#include <selection/selection.h>
-#include <theme/theme.h>
+#include <buffer/src/buffer.h>
+#include <selection/src/selection.h>
+#include <theme/src/theme.h>
 #include <oak/basic_tree.h>
 namespace ct { struct metrics_t; struct line_t; };
 

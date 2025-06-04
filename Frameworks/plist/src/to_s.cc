@@ -1,8 +1,8 @@
 #include "plist.h"
 #include <oak/oak.h>
-#include <text/format.h>
-#include <text/hexdump.h>
-#include <text/utf8.h>
+#include <text/src/format.h>
+#include <text/src/hexdump.h>
+#include <text/src/utf8.h>
 
 namespace
 {

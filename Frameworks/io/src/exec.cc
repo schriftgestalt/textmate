@@ -1,9 +1,9 @@
 #include "exec.h"
 #include "environment.h"
 #include "pipe.h"
-#include <text/format.h>
+#include <text/src/format.h>
 #include <oak/datatypes.h>
-#include <crash/info.h>
+#include <crash/src/info.h>
 
 namespace io
 {

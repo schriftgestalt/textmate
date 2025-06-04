@@ -1,6 +1,6 @@
 #ifndef TEXT_CDEF_H_GWU81P7L
 #define TEXT_CDEF_H_GWU81P7L
-
+#include <locale>
 namespace text
 {
 	inline bool is_word_char (uint32_t ch)

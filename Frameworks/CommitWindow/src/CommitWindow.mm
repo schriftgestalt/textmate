@@ -2,20 +2,20 @@
 #import "CWItem.h"
 #import "CWStatusStringTransformer.h"
 #import "CWTableCellView.h"
-#import <OakAppKit/NSAlert Additions.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakTextView/OakDocumentView.h>
-#import <document/OakDocument.h>
-#import <bundles/bundles.h>
-#import <io/io.h>
-#import <regexp/format_string.h>
-#import <text/trim.h>
-#import <text/tokenize.h>
-#import <text/parse.h>
-#import <ns/ns.h>
+#import <OakAppKit/src/NSAlert Additions.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakTextView/src/OakDocumentView.h>
+#import <document/src/OakDocument.h>
+#import <bundles/src/bundles.h>
+#import <io/src/io.h>
+#import <regexp/src/format_string.h>
+#import <text/src/trim.h>
+#import <text/src/tokenize.h>
+#import <text/src/parse.h>
+#import <ns/src/ns.h>
 #import <oak/oak.h>
-#import <plist/uuid.h>
+#import <plist/src/uuid.h>
 
 @interface actionCommandObj : NSObject
 @property (nonatomic, readonly) NSString* name;

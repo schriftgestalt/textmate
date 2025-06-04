@@ -1,8 +1,8 @@
 #import "BundlesPreferences.h"
-#import <BundlesManager/BundlesManager.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakAppKit/OakScopeBarView.h>
+#import <BundlesManager/src/BundlesManager.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/OakScopeBarView.h>
 
 static NSUserInterfaceItemIdentifier const kTableColumnIdentifierInstalled   = @"Installed";
 static NSUserInterfaceItemIdentifier const kTableColumnIdentifierBundleName  = @"BundleName";

@@ -1,9 +1,9 @@
 #import "NSMenuItem Additions.h"
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <text/case.h>
-#import <text/utf8.h>
-#import <ns/ns.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <text/src/case.h>
+#import <text/src/utf8.h>
+#import <ns/src/ns.h>
 
 @interface MenuAttributedString : NSAttributedString
 @property (nonatomic) NSAttributedString* wrappedAttributedString;

@@ -1,10 +1,10 @@
 #import "SoftwareUpdatePreferences.h"
 #import "Keys.h"
-#import <OakAppKit/NSImage Additions.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakFoundation/OakStringListTransformer.h>
-#import <SoftwareUpdate/SoftwareUpdate.h>
-#import <MenuBuilder/MenuBuilder.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakFoundation/src/OakStringListTransformer.h>
+#import <SoftwareUpdate/src/SoftwareUpdate.h>
+#import <MenuBuilder/src/MenuBuilder.h>
 
 @interface SoftwareUpdatePreferences ()
 {

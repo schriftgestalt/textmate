@@ -1,10 +1,10 @@
 #import "AboutWindowController.h"
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <BundlesManager/BundlesManager.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <BundlesManager/src/BundlesManager.h>
 // #import <license/LicenseManager.h>
-#import <ns/ns.h>
+#import <ns/src/ns.h>
 
 static NSString* const kUserDefaultsReleaseNotesDigestKey = @"releaseNotesDigest";
 

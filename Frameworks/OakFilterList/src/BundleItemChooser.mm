@@ -1,22 +1,22 @@
 #import "BundleItemChooser.h"
 #import "OakAbbreviations.h"
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakAppKit/OakKeyEquivalentView.h>
-#import <OakAppKit/OakScopeBarView.h>
-#import <OakAppKit/NSColor Additions.h>
-#import <OakAppKit/NSImage Additions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakSystem/application.h>
-#import <TMFileReference/TMFileReference.h>
-#import <bundles/bundles.h>
-#import <settings/settings.h>
-#import <text/ranker.h>
-#import <text/case.h>
-#import <text/ctype.h>
-#import <regexp/format_string.h>
-#import <ns/ns.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/OakKeyEquivalentView.h>
+#import <OakAppKit/src/OakScopeBarView.h>
+#import <OakAppKit/src/NSColor Additions.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakSystem/src/application.h>
+#import <TMFileReference/src/TMFileReference.h>
+#import <bundles/src/bundles.h>
+#import <settings/src/settings.h>
+#import <text/src/ranker.h>
+#import <text/src/case.h>
+#import <text/src/my_ctype.h>
+#import <regexp/src/format_string.h>
+#import <ns/src/ns.h>
 
 static NSUInteger const kBundleItemTitleField          = 0;
 static NSUInteger const kBundleItemKeyEquivalentField  = 1;

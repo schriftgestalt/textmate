@@ -1,7 +1,7 @@
 #ifndef BASIC_TREE_H_7EA7G2TN
 #define BASIC_TREE_H_7EA7G2TN
 
-#include <text/format.h>
+#include <text/src/format.h>
 #include <oak/debug.h>
 
 namespace oak

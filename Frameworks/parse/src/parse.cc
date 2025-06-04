@@ -1,9 +1,9 @@
 #include "grammar.h"
 #include "private.h"
-#include <regexp/regexp.h>
-#include <regexp/format_string.h>
-#include <bundles/bundles.h>
-#include <text/utf8.h>
+#include <regexp/src/regexp.h>
+#include <regexp/src/format_string.h>
+#include <bundles/src/bundles.h>
+#include <text/src/utf8.h>
 #include <oak/oak.h>
 
 static size_t const kParserMaxLineSize = 4096;

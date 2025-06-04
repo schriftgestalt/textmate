@@ -1,10 +1,10 @@
 #include "type.h"
 #include "path_info.h"
-#include <settings/settings.h>
-#include <bundles/bundles.h>
-#include <regexp/regexp.h>
-#include <regexp/glob.h>
-#include <cf/cf.h>
+#include <settings/src/settings.h>
+#include <bundles/src/bundles.h>
+#include <regexp/src/regexp.h>
+#include <regexp/src/glob.h>
+#include <cf/src/cf.h>
 #include <oak/debug.h>
 
 // =====================

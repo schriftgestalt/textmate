@@ -1,7 +1,7 @@
 #include "load.h"
-#include <plist/delta.h>
-#include <regexp/glob.h>
-#include <text/format.h>
+#include <plist/src/delta.h>
+#include <regexp/src/glob.h>
+#include <text/src/format.h>
 #include <oak/debug.h>
 
 static std::string const kSeparatorString = "------------------------------------";

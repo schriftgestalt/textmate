@@ -4,30 +4,30 @@
 #import "EncodingView.h"
 #import "Printing.h"
 #import "merge.h"
-#import <FileBrowser/FileItemImage.h>
-#import <FileBrowser/KEventManager.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakAppKit/OakEncodingPopUpButton.h>
-#import <OakAppKit/OakSavePanel.h>
-#import <OakAppKit/NSAlert Additions.h>
-#import <TMFileReference/TMFileReference.h>
-#import <BundlesManager/BundlesManager.h>
-#import <authorization/constants.h>
-#import <cf/run_loop.h>
-#import <ns/ns.h>
-#import <settings/settings.h>
-#import <buffer/buffer.h>
-#import <undo/undo.h>
-#import <selection/types.h>
-#import <text/newlines.h>
-#import <text/utf8.h>
-#import <io/entries.h>
-#import <file/type.h>
-#import <file/open.h>
-#import <file/save.h>
-#import <file/reader.h>
-#import <encoding/encoding.h>
+#import <FileBrowser/src/FileItemImage.h>
+#import <FileBrowser/src/KEventManager.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakAppKit/src/OakEncodingPopUpButton.h>
+#import <OakAppKit/src/OakSavePanel.h>
+#import <OakAppKit/src/NSAlert Additions.h>
+#import <TMFileReference/src/TMFileReference.h>
+#import <BundlesManager/src/BundlesManager.h>
+#import <authorization/src/constants.h>
+#import <cf/src/run_loop.h>
+#import <ns/src/ns.h>
+#import <settings/src/settings.h>
+#import <buffer/src/buffer.h>
+#import <undo/src/undo.h>
+#import <selection/src/types.h>
+#import <text/src/newlines.h>
+#import <text/src/utf8.h>
+#import <io/src/entries.h>
+#import <file/src/type.h>
+#import <file/src/open.h>
+#import <file/src/save.h>
+#import <file/src/reader.h>
+#import <encoding/src/encoding.h>
 
 namespace document
 {

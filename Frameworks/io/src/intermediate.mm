@@ -1,7 +1,7 @@
 #include "intermediate.h"
 #include "path.h"
-#include <ns/ns.h>
-#include <text/format.h>
+#include <ns/src/ns.h>
+#include <text/src/format.h>
 #include <oak/debug.h>
 
 __attribute__ ((format (printf, 1, 2))) static std::string format_error (char const* format, ...)

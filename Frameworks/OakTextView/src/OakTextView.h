@@ -1,7 +1,7 @@
 #import "GutterView.h"
-#import <OakAppKit/OakView.h>
-#import <theme/theme.h>
-#import <command/parser.h>
+#import <OakAppKit/src/OakView.h>
+#import <theme/src/theme.h>
+#import <command/src/parser.h>
 #import <oak/debug.h>
 
 extern int32_t const NSWrapColumnWindowWidth;

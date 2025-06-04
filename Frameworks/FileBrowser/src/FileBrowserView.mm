@@ -2,7 +2,7 @@
 #import "FileBrowserOutlineView.h"
 #import "OFB/OFBHeaderView.h"
 #import "OFB/OFBActionsView.h"
-#import <OakAppKit/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
 
 @interface FileBrowserView () <NSAccessibilityGroup>
 @property (nonatomic) NSScrollView* scrollView;

@@ -1,8 +1,8 @@
 #include "scope.h"
 #include "parse.h"
-#include <text/format.h>
-#include <text/parse.h>
-#include <text/tokenize.h>
+#include <text/src/format.h>
+#include <text/src/parse.h>
+#include <text/src/tokenize.h>
 #include <oak/oak.h>
 
 namespace scope

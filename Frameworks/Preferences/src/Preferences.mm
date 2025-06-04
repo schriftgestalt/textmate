@@ -6,7 +6,7 @@
 #import "SoftwareUpdatePreferences.h"
 #import "TerminalPreferences.h"
 #import "Keys.h"
-#import <OakAppKit/OakTransitionViewController.h>
+#import <OakAppKit/src/OakTransitionViewController.h>
 
 static NSString* const kMASPreferencesFrameTopLeftKey = @"MASPreferences Frame Top Left";
 static NSString* const kMASPreferencesSelectedViewKey = @"MASPreferences Selected Identifier View";

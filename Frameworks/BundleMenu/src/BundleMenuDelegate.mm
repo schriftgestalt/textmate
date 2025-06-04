@@ -1,7 +1,7 @@
 #import "Private.h"
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <OakFoundation/NSString Additions.h>
-#import <ns/ns.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <ns/src/ns.h>
 #import <oak/debug.h>
 
 @interface NSObject (HasSelection)

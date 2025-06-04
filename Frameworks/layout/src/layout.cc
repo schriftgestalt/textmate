@@ -3,13 +3,13 @@
 #include "ct.h"
 #include "folds.h"
 #include "paragraph.h"
-#include <cf/cf.h>
-#include <cf/cgrect.h>
-#include <text/parse.h>
-#include <text/utf8.h>
-#include <text/ctype.h>
+#include <cf/src/cf.h>
+#include <cf/src/cgrect.h>
+#include <text/src/parse.h>
+#include <text/src/utf8.h>
+#include <text/src/my_ctype.h>
 #include <oak/debug.h>
-#include <crash/info.h>
+#include <crash/src/info.h>
 
 // ====================
 // = Helper Functions =

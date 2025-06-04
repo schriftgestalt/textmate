@@ -1,13 +1,13 @@
 #import "GutterView.h"
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/NSImage Additions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <Preferences/Keys.h>
-#import <text/types.h>
-#import <cf/cf.h>
-#import <cf/cgrect.h>
-#import <crash/info.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <Preferences/src/Keys.h>
+#import <text/src/types.h>
+#import <cf/src/cf.h>
+#import <cf/src/cgrect.h>
+#import <crash/src/info.h>
 #import <oak/debug.h>
 #import <oak/oak.h>
 

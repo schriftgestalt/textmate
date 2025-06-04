@@ -1,7 +1,7 @@
 #include "snippet.h"
 #include "dependency_graph.h"
 #include <oak/oak.h>
-#include <text/parse.h>
+#include <text/src/parse.h>
 #include <oak/debug.h>
 
 namespace snippet

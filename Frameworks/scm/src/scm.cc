@@ -2,9 +2,9 @@
 #include "drivers/api.h"
 #include "snapshot.h"
 #include "fs_events.h"
-#include <io/path.h>
-#include <text/format.h>
-#include <settings/settings.h>
+#include <io/src/path.h>
+#include <text/src/format.h>
+#include <settings/src/settings.h>
 
 namespace scm
 {

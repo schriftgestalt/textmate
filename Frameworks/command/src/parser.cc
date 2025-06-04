@@ -1,6 +1,6 @@
 #include "parser.h"
-#include <bundles/bundles.h>
-#include <text/case.h>
+#include <bundles/src/bundles.h>
+#include <text/src/case.h>
 
 static size_t index_of (size_t i, std::string const& needle)
 {

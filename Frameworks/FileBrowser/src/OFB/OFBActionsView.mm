@@ -1,7 +1,7 @@
 #import "OFBActionsView.h"
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakAppKit/NSImage Additions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/NSImage Additions.h>
 
 static NSButton* OakCreateImageButton (NSImage* image)
 {

@@ -1,4 +1,4 @@
-#import <bundles/item.h>
+#import <bundles/src/item.h>
 
 @class OakDocument;
 

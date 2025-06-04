@@ -1,6 +1,6 @@
 #include "fs_events.h"
-#include <io/path.h>
-#include <cf/cf.h>
+#include <io/src/path.h>
+#include <cf/src/cf.h>
 
 namespace scm
 {

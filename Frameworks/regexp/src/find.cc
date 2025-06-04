@@ -1,8 +1,8 @@
 #include "find.h"
 #include "private.h"
 #include <Onigmo/oniguruma.h>
-#include <text/utf8.h>
-#include <cf/cf.h>
+#include <text/src/utf8.h>
+#include <cf/src/cf.h>
 
 namespace find
 {

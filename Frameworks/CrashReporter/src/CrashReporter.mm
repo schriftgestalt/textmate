@@ -1,5 +1,5 @@
 #import "CrashReporter.h"
-#import <Preferences/Keys.h>
+#import <Preferences/src/Keys.h>
 #import <UserNotifications/UserNotifications.h>
 #import <oak/misc.h>
 

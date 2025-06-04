@@ -1,6 +1,6 @@
 #import "OakDebug.h"
 #import <oak/oak.h>
-#import <text/format.h>
+#import <text/src/format.h>
 
 @interface OakExceptionHandlerDelegate : NSObject { }
 @end

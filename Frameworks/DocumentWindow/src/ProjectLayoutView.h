@@ -1,4 +1,4 @@
-#import <OakTabBarView/OakTabBarView.h>
+#import <OakTabBarView/src/OakTabBarView.h>
 
 @interface ProjectLayoutView : NSView
 @property (nonatomic) NSView* documentView;

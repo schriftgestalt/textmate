@@ -1,13 +1,13 @@
 #import "OTVStatusBar.h"
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/NSImage Additions.h>
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakFoundation/NSString Additions.h>
-#import <MenuBuilder/MenuBuilder.h>
-#import <bundles/bundles.h>
-#import <text/ctype.h>
-#import <ns/ns.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <MenuBuilder/src/MenuBuilder.h>
+#import <bundles/src/bundles.h>
+#import <text/src/my_ctype.h>
+#import <ns/src/ns.h>
 
 static NSTextField* OakCreateTextField (NSString* label)
 {

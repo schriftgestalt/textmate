@@ -1,14 +1,14 @@
 #include "selection.h"
-#include <buffer/buffer.h>
-#include <bundles/bundles.h>
-#include <regexp/find.h>
-#include <regexp/regexp.h>
-#include <text/classification.h>
-#include <text/utf8.h>
-#include <text/ctype.h>
-#include <text/types.h>
-#include <text/tokenize.h>
-#include <crash/info.h>
+#include <buffer/src/buffer.h>
+#include <bundles/src/bundles.h>
+#include <regexp/src/find.h>
+#include <regexp/src/regexp.h>
+#include <text/src/classification.h>
+#include <text/src/utf8.h>
+#include <text/src/my_ctype.h>
+#include <text/src/types.h>
+#include <text/src/tokenize.h>
+#include <crash/src/info.h>
 
 namespace ng
 {

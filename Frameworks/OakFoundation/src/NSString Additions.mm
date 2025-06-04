@@ -1,5 +1,5 @@
 #import "NSString Additions.h"
-#import <text/utf8.h>
+#import <text/src/utf8.h>
 #import <oak/oak.h>
 
 @implementation NSString (Additions)

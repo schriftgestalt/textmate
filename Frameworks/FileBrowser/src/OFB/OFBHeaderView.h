@@ -1,4 +1,4 @@
-#import <OakAppKit/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
 
 @interface OFBHeaderView : NSVisualEffectView
 @property (nonatomic) NSPopUpButton* folderPopUpButton;

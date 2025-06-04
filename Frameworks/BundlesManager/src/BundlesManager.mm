@@ -1,20 +1,20 @@
 #import "BundlesManager.h"
-#import <bundles/load.h>
+#import <bundles/src/load.h>
 #import "InstallBundleItems.h"
-#import <OakAppKit/NSAlert Additions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <SoftwareUpdate/OakDownloadManager.h>
-#import <bundles/locations.h>
-#import <bundles/query.h> // set_index
-#import <regexp/format_string.h>
-#import <text/ctype.h>
-#import <text/decode.h>
-#import <ns/ns.h>
-#import <io/path.h>
-#import <io/move_path.h>
-#import <io/entries.h>
-#import <io/events.h>
+#import <OakAppKit/src/NSAlert Additions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <SoftwareUpdate/src/OakDownloadManager.h>
+#import <bundles/src/locations.h>
+#import <bundles/src/query.h> // set_index
+#import <regexp/src/format_string.h>
+#import <text/src/my_ctype.h>
+#import <text/src/decode.h>
+#import <ns/src/ns.h>
+#import <io/src/path.h>
+#import <io/src/move_path.h>
+#import <io/src/entries.h>
+#import <io/src/events.h>
 #import <oak/debug.h>
 
 NSString* const kUserDefaultsDisableBundleUpdatesKey       = @"disableBundleUpdates";

@@ -1,10 +1,10 @@
 #import "FFDocumentSearch.h"
 #import "CommonAncestor.h"
-#import <OakFoundation/NSString Additions.h>
-#import <document/OakDocumentController.h>
-#import <document/OakDocument.h>
-#import <settings/settings.h>
-#import <ns/ns.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <document/src/OakDocumentController.h>
+#import <document/src/OakDocument.h>
+#import <settings/src/settings.h>
+#import <ns/src/ns.h>
 #import <oak/oak.h>
 
 NSNotificationName const FFDocumentSearchDidReceiveResultsNotification = @"FFDocumentSearchDidReceiveResultsNotification";

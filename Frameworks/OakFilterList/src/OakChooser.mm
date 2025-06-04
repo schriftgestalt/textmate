@@ -1,13 +1,13 @@
 #import "OakChooser.h"
 #import "ui/TableView.h"
 #import "ui/SearchField.h"
-#import <OakAppKit/NSColor Additions.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <ns/ns.h>
-#import <text/ranker.h>
+#import <OakAppKit/src/NSColor Additions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <ns/src/ns.h>
+#import <text/src/ranker.h>
 
 @interface OakFileTableCellView ()
 @property (nonatomic) NSTextField* folderTextField;

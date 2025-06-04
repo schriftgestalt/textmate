@@ -1,9 +1,9 @@
 #import "SymbolChooser.h"
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <text/ranker.h>
-#import <ns/ns.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <text/src/ranker.h>
+#import <ns/src/ns.h>
 
 @interface SymbolChooserItem : NSObject
 @property (nonatomic) NSString* path;

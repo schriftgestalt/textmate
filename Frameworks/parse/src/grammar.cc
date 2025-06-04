@@ -1,9 +1,9 @@
 #include "grammar.h"
 #include "private.h"
-#include <bundles/bundles.h>
-#include <plist/plist.h>
-#include <plist/schema.h>
-#include <text/format.h>
+#include <bundles/src/bundles.h>
+#include <plist/src/plist.h>
+#include <plist/src/schema.h>
+#include <text/src/format.h>
 #include <oak/oak.h>
 #include <oak/debug.h>
 

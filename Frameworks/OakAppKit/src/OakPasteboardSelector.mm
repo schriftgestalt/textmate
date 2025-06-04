@@ -6,7 +6,7 @@
 
 #import "OakPasteboardSelector.h"
 #import "OakAppKit.h"
-#import <ns/ns.h>
+#import <ns/src/ns.h>
 #import <oak/oak.h>
 #import <oak/debug.h>
 

@@ -1,6 +1,6 @@
 #include "indent.h"
-#include <text/ctype.h>
-#include <text/format.h>
+#include <text/src/my_ctype.h>
+#include <text/src/format.h>
 #include <oak/oak.h>
 #include <oak/debug.h>
 

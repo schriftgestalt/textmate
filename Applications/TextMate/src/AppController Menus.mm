@@ -1,20 +1,20 @@
 #import "AppController.h"
 #import <oak/oak.h>
-#import <text/ctype.h>
-#import <text/parse.h>
-#import <bundles/bundles.h>
-#import <command/parser.h>
-#import <cf/cf.h>
-#import <ns/ns.h>
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <OakAppKit/OakToolTip.h>
-#import <MenuBuilder/MenuBuilder.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakTextView/OakTextView.h>
+#import <text/src/my_ctype.h>
+#import <text/src/parse.h>
+#import <bundles/src/bundles.h>
+#import <command/src/parser.h>
+#import <cf/src/cf.h>
+#import <ns/src/ns.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <OakAppKit/src/OakToolTip.h>
+#import <MenuBuilder/src/MenuBuilder.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakTextView/src/OakTextView.h>
 #import <oak/debug.h>
-#import <BundleMenu/BundleMenu.h>
-#import <theme/theme.h>
-#import <settings/settings.h>
+#import <BundleMenu/src/BundleMenu.h>
+#import <theme/src/theme.h>
+#import <settings/src/settings.h>
 
 static NSString* NameForLocaleIdentifier (NSString* languageCode)
 {
@@ -25,8 +25,8 @@ static NSString* NameForLocaleIdentifier (NSString* languageCode)
 		CFRelease(locale);
 	}
 
-	NSString* systemLangauge = [(NSString*)CFBridgingRelease(CFLocaleCopyDisplayNameForPropertyValue(CFLocaleGetSystem(), kCFLocaleIdentifier, (__bridge CFStringRef)languageCode)) capitalizedString];
-	return localLanguage ?: systemLangauge ?: languageCode;
+	NSString* systemLanguage = [(NSString*)CFBridgingRelease(CFLocaleCopyDisplayNameForPropertyValue(CFLocaleGetSystem(), kCFLocaleIdentifier, (__bridge CFStringRef)languageCode)) capitalizedString];
+	return localLanguage ?: systemLanguage ?: languageCode;
 }
 
 @implementation AppController (BundlesMenu)

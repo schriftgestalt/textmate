@@ -1,12 +1,12 @@
 #include "item.h"
 #include "query.h"     // required by item_t::environment
 #include "locations.h" // required by item_t::save
-#include <plist/delta.h>
-#include <io/path.h>
-#include <text/format.h>
-#include <text/parse.h>
-#include <text/trim.h>
-#include <regexp/format_string.h>
+#include <plist/src/delta.h>
+#include <io/src/path.h>
+#include <text/src/format.h>
+#include <text/src/parse.h>
+#include <text/src/trim.h>
+#include <regexp/src/format_string.h>
 
 namespace bundles
 {

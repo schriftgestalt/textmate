@@ -1,7 +1,7 @@
 #include "filter_check_signature.h"
-#include <cf/cf.h>
-#include <text/decode.h>
-#include <text/format.h>
+#include <cf/src/cf.h>
+#include <text/src/decode.h>
+#include <text/src/format.h>
 #include <oak/debug.h>
 
 namespace network

@@ -1,18 +1,18 @@
 #include "editor.h"
 #include "transform.h"
 #include "indent.h"
-#include <bundles/bundles.h>
-#include <command/runner.h>
-#include <text/case.h>
-#include <text/ctype.h>
-#include <text/classification.h>
-#include <text/utf8.h>
-#include <text/hexdump.h>
-#include <text/newlines.h>
-#include <text/parse.h>
-#include <text/tokenize.h>
-#include <text/trim.h>
-#include <io/exec.h>
+#include <bundles/src/bundles.h>
+#include <command/src/runner.h>
+#include <text/src/case.h>
+#include <text/src/my_ctype.h>
+#include <text/src/classification.h>
+#include <text/src/utf8.h>
+#include <text/src/hexdump.h>
+#include <text/src/newlines.h>
+#include <text/src/parse.h>
+#include <text/src/tokenize.h>
+#include <text/src/trim.h>
+#include <io/src/exec.h>
 
 namespace ng
 {

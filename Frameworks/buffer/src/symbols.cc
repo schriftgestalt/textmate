@@ -1,8 +1,8 @@
 #include "meta_data.h"
-#include <regexp/format_string.h>
-#include <bundles/bundles.h>
+#include <regexp/src/format_string.h>
+#include <bundles/src/bundles.h>
 #include <oak/oak.h>
-#include <text/ctype.h>
+#include <text/src/my_ctype.h>
 #include <oak/duration.h>
 
 namespace

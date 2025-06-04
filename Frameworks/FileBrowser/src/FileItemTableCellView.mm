@@ -1,8 +1,8 @@
 #import "FileItemTableCellView.h"
 #import "FileItem.h"
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakAppKit/OakFinderTag.h>
-#import <TMFileReference/TMFileReference.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/OakFinderTag.h>
+#import <TMFileReference/src/TMFileReference.h>
 
 @interface FileItemSelectBasenameCell : NSTextFieldCell
 @end

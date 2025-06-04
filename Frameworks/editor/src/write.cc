@@ -1,6 +1,6 @@
 #include "write.h"
-#include <text/utf8.h>
-#include <text/ctype.h>
+#include <text/src/utf8.h>
+#include <text/src/my_ctype.h>
 
 namespace ng
 {

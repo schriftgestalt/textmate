@@ -1,10 +1,10 @@
 #include "paragraph.h"
 #include "ct.h"
 #include "render.h"
-#include <cf/cf.h>
-#include <text/parse.h>
-#include <text/utf8.h>
-#include <regexp/format_string.h>
+#include <cf/src/cf.h>
+#include <text/src/parse.h>
+#include <text/src/utf8.h>
+#include <regexp/src/format_string.h>
 
 static double const kFoldingDotsRatio = 20.0 / 10.0; // FIXME Folding dots ratio should be obtained from the image and given to layout_t
 static size_t const kCTLineMaxSize = 2048;

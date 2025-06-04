@@ -4,7 +4,7 @@
 #include <oak/basic_tree.h>
 #include <oak/misc.h>
 #include <oak/debug.h>
-#include <text/format.h>
+#include <text/src/format.h>
 
 template <typename _ValT = bool>
 struct indexed_map_t

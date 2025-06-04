@@ -1,14 +1,14 @@
 #import "FilesPreferences.h"
 #import "Keys.h"
-#import <OakAppKit/OakEncodingPopUpButton.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakFoundation/OakStringListTransformer.h>
-#import <MenuBuilder/MenuBuilder.h>
-#import <settings/settings.h>
-#import <bundles/bundles.h>
-#import <ns/ns.h>
-#import <text/ctype.h>
+#import <OakAppKit/src/OakEncodingPopUpButton.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakFoundation/src/OakStringListTransformer.h>
+#import <MenuBuilder/src/MenuBuilder.h>
+#import <settings/src/settings.h>
+#import <bundles/src/bundles.h>
+#import <ns/src/ns.h>
+#import <text/src/my_ctype.h>
 #import <oak/oak.h>
 
 @implementation FilesPreferences

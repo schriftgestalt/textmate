@@ -1,7 +1,7 @@
 #import "ProjectLayoutView.h"
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <Preferences/Keys.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <Preferences/src/Keys.h>
 #import <oak/misc.h>
 #import <oak/debug.h>
 

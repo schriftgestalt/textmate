@@ -2,39 +2,39 @@
 #import "ProjectLayoutView.h"
 #import "SelectGrammarViewController.h"
 #import "OakRunCommandWindowController.h"
-#import <document/OakDocument.h>
-#import <document/OakDocumentController.h>
-#import <OakAppKit/NSAlert Additions.h>
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakPasteboard.h>
-#import <OakAppKit/OakSavePanel.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <MenuBuilder/MenuBuilder.h>
-#import <OakTabBarView/OakTabBarView.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <Preferences/Keys.h>
-#import <OakTextView/OakDocumentView.h>
-#import <FileBrowser/FileBrowserViewController.h>
-#import <OakCommand/OakCommand.h>
-#import <HTMLOutputWindow/HTMLOutputWindow.h>
-#import <OakFilterList/FileChooser.h>
-#import <OakSystem/application.h>
-#import <Find/Find.h>
-#import <BundlesManager/BundlesManager.h>
-#import <BundleEditor/BundleEditor.h>
-#import <file/path_info.h>
-#import <io/entries.h>
-#import <scm/scm.h>
-#import <text/parse.h>
-#import <text/tokenize.h>
-#import <text/utf8.h>
-#import <regexp/glob.h>
-#import <settings/settings.h>
-#import <ns/ns.h>
+#import <document/src/OakDocument.h>
+#import <document/src/OakDocumentController.h>
+#import <OakAppKit/src/NSAlert Additions.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakPasteboard.h>
+#import <OakAppKit/src/OakSavePanel.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <MenuBuilder/src/MenuBuilder.h>
+#import <OakTabBarView/src/OakTabBarView.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <Preferences/src/Keys.h>
+#import <OakTextView/src/OakDocumentView.h>
+#import <FileBrowser/src/FileBrowserViewController.h>
+#import <OakCommand/src/OakCommand.h>
+#import <HTMLOutputWindow/src/HTMLOutputWindow.h>
+#import <OakFilterList/src/FileChooser.h>
+#import <OakSystem/src/application.h>
+#import <Find/src/Find.h>
+#import <BundlesManager/src/BundlesManager.h>
+#import <BundleEditor/src/BundleEditor.h>
+#import <file/src/path_info.h>
+#import <io/src/entries.h>
+#import <scm/src/scm.h>
+#import <text/src/parse.h>
+#import <text/src/tokenize.h>
+#import <text/src/utf8.h>
+#import <regexp/src/glob.h>
+#import <settings/src/settings.h>
+#import <ns/src/ns.h>
 #import <kvdb/kvdb.h>
-#import <crash/info.h>
+#import <crash/src/info.h>
 
 static NSString* const kUserDefaultsAlwaysFindInDocument = @"alwaysFindInDocument";
 static NSString* const kUserDefaultsDisableFolderStateRestore = @"disableFolderStateRestore";

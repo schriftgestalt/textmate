@@ -1,6 +1,6 @@
 #include "tbz.h"
-#include <text/format.h>
-#include <text/trim.h>
+#include <text/src/format.h>
+#include <text/src/trim.h>
 
 namespace network
 {

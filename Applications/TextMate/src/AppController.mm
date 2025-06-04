@@ -4,38 +4,38 @@
 #import "AboutWindowController.h"
 #import "TMPlugInController.h"
 #import "RMateServer.h"
-#import <BundleEditor/BundleEditor.h>
-#import <BundlesManager/BundlesManager.h>
-#import <CrashReporter/CrashReporter.h>
-#import <DocumentWindow/DocumentWindowController.h>
-#import <Find/Find.h>
-#import <CommitWindow/CommitWindow.h>
-#import <OakAppKit/NSAlert Additions.h>
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakPasteboard.h>
-#import <OakFilterList/BundleItemChooser.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakTextView/OakDocumentView.h>
-#import <MenuBuilder/MenuBuilder.h>
-#import <MenuBuilder/MBMenuDelegate.h>
-#import <Preferences/Keys.h>
-#import <Preferences/Preferences.h>
-#import <Preferences/TerminalPreferences.h>
-#import <SoftwareUpdate/SoftwareUpdate.h>
-#import <document/OakDocument.h>
-#import <document/OakDocumentController.h>
-#import <bundles/query.h>
-#import <io/path.h>
-#import <regexp/glob.h>
-#import <network/tbz.h>
-#import <ns/ns.h>
-#import <settings/settings.h>
+#import <BundleEditor/src/BundleEditor.h>
+#import <BundlesManager/src/BundlesManager.h>
+#import <CrashReporter/src/CrashReporter.h>
+#import <DocumentWindow/src/DocumentWindowController.h>
+#import <Find/src/Find.h>
+#import <CommitWindow/src/CommitWindow.h>
+#import <OakAppKit/src/NSAlert Additions.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakPasteboard.h>
+#import <OakFilterList/src/BundleItemChooser.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakTextView/src/OakDocumentView.h>
+#import <MenuBuilder/src/MenuBuilder.h>
+#import <MenuBuilder/src/MBMenuDelegate.h>
+#import <Preferences/src/Keys.h>
+#import <Preferences/src/Preferences.h>
+#import <Preferences/src/TerminalPreferences.h>
+#import <SoftwareUpdate/src/SoftwareUpdate.h>
+#import <document/src/OakDocument.h>
+#import <document/src/OakDocumentController.h>
+#import <bundles/src/query.h>
+#import <io/src/path.h>
+#import <regexp/src/glob.h>
+#import <network/src/tbz.h>
+#import <ns/src/ns.h>
+#import <settings/src/settings.h>
 #import <oak/debug.h>
 #import <oak/oak.h>
-#import <scm/scm.h>
-#import <text/types.h>
+#import <scm/src/scm.h>
+#import <text/src/types.h>
 
 void OakOpenDocuments (NSArray* paths, BOOL treatFilePackageAsFolder)
 {

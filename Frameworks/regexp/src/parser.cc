@@ -1,7 +1,7 @@
 #include "parser.h"
 #include "parser_base.h"
-#include <text/format.h>
-#include <text/utf8.h>
+#include <text/src/format.h>
+#include <text/src/utf8.h>
 #include <oak/oak.h>
 
 /*

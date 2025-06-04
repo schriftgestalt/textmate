@@ -1,15 +1,15 @@
 #include "settings.h"
 #include "parser.h"
 #include "track_paths.h"
-#include <plist/plist.h>
+#include <plist/src/plist.h>
 #include <oak/oak.h>
-#include <regexp/format_string.h>
-#include <regexp/glob.h>
-#include <text/parse.h>
-#include <text/format.h>
+#include <regexp/src/format_string.h>
+#include <regexp/src/glob.h>
+#include <text/src/parse.h>
+#include <text/src/format.h>
 #include <oak/debug.h>
-#include <io/io.h>
-#include <cf/cf.h>
+#include <io/src/io.h>
+#include <cf/src/cf.h>
 
 namespace
 {
@@ -293,7 +293,7 @@ std::vector<setting_info_t> settings_info_for_path (std::string const& path, sco
 }
 
 // ===================================
-// = Helper Funtions for raw get/set =
+// = Helper Functions for raw get/set =
 // ===================================
 
 static std::string quote_string (std::string const& src)

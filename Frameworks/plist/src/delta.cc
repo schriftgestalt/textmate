@@ -1,5 +1,5 @@
 #include "delta.h"
-#include <text/format.h>
+#include <text/src/format.h>
 
 // ================
 // = Create Delta =

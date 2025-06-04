@@ -1,12 +1,12 @@
 #include "editor.h"
 #include "write.h"
-#include <text/utf8.h>
-#include <text/classification.h>
-#include <text/ctype.h>
-#include <text/tokenize.h>
-#include <bundles/bundles.h>
-#include <command/runner.h>
-#include <settings/settings.h>
+#include <text/src/utf8.h>
+#include <text/src/classification.h>
+#include <text/src/my_ctype.h>
+#include <text/src/tokenize.h>
+#include <bundles/src/bundles.h>
+#include <command/src/runner.h>
+#include <settings/src/settings.h>
 
 template <typename _OutputIter>
 _OutputIter words_with_prefix_and_suffix (ng::buffer_t const& buffer, std::string const& prefix, std::string const& suffix, std::string const& excludeWord, _OutputIter out)

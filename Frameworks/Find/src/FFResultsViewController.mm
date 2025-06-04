@@ -1,9 +1,9 @@
 #import "FFResultsViewController.h"
 #import "FFResultNode.h"
-#import <document/OakDocument.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakAppKit/NSColor Additions.h>
+#import <document/src/OakDocument.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/NSColor Additions.h>
 
 static NSString* const kUserDefaultsSearchResultsFontNameKey = @"searchResultsFontName";
 static NSString* const kUserDefaultsSearchResultsFontSizeKey = @"searchResultsFontSize";

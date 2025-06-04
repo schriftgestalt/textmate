@@ -1,10 +1,10 @@
 #include "runner.h"
-#import <OakAppKit/NSAlert Additions.h>
-#include <OakSystem/process.h>
-#include <OakFoundation/NSString Additions.h>
-#include <io/path.h>
-#include <io/pipe.h>
-#include <regexp/format_string.h>
+#import <OakAppKit/src/NSAlert Additions.h>
+#include <OakSystem/src/process.h>
+#include <OakFoundation/src/NSString Additions.h>
+#include <io/src/path.h>
+#include <io/src/pipe.h>
+#include <regexp/src/format_string.h>
 #include <oak/datatypes.h>
 
 static std::string trim_right (std::string const& str, std::string const& trimChars = " \t\n")

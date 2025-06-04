@@ -1,7 +1,7 @@
 #import "OakPasteboard.h"
 #import "OakPasteboardSelector.h"
-#import <crash/info.h>
-#import <ns/ns.h>
+#import <crash/src/info.h>
+#import <ns/src/ns.h>
 #import <oak/oak.h>
 #import <oak/debug.h>
 #import <sqlite3.h>

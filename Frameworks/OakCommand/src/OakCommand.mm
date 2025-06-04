@@ -1,24 +1,24 @@
 #import "OakCommand.h"
-#import <document/OakDocument.h>
-#import <document/OakDocumentController.h>
+#import <document/src/OakDocument.h>
+#import <document/src/OakDocumentController.h>
 #import <oak/datatypes.h>
-#import <cf/cf.h>
-#import <ns/ns.h>
-#import <io/environment.h>
-#import <io/pipe.h>
-#import <text/tokenize.h>
-#import <text/trim.h>
-#import <text/encode.h>
-#import <text/parse.h>
-#import <command/runner.h> // bundle_command_t, fix_shebang, create_script_path
-#import <bundles/wrappers.h>
-#import <regexp/format_string.h>
-#import <OakAppKit/OakToolTip.h>
-#import <HTMLOutput/HTMLOutput.h>
-#import <HTMLOutputWindow/HTMLOutputWindow.h>
-#import <OakSystem/process.h>
-#import <settings/settings.h>
-#import <BundleEditor/BundleEditor.h>
+#import <cf/src/cf.h>
+#import <ns/src/ns.h>
+#import <io/src/environment.h>
+#import <io/src/pipe.h>
+#import <text/src/tokenize.h>
+#import <text/src/trim.h>
+#import <text/src/encode.h>
+#import <text/src/parse.h>
+#import <command/src/runner.h> // bundle_command_t, fix_shebang, create_script_path
+#import <bundles/src/wrappers.h>
+#import <regexp/src/format_string.h>
+#import <OakAppKit/src/OakToolTip.h>
+#import <HTMLOutput/src/HTMLOutput.h>
+#import <HTMLOutputWindow/src/HTMLOutputWindow.h>
+#import <OakSystem/src/process.h>
+#import <settings/src/settings.h>
+#import <BundleEditor/src/BundleEditor.h>
 
 NSNotificationName const OakCommandDidTerminateNotification = @"OakCommandDidTerminateNotification";
 NSString* const OakCommandErrorDomain                       = @"com.macromates.TextMate.ErrorDomain";

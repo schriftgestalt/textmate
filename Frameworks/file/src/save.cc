@@ -3,14 +3,14 @@
 #include "encoding.h"
 #include "filter.h"
 #include "path_info.h"
-#include <authorization/server.h>
-#include <authorization/constants.h>
-#include <io/intermediate.h>
-#include <io/path.h>
-#include <text/trim.h>
-#include <text/newlines.h>
-#include <settings/settings.h>
-#include <command/parser.h>
+#include <authorization/src/server.h>
+#include <authorization/src/constants.h>
+#include <io/src/intermediate.h>
+#include <io/src/path.h>
+#include <text/src/trim.h>
+#include <text/src/newlines.h>
+#include <settings/src/settings.h>
+#include <command/src/parser.h>
 #include <oak/debug.h>
 
 namespace

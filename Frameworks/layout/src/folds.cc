@@ -1,9 +1,9 @@
 #include "folds.h"
-#include <bundles/wrappers.h>
-#include <regexp/indent.h>
-#include <plist/ascii.h>
-#include <text/ctype.h>
-#include <text/format.h>
+#include <bundles/src/wrappers.h>
+#include <regexp/src/indent.h>
+#include <plist/src/ascii.h>
+#include <text/src/my_ctype.h>
+#include <text/src/format.h>
 #include <oak/algorithm.h>
 #include <oak/oak.h>
 

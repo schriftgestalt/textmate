@@ -1,7 +1,7 @@
 #include "api.h"
-#include <text/tokenize.h>
-#include <text/format.h>
-#include <io/io.h>
+#include <text/src/tokenize.h>
+#include <text/src/format.h>
+#include <io/src/io.h>
 #include <oak/oak.h>
 #include <oak/debug.h>
 

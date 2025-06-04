@@ -1,9 +1,9 @@
 #import "OakMainMenu.h"
-#import <ns/ns.h>
-#import <bundles/bundles.h>
-#import <OakFoundation/NSString Additions.h>
-#import <BundleMenu/BundleMenu.h>
-#import <crash/info.h>
+#import <ns/src/ns.h>
+#import <bundles/src/bundles.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <BundleMenu/src/BundleMenu.h>
+#import <crash/src/info.h>
 
 /*
 

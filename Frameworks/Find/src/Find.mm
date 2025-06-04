@@ -6,27 +6,27 @@
 #import "CommonAncestor.h"
 #import "FFFolderMenu.h"
 #import "FFStatusBarViewController.h"
-#import <OakFoundation/OakFindProtocol.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/OakHistoryList.h>
-#import <OakAppKit/NSAlert Additions.h>
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakPasteboard.h>
-#import <OakAppKit/OakTransitionViewController.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <MenuBuilder/MenuBuilder.h>
-#import <Preferences/Keys.h>
-#import <ns/ns.h>
-#import <text/types.h>
-#import <text/utf8.h>
-#import <regexp/format_string.h>
-#import <regexp/regexp.h>
-#import <document/OakDocument.h>
-#import <document/OakDocumentController.h>
-#import <io/path.h>
-#import <settings/settings.h>
+#import <OakFoundation/src/OakFindProtocol.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/OakHistoryList.h>
+#import <OakAppKit/src/NSAlert Additions.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakPasteboard.h>
+#import <OakAppKit/src/OakTransitionViewController.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <MenuBuilder/src/MenuBuilder.h>
+#import <Preferences/src/Keys.h>
+#import <ns/src/ns.h>
+#import <text/src/types.h>
+#import <text/src/utf8.h>
+#import <regexp/src/format_string.h>
+#import <regexp/src/regexp.h>
+#import <document/src/OakDocument.h>
+#import <document/src/OakDocumentController.h>
+#import <io/src/path.h>
+#import <settings/src/settings.h>
 
 static NSString* const kUserDefaultsFolderOptionsKey               = @"Folder Search Options";
 static NSString* const kUserDefaultsFindResultsHeightKey           = @"findResultsHeight";

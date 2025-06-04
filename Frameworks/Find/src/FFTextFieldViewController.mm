@@ -1,8 +1,8 @@
 #import "FFTextFieldViewController.h"
-#import <OakAppKit/OakSyntaxFormatter.h>
-#import <OakAppKit/OakPasteboard.h>
-#import <OakAppKit/OakPasteboardSelector.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/OakSyntaxFormatter.h>
+#import <OakAppKit/src/OakPasteboard.h>
+#import <OakAppKit/src/OakPasteboardSelector.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
 
 // ==========================
 // = OakAutoSizingTextField =

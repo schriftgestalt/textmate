@@ -1,9 +1,9 @@
 #include "fs_cache.h"
-#include "cache.capnp.h"
+#include <plist/src/cache.capnp.h>
 #include <capnp/message.h>
 #include <capnp/serialize-packed.h>
-#include <io/entries.h>
-#include <text/format.h>
+#include <io/src/entries.h>
+#include <text/src/format.h>
 #include <oak/debug.h>
 
 static std::string read_link (std::string const& path)

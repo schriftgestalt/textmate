@@ -1,5 +1,5 @@
 #import "OakTabBarViewController.h"
-#import <OakAppKit/NSMenuItem Additions.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
 
 @interface NSArray<ObjectType> (SafeAccessor)
 - (ObjectType)mySafeObjectAtIndex:(NSUInteger)index;

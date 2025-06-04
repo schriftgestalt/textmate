@@ -1,10 +1,10 @@
 #import "SoftwareUpdate.h"
 #import "OakDownloadManager.h"
-#import <OakAppKit/NSImage Additions.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakSound.h>
-#import <OakAppKit/OakTransitionViewController.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakSound.h>
+#import <OakAppKit/src/OakTransitionViewController.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
 
 NSString* const kUserDefaultsLastSoftwareUpdateCheckKey                        = @"SoftwareUpdateLastPoll";
 NSString* const kUserDefaultsSoftwareUpdateSuspendUntilKey                     = @"SoftwareUpdateSuspendUntil";

@@ -1,7 +1,7 @@
 #import "spellcheck.h"
 
-#import <OakFoundation/NSString Additions.h>
-#import <text/utf16.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <text/src/utf16.h>
 
 namespace ns
 {

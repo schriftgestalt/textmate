@@ -1,9 +1,9 @@
 #import "event.h"
 #import "ns.h"
-#import <text/utf8.h>
-#import <text/case.h>
-#import <text/format.h>
-#import <OakFoundation/NSString Additions.h>
+#import <text/src/utf8.h>
+#import <text/src/case.h>
+#import <text/src/format.h>
+#import <OakFoundation/src/NSString Additions.h>
 
 static std::string glyph_named (std::string const& name)
 {

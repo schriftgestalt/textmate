@@ -1,10 +1,10 @@
 #import "OakKeyEquivalentView.h"
 #import "OakUIConstructionFunctions.h"
 #import "NSImage Additions.h"
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/NSString Additions.h>
-#import <ns/ns.h>
-#import <text/utf8.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <ns/src/ns.h>
+#import <text/src/utf8.h>
 
 static NSString* const kRecordingPlaceholderString = @"…";
 

@@ -1,24 +1,24 @@
 #import "OakDocumentView.h"
 #import "GutterView.h"
 #import "OTVStatusBar.h"
-#import <document/OakDocument.h>
-#import <file/type.h>
-#import <text/ctype.h>
-#import <text/parse.h>
-#import <ns/ns.h>
+#import <document/src/OakDocument.h>
+#import <file/src/type.h>
+#import <text/src/my_ctype.h>
+#import <text/src/parse.h>
+#import <ns/src/ns.h>
 #import <oak/debug.h>
-#import <bundles/bundles.h>
-#import <settings/settings.h>
-#import <OakFilterList/SymbolChooser.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/NSImage Additions.h>
-#import <OakAppKit/OakToolTip.h>
-#import <OakAppKit/OakPasteboardChooser.h>
-#import <OakAppKit/OakPasteboard.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <BundleMenu/BundleMenu.h>
+#import <bundles/src/bundles.h>
+#import <settings/src/settings.h>
+#import <OakFilterList/src/SymbolChooser.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakAppKit/src/OakToolTip.h>
+#import <OakAppKit/src/OakPasteboardChooser.h>
+#import <OakAppKit/src/OakPasteboard.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <BundleMenu/src/BundleMenu.h>
 
 static NSString* const kUserDefaultsLineNumberScaleFactorKey = @"lineNumberScaleFactor";
 static NSString* const kUserDefaultsLineNumberFontNameKey    = @"lineNumberFontName";

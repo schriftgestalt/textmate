@@ -1,17 +1,17 @@
 #import "Favorites.h"
-#import <OakFilterList/OakAbbreviations.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakAppKit/OakScopeBarView.h>
-#import <OakAppKit/OakSound.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakSystem/application.h>
-#import <text/ranker.h>
-#import <io/entries.h>
-#import <text/case.h>
-#import <text/ctype.h>
-#import <io/path.h>
-#import <ns/ns.h>
+#import <OakFilterList/src/OakAbbreviations.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/OakScopeBarView.h>
+#import <OakAppKit/src/OakSound.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakSystem/src/application.h>
+#import <text/src/ranker.h>
+#import <io/src/entries.h>
+#import <text/src/case.h>
+#import <text/src/my_ctype.h>
+#import <io/src/path.h>
+#import <ns/src/ns.h>
 #import <kvdb/kvdb.h>
 
 static NSString* const kUserDefaultsOpenProjectSourceIndex = @"openProjectSourceIndex";

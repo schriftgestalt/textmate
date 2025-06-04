@@ -1,12 +1,12 @@
 #import "ProjectsPreferences.h"
 #import "Keys.h"
-#import <settings/settings.h>
-#import <OakAppKit/NSImage Additions.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakTabBarView/OakTabBarView.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakFoundation/OakStringListTransformer.h>
-#import <MenuBuilder/MenuBuilder.h>
+#import <settings/src/settings.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakTabBarView/src/OakTabBarView.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakFoundation/src/OakStringListTransformer.h>
+#import <MenuBuilder/src/MenuBuilder.h>
 
 @interface ProjectsPreferences ()
 {

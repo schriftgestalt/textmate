@@ -1,6 +1,6 @@
 #import "FileBrowserOutlineView.h"
-#import <text/utf8.h>
-#import <ns/ns.h>
+#import <text/src/utf8.h>
+#import <ns/src/ns.h>
 
 @implementation FileBrowserOutlineView
 - (void)expandItem:(id)someItem expandChildren:(BOOL)flag

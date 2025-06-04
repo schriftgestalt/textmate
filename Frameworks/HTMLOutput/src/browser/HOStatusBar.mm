@@ -1,6 +1,6 @@
 #import "HOStatusBar.h"
-#import <OakAppKit/NSImage Additions.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
 
 static NSButton* OakCreateImageButton (NSImage* image)
 {

@@ -1,6 +1,6 @@
 #include "parse_glob.h"
 #include "parser_base.h"
-#include <text/utf8.h>
+#include <text/src/utf8.h>
 #include <oak/debug.h>
 
 // \«char»           -- Literal «char»

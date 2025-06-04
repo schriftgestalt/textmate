@@ -1,13 +1,13 @@
 #include "io.h"
 #include "intermediate.h"
 #include "entries.h"
-#include <OakFoundation/OakFoundation.h>
+#include <OakFoundation/src/OakFoundation.h>
 #include <oak/debug.h>
-#include <text/tokenize.h>
-#include <text/format.h>
-#include <regexp/regexp.h>
-#include <regexp/format_string.h>
-#include <cf/cf.h>
+#include <text/src/tokenize.h>
+#include <text/src/format.h>
+#include <regexp/src/regexp.h>
+#include <regexp/src/format_string.h>
+#include <cf/src/cf.h>
 
 namespace path
 {

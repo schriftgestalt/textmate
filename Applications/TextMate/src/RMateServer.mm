@@ -1,13 +1,13 @@
 #include <oak/oak.h>
-#include <text/parse.h>
-#include <text/hexdump.h>
-#include <document/OakDocument.h>
-#include <document/OakDocumentController.h>
+#include <text/src/parse.h>
+#include <text/src/hexdump.h>
+#include <document/src/OakDocument.h>
+#include <document/src/OakDocumentController.h>
 #include <oak/debug.h>
-#include <authorization/authorization.h>
-#include <io/io.h>
-#include <ns/ns.h>
-#include <OakAppKit/IOAlertPanel.h>
+#include <authorization/src/authorization.h>
+#include <io/src/io.h>
+#include <ns/src/ns.h>
+#include <OakAppKit/src/IOAlertPanel.h>
 
 /*
 	open

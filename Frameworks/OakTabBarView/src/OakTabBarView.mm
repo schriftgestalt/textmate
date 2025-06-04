@@ -1,10 +1,10 @@
 #import "OakTabBarView.h"
-#import <OakAppKit/NSImage Additions.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <TMFileReference/TMFileReference.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <TMFileReference/src/TMFileReference.h>
 #import <oak/misc.h>
 
 static NSString* kUserDefaultsTabItemMinWidthKey = @"tabItemMinWidth";

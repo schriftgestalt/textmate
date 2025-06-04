@@ -1,8 +1,8 @@
 #include "query.h"
-#include <text/ctype.h>
-#include <text/parse.h>
-#include <text/trim.h>
-#include <regexp/format_string.h>
+#include <text/src/my_ctype.h>
+#include <text/src/parse.h>
+#include <text/src/trim.h>
+#include <regexp/src/format_string.h>
 #include <oak/callbacks.h>
 
 namespace bundles

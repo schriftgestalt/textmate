@@ -4,47 +4,47 @@
 #import "OakCommandRefresh.h"
 #import "LiveSearchView.h"
 #import "OTVHUD.h"
-#import <OakCommand/OakCommand.h>
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/NSAlert Additions.h>
-#import <OakAppKit/NSEvent Additions.h>
-#import <OakAppKit/NSImage Additions.h>
-#import <OakAppKit/NSMenuItem Additions.h>
-#import <OakAppKit/OakPasteboard.h>
-#import <OakAppKit/OakPopOutAnimation.h>
-#import <OakAppKit/OakToolTip.h>
-#import <OakAppKit/OakSound.h>
-#import <OakFoundation/NSString Additions.h>
-#import <OakFoundation/OakFoundation.h>
-#import <OakFoundation/OakFindProtocol.h>
-#import <OakSystem/application.h>
-#import <crash/info.h>
-#import <buffer/indexed_map.h>
-#import <BundleMenu/BundleMenu.h>
-#import <BundlesManager/BundlesManager.h>
-#import <Preferences/Keys.h>
-#import <bundles/bundles.h>
-#import <cf/cf.h>
-#import <command/runner.h>
-#import <document/OakDocumentEditor.h>
-#import <document/OakDocumentController.h>
-#import <file/type.h>
-#import <layout/layout.h>
-#import <ns/ns.h>
-#import <ns/spellcheck.h>
-#import <text/case.h>
-#import <text/classification.h>
-#import <text/format.h>
-#import <text/newlines.h>
-#import <text/trim.h>
-#import <text/utf16.h>
-#import <text/utf8.h>
-#import <settings/settings.h>
+#import <OakCommand/src/OakCommand.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/NSAlert Additions.h>
+#import <OakAppKit/src/NSEvent Additions.h>
+#import <OakAppKit/src/NSImage Additions.h>
+#import <OakAppKit/src/NSMenuItem Additions.h>
+#import <OakAppKit/src/OakPasteboard.h>
+#import <OakAppKit/src/OakPopOutAnimation.h>
+#import <OakAppKit/src/OakToolTip.h>
+#import <OakAppKit/src/OakSound.h>
+#import <OakFoundation/src/NSString Additions.h>
+#import <OakFoundation/src/OakFoundation.h>
+#import <OakFoundation/src/OakFindProtocol.h>
+#import <OakSystem/src/application.h>
+#import <crash/src/info.h>
+#import <buffer/src/indexed_map.h>
+#import <BundleMenu/src/BundleMenu.h>
+#import <BundlesManager/src/BundlesManager.h>
+#import <Preferences/src/Keys.h>
+#import <bundles/src/bundles.h>
+#import <cf/src/cf.h>
+#import <command/src/runner.h>
+#import <document/src/OakDocumentEditor.h>
+#import <document/src/OakDocumentController.h>
+#import <file/src/type.h>
+#import <layout/src/layout.h>
+#import <ns/src/ns.h>
+#import <ns/src/spellcheck.h>
+#import <text/src/case.h>
+#import <text/src/classification.h>
+#import <text/src/format.h>
+#import <text/src/newlines.h>
+#import <text/src/trim.h>
+#import <text/src/utf16.h>
+#import <text/src/utf8.h>
+#import <settings/src/settings.h>
 #import <oak/debug.h>
-#import <editor/editor.h>
-#import <editor/write.h>
-#import <io/exec.h>
-#import <Find/Find.h>
+#import <editor/src/editor.h>
+#import <editor/src/write.h>
+#import <io/src/exec.h>
+#import <Find/src/Find.h>
 
 int32_t const NSWrapColumnWindowWidth =  0;
 int32_t const NSWrapColumnAskUser     = -1;

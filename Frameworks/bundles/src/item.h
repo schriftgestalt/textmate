@@ -1,8 +1,8 @@
 #ifndef BUNDLES_ITEM_H_H2GEVOXK
 #define BUNDLES_ITEM_H_H2GEVOXK
 
-#include <plist/plist.h>
-#include <scope/scope.h>
+#include <plist/src/plist.h>
+#include <scope/src/scope.h>
 
 namespace fs { struct node_t; }
 

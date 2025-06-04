@@ -1,6 +1,6 @@
 #import "OFBHeaderView.h"
-#import <OakAppKit/OakAppKit.h>
-#import <OakAppKit/OakUIConstructionFunctions.h>
+#import <OakAppKit/src/OakAppKit.h>
+#import <OakAppKit/src/OakUIConstructionFunctions.h>
 
 static NSButton* OakCreateImageButton (NSString* imageName)
 {
