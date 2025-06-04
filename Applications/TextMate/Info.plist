@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>${TARGET_NAME}</string>
+	<string>${PRODUCT_NAME}</string>
 	<key>CFBundleShortVersionString</key>
-	<string>${APP_VERSION}</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>9800</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.macromates.${TARGET_NAME}</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>${TARGET_NAME}</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleHelpBookFolder</key>
 	<string>${TARGET_NAME} Help</string>
 	<key>CFBundleHelpBookName</key>
@@ -24,12 +24,10 @@
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>avin</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.developer-tools</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>${APP_MIN_OS}</string>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
