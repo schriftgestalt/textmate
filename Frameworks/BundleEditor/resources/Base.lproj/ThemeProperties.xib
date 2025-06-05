@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,9 +18,8 @@
             <rect key="frame" x="0.0" y="0.0" width="296" height="72"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="127" userLabel="Author Text Field">
-                    <rect key="frame" x="92" y="50" width="184" height="22"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="127" userLabel="Author Text Field">
+                    <rect key="frame" x="91" y="51" width="185" height="21"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="130">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -30,9 +29,8 @@
                         <binding destination="99" name="value" keyPath="selection.author" id="141"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="93" userLabel="Comment Text Field">
-                    <rect key="frame" x="92" y="20" width="184" height="22"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="93" userLabel="Comment Text Field">
+                    <rect key="frame" x="91" y="20" width="185" height="21"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="94">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -42,25 +40,36 @@
                         <binding destination="99" name="value" keyPath="selection.comment" id="142"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="92">
-                    <rect key="frame" x="17" y="22" width="70" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Comment:" id="95">
+                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="92">
+                    <rect key="frame" x="18" y="23" width="67" height="16"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Comment:" id="95">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="128">
-                    <rect key="frame" x="35" y="52" width="52" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Author:" id="129">
+                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="128">
+                    <rect key="frame" x="18" y="54" width="67" height="16"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Author:" id="129">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
             </subviews>
+            <constraints>
+                <constraint firstItem="93" firstAttribute="leading" secondItem="92" secondAttribute="trailing" constant="8" symbolic="YES" id="2qM-7N-AKA"/>
+                <constraint firstItem="92" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" symbolic="YES" id="6M3-f8-e4t"/>
+                <constraint firstItem="127" firstAttribute="firstBaseline" secondItem="128" secondAttribute="firstBaseline" id="CaC-cZ-tsG"/>
+                <constraint firstItem="93" firstAttribute="leading" secondItem="127" secondAttribute="leading" id="QuF-K4-gsX"/>
+                <constraint firstItem="93" firstAttribute="trailing" secondItem="127" secondAttribute="trailing" id="Unu-zM-pjz"/>
+                <constraint firstAttribute="trailing" secondItem="127" secondAttribute="trailing" constant="20" symbolic="YES" id="WFC-8v-77i"/>
+                <constraint firstItem="93" firstAttribute="top" secondItem="127" secondAttribute="bottom" constant="10" symbolic="YES" id="ZnH-nr-FhK"/>
+                <constraint firstItem="127" firstAttribute="leading" secondItem="128" secondAttribute="trailing" constant="8" symbolic="YES" id="cKb-iB-6hj"/>
+                <constraint firstItem="127" firstAttribute="top" secondItem="1" secondAttribute="top" id="coM-Nk-THU"/>
+                <constraint firstItem="93" firstAttribute="firstBaseline" secondItem="92" secondAttribute="firstBaseline" id="ihc-Kl-Me7"/>
+                <constraint firstItem="128" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" symbolic="YES" id="qDo-8K-Nou"/>
+            </constraints>
             <point key="canvasLocation" x="-168" y="129"/>
         </customView>
         <objectController id="99">
