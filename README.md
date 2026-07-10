@@ -18,65 +18,49 @@ Before you submit a bug report please read the [writing bug reports](https://git
 
 # Building
 
+TextMate builds with **Xcode**. The Xcode project is self-contained — it compiles the checked-in generated sources directly and links the dependencies below.
+
 ## Setup
 
-To build TextMate, you need the following:
-
- * [boost][]            — portable C++ source libraries
- * [Cap’n Proto][capnp] — serialization library
- * [multimarkdown][]    — marked-up plain text compiler
- * [ninja][]            — build system similar to `make`
- * [ragel][]            — state machine compiler
- * [sparsehash][]       — a cache friendly `hash_map`
-
-All this can be installed using either [Homebrew][] or [MacPorts][]:
+Install the build dependencies with [Homebrew][]:
 
 ```sh
-# Homebrew
-brew install boost capnp google-sparsehash multimarkdown ninja ragel
-
-# MacPorts
-sudo port install boost capnproto multimarkdown ninja ragel sparsehash
+brew install boost capnp google-sparsehash
 ```
 
-After installing dependencies, make sure you have a full checkout (including submodules) and then run `./configure` followed by `ninja`, for example:
+`ragel` and `multimarkdown` are only needed if you regenerate the checked-in generated sources (see below); they are not required for a normal build.
+
+Make sure you have a full checkout including submodules:
 
 ```sh
 git clone --recursive https://github.com/textmate/textmate.git
 cd textmate
-./configure && ninja TextMate/run
 ```
 
-The `./configure` script simply checks that all dependencies can be found, and then calls `bin/rave` to bootstrap a `build.ninja` file with default config set to `release` and default target set to `TextMate`.
+### Build the Onigmo dependency
 
-## Building from within TextMate
-
-You should install the [Ninja][NinjaBundle] bundle which can be installed via _Preferences_ → _Bundles_.
-
-After this you can press ⌘B to build from within TextMate. In case you haven't already you also need to set up the `PATH` variable either in _Preferences_ → _Variables_ or `~/.tm_properties` so it can find `ninja` and related tools; an example could be `$PATH:/usr/local/bin`.
-
-The default target (set in `.tm_properties`) is `TextMate/run`. This will relaunch TextMate but when called from within TextMate, a dialog will appear before the current instance is killed. As there is full session restore, it is safe to relaunch even with unsaved changes.
-
-If the current file is a test file then the target to build is changed to build the library to which the test belongs (this is done by setting `TM_NINJA_TARGET` in the `.tm_properties` file found in the root of the source tree).
-
-Similarly, if the current file belongs to an application target (other than `TextMate.app`) then `TM_NINJA_TARGET` is set to build and run this application.
-
-## Build Targets
-
-For the `TextMate.app` application there are two symbolic build targets:
+The regular-expression library (Onigmo) is vendored and built with its own autotools setup, producing the static `libonig.a` that the app links against. Build it once after checkout:
 
 ```sh
-ninja TextMate      # Build and sign TextMate
-ninja TextMate/run  # Build, sign, and (re)launch TextMate
+cd vendor/Onigmo/vendor
+./configure && make
+cd -
 ```
 
-To clean everything run:
+## Building the app
+
+Open `Applications/TextMate/TextMate.xcodeproj` in Xcode and build/run the `TextMate` scheme (⌘R), or from the command line:
 
 ```sh
-ninja -t clean
+xcodebuild -project Applications/TextMate/TextMate.xcodeproj -scheme TextMate -configuration Debug build
 ```
 
-Or simply delete `~/build/TextMate`.
+## Regenerating generated sources (optional)
+
+Some sources are generated and committed to the repository, so a normal build does not run any code generators. Regenerate them only when you edit the corresponding schema/source:
+
+ * **Cap’n Proto** — `*.capnp` → `*.capnp.c++` / `*.capnp.h` (requires `capnp`)
+ * **Ragel** — `Frameworks/plist/src/ascii.rl` → `ascii.cc` (requires `ragel`)
 
 # Legal
 
@@ -85,13 +69,10 @@ The source for TextMate is released under the GNU General Public License as publ
 TextMate is a trademark of Allan Odgaard.
 
 [boost]:         http://www.boost.org/
-[ninja]:         https://ninja-build.org/
 [multimarkdown]: http://fletcherpenney.net/multimarkdown/
 [ragel]:         http://www.complang.org/ragel/
 [capnp]:         https://github.com/capnproto/capnproto.git
-[MacPorts]:      http://www.macports.org/
 [Homebrew]:      http://brew.sh/
-[NinjaBundle]:   https://github.com/textmate/ninja.tmbundle
 [sparsehash]:    https://code.google.com/p/sparsehash/
 [#textmate]:     irc://irc.freenode.net/#textmate
 [freenode.net]:  http://freenode.net/
