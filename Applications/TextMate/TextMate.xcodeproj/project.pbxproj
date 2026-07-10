@@ -25,6 +25,7 @@
 		5656C45B2DF0879600DCE20D /* classification.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C44F2DF0879600DCE20D /* classification.cc */; };
 		5656C45D2DF088C900DCE20D /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C45C2DF088C900DCE20D /* UserNotifications.framework */; };
 		5656C45F2DF089FA00DCE20D /* ascii.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C45E2DF089FA00DCE20D /* ascii.cc */; };
+		5697238730017190005DC1DD /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5697238630017190005DC1DD /* AppIcon.icon */; };
 		56A4D5F12B5959340049910C /* AboutWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D5DE2B5959340049910C /* AboutWindowController.mm */; };
 		56A4D5F22B5959340049910C /* Favorites.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D5DF2B5959340049910C /* Favorites.mm */; };
 		56A4D5F32B5959340049910C /* TMPlugInController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D5E22B5959340049910C /* TMPlugInController.mm */; };
@@ -70,62 +71,15 @@
 		56A4D6472B5959560049910C /* Registration.md in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D63C2B5959560049910C /* Registration.md */; };
 		56A4D6482B5959560049910C /* Changes.md in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D63D2B5959560049910C /* Changes.md */; };
 		56A4D6492B5959560049910C /* About.md in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D63E2B5959560049910C /* About.md */; };
-		56A4D6852B5959640049910C /* SWIG.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D64D2B5959640049910C /* SWIG.icns */; };
-		56A4D6862B5959640049910C /* JavaScript.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D64E2B5959640049910C /* JavaScript.icns */; };
-		56A4D6872B5959640049910C /* Shell.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D64F2B5959640049910C /* Shell.icns */; };
-		56A4D6882B5959640049910C /* CSS.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6502B5959640049910C /* CSS.icns */; };
-		56A4D6892B5959640049910C /* JSON.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6512B5959640049910C /* JSON.icns */; };
-		56A4D68A2B5959640049910C /* H.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6522B5959640049910C /* H.icns */; };
-		56A4D68B2B5959640049910C /* C#.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6532B5959640049910C /* C#.icns */; };
-		56A4D68C2B5959640049910C /* Strings.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6542B5959640049910C /* Strings.icns */; };
-		56A4D68D2B5959640049910C /* Blank.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6552B5959640049910C /* Blank.icns */; };
-		56A4D68E2B5959640049910C /* SQL.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6562B5959640049910C /* SQL.icns */; };
-		56A4D68F2B5959640049910C /* PHP.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6572B5959640049910C /* PHP.icns */; };
-		56A4D6902B5959640049910C /* YAML.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6582B5959640049910C /* YAML.icns */; };
-		56A4D6912B5959640049910C /* Python.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6592B5959640049910C /* Python.icns */; };
-		56A4D6922B5959640049910C /* Text.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D65A2B5959640049910C /* Text.icns */; };
-		56A4D6932B5959640049910C /* Haskell.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D65B2B5959640049910C /* Haskell.icns */; };
-		56A4D6942B5959640049910C /* Obj-C++.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D65C2B5959640049910C /* Obj-C++.icns */; };
-		56A4D6952B5959640049910C /* H++.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D65D2B5959640049910C /* H++.icns */; };
 		56A4D6962B5959640049910C /* TextMate PlugIn.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D65E2B5959640049910C /* TextMate PlugIn.icns */; };
-		56A4D6972B5959640049910C /* TeX.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D65F2B5959640049910C /* TeX.icns */; };
-		56A4D6982B5959640049910C /* HTML.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6602B5959640049910C /* HTML.icns */; };
-		56A4D6992B5959640049910C /* C.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6612B5959640049910C /* C.icns */; };
-		56A4D69A2B5959640049910C /* reST.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6622B5959640049910C /* reST.icns */; };
-		56A4D69B2B5959640049910C /* Pascal.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6632B5959640049910C /* Pascal.icns */; };
 		56A4D69C2B5959640049910C /* TextMate Bundle.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6642B5959640049910C /* TextMate Bundle.icns */; };
-		56A4D69D2B5959640049910C /* Plist.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6652B5959640049910C /* Plist.icns */; };
-		56A4D69E2B5959640049910C /* Patch.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6662B5959640049910C /* Patch.icns */; };
-		56A4D69F2B5959640049910C /* TextMate.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6672B5959640049910C /* TextMate.icns */; };
-		56A4D6A02B5959640049910C /* AS.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6682B5959640049910C /* AS.icns */; };
 		56A4D6A12B5959640049910C /* TextMate Snippet.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6692B5959640049910C /* TextMate Snippet.icns */; };
-		56A4D6A22B5959640049910C /* Perl.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D66A2B5959640049910C /* Perl.icns */; };
-		56A4D6A32B5959640049910C /* INI.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D66B2B5959640049910C /* INI.icns */; };
-		56A4D6A42B5959640049910C /* Lisp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D66C2B5959640049910C /* Lisp.icns */; };
-		56A4D6A52B5959640049910C /* XML.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D66D2B5959640049910C /* XML.icns */; };
-		56A4D6A62B5959640049910C /* Erlang.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D66E2B5959640049910C /* Erlang.icns */; };
-		56A4D6A72B5959640049910C /* C++.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D66F2B5959640049910C /* C++.icns */; };
-		56A4D6A82B5959640049910C /* CoffeeScript.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6702B5959640049910C /* CoffeeScript.icns */; };
-		56A4D6A92B5959640049910C /* RHTML.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6712B5959640049910C /* RHTML.icns */; };
-		56A4D6AA2B5959640049910C /* Icon Template.psd in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6722B5959640049910C /* Icon Template.psd */; };
 		56A4D6AB2B5959640049910C /* TextMate Settings.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6732B5959640049910C /* TextMate Settings.icns */; };
 		56A4D6AC2B5959640049910C /* TextMate Grammar.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6742B5959640049910C /* TextMate Grammar.icns */; };
 		56A4D6AD2B5959640049910C /* TextMate Theme.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6752B5959640049910C /* TextMate Theme.icns */; };
-		56A4D6AE2B5959640049910C /* Ragel.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6762B5959640049910C /* Ragel.icns */; };
-		56A4D6AF2B5959640049910C /* Java.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6772B5959640049910C /* Java.icns */; };
-		56A4D6B02B5959640049910C /* Diff.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6782B5959640049910C /* Diff.icns */; };
-		56A4D6B12B5959640049910C /* BibTeX.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6792B5959640049910C /* BibTeX.icns */; };
-		56A4D6B22B5959640049910C /* GTD.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D67A2B5959640049910C /* GTD.icns */; };
-		56A4D6B32B5959640049910C /* ASP.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D67B2B5959640049910C /* ASP.icns */; };
 		56A4D6B42B5959640049910C /* TextMate Macro.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D67C2B5959640049910C /* TextMate Macro.icns */; };
-		56A4D6B52B5959640049910C /* Obj-C.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D67D2B5959640049910C /* Obj-C.icns */; };
 		56A4D6B62B5959640049910C /* TextMate Command.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D67E2B5959640049910C /* TextMate Command.icns */; };
-		56A4D6B72B5959640049910C /* Fortran.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D67F2B5959640049910C /* Fortran.icns */; };
 		56A4D6B82B5959640049910C /* TextMate Bundle Item.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6802B5959640049910C /* TextMate Bundle Item.icns */; };
-		56A4D6B92B5959640049910C /* R.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6812B5959640049910C /* R.icns */; };
-		56A4D6BA2B5959640049910C /* Ruby.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6822B5959640049910C /* Ruby.icns */; };
-		56A4D6BB2B5959640049910C /* Markdown.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6832B5959640049910C /* Markdown.icns */; };
-		56A4D6BC2B5959640049910C /* Lua.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6842B5959640049910C /* Lua.icns */; };
 		56A4D6C02B5959790049910C /* footer.html in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6BE2B5959780049910C /* footer.html */; };
 		56A4D6C12B5959790049910C /* header.html in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6BF2B5959780049910C /* header.html */; };
 		56A4DA7A2B595A010049910C /* info.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D6C62B5959FE0049910C /* info.cc */; };
@@ -561,6 +515,7 @@
 		5656C46D2DF0AD0000DCE20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/Pasteboard Selector.xib"; sourceTree = "<group>"; };
 		5656C46E2DF0AD0800DCE20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TabSizeSetting.xib; sourceTree = "<group>"; };
 		5656C46F2DF0AD0F00DCE20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TerminalPreferences.xib; sourceTree = "<group>"; };
+		5697238630017190005DC1DD /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		56A4D5C22B5958BF0049910C /* TextMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A4D5DE2B5959340049910C /* AboutWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AboutWindowController.mm; sourceTree = "<group>"; };
 		56A4D5DF2B5959340049910C /* Favorites.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Favorites.mm; sourceTree = "<group>"; };
@@ -1644,6 +1599,7 @@
 				56A4D6822B5959640049910C /* Ruby.icns */,
 				56A4D6832B5959640049910C /* Markdown.icns */,
 				56A4D6842B5959640049910C /* Lua.icns */,
+				5697238630017190005DC1DD /* AppIcon.icon */,
 				561C46892DF0F9C300D6568C /* Icons.xcassets */,
 			);
 			path = icons;
@@ -3808,6 +3764,7 @@
 				56A4DACC2B595A010049910C /* Drag Command.plist in Resources */,
 				56A4D69D2B5959640049910C /* Plist.icns in Resources */,
 				56A4D6412B5959560049910C /* flower@2x.png in Resources */,
+				5697238730017190005DC1DD /* AppIcon.icon in Resources */,
 				56A4DB6B2B595A010049910C /* TouchBarQuickOpenTemplate@2x.png in Resources */,
 				56A4DBB12B595A010049910C /* cache.capnp in Resources */,
 				56A4DB932B595A010049910C /* search Template.pdf in Resources */,
