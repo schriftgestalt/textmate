@@ -211,7 +211,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 
 		outlineView.menu = [[NSMenu alloc] init];
 		outlineView.menu.delegate = self;
-
+		outlineView.style = NSTableViewStyleSourceList;
 		OFBHeaderView* headerView = _fileBrowserView.headerView;
 		headerView.goBackButton.target  = self;
 		headerView.goBackButton.action  = @selector(goBack:);
