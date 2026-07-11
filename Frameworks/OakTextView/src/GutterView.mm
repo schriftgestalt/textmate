@@ -122,8 +122,12 @@ struct data_source_t
 		CGFloat lastY = to.column == 0 && from.line != to.line ? fragment.firstY : fragment.lastY;
 
 		backgroundRects.push_back(CGRectMake(0, firstY+1, self.frame.size.width, lastY - firstY - 2));
+#if 0
+		// Disabled: keep the old current-line top/bottom gutter strokes here in
+		// case we want to restore the bordered gutter highlight later.
 		borderRects.push_back(CGRectMake(0, firstY, self.frame.size.width, 1));
 		borderRects.push_back(CGRectMake(0, lastY-1, self.frame.size.width, 1));
+#endif
 	}
 }
 
@@ -317,9 +321,13 @@ static void DrawText (std::string const& text, CGRect const& rect, CGFloat basel
 	for(auto const& rect : backgroundRects)
 		NSRectFillUsingOperation(NSIntersectionRect(rect, NSIntersectionRect(aRect, self.frame)), NSCompositingOperationSourceOver);
 
+#if 0
+	// Disabled: current-line gutter fill no longer draws top/bottom border
+	// strokes, but leave the drawing code close by for easy restoration.
 	[self.selectionBorderColor set];
 	for(auto const& rect : borderRects)
 		NSRectFillUsingOperation(NSIntersectionRect(rect, NSIntersectionRect(aRect, self.frame)), NSCompositingOperationSourceOver);
+#endif
 
 	if(!self.antiAlias)
 		CGContextSetShouldAntialias(NSGraphicsContext.currentContext.CGContext, false);

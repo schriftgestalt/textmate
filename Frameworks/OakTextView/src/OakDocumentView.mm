@@ -84,7 +84,15 @@ static NSString* const kFoldingsColumnIdentifier  = @"foldings";
 		[gutterScrollView.contentView addConstraint:[NSLayoutConstraint constraintWithItem:gutterView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:gutterScrollView.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0]];
 		[gutterScrollView.contentView addConstraint:[NSLayoutConstraint constraintWithItem:gutterView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:gutterScrollView.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0]];
 
+#if 0
+		// Disabled: keep the old gutter/code divider line creation here in
+		// case we want to restore the separator later.
 		gutterDividerView = OakCreateVerticalLine(OakBackgroundFillViewStyleNone);
+#else
+		gutterDividerView = [[OakBackgroundFillView alloc] initWithFrame:NSZeroRect];
+		[gutterDividerView addConstraint:[NSLayoutConstraint constraintWithItem:gutterDividerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0]];
+		gutterDividerView.translatesAutoresizingMaskIntoConstraints = NO;
+#endif
 
 		_statusBar = [[OTVStatusBar alloc] initWithFrame:NSZeroRect];
 		_statusBar.delegate = self;
@@ -330,7 +338,8 @@ static NSString* const kFoldingsColumnIdentifier  = @"foldings";
 {
 	if(theme_ptr theme = _textView.theme)
 	{
-		[textScrollView setBackgroundColor:[NSColor colorWithCGColor:theme->background(to_s(self.document.fileType))]];
+		NSColor* editorBackgroundColor = [NSColor colorWithCGColor:theme->background(to_s(self.document.fileType))];
+		[textScrollView setBackgroundColor:editorBackgroundColor];
 		[textScrollView setScrollerKnobStyle:theme->is_dark() ? NSScrollerKnobStyleLight : NSScrollerKnobStyleDark];
 
 		if(@available(macOS 10.14, *))
@@ -355,18 +364,22 @@ static NSString* const kFoldingsColumnIdentifier  = @"foldings";
 		auto const& styles = theme->gutter_styles();
 
 		gutterView.foregroundColor           = [NSColor colorWithCGColor:styles.foreground];
-		gutterView.backgroundColor           = [NSColor colorWithCGColor:styles.background];
+		gutterView.backgroundColor           = editorBackgroundColor;
 		gutterView.iconColor                 = [NSColor colorWithCGColor:styles.icons];
 		gutterView.iconHoverColor            = [NSColor colorWithCGColor:styles.iconsHover];
 		gutterView.iconPressedColor          = [NSColor colorWithCGColor:styles.iconsPressed];
 		gutterView.selectionForegroundColor  = [NSColor colorWithCGColor:styles.selectionForeground];
-		gutterView.selectionBackgroundColor  = [NSColor colorWithCGColor:styles.selectionBackground];
+		gutterView.selectionBackgroundColor  = [NSColor colorWithCalibratedWhite:theme->is_dark() ? 1.0 : 0.0 alpha:theme->is_dark() ? 0.08 : 0.06];
 		gutterView.selectionIconColor        = [NSColor colorWithCGColor:styles.selectionIcons];
 		gutterView.selectionIconHoverColor   = [NSColor colorWithCGColor:styles.selectionIconsHover];
 		gutterView.selectionIconPressedColor = [NSColor colorWithCGColor:styles.selectionIconsPressed];
 		gutterView.selectionBorderColor      = [NSColor colorWithCGColor:styles.selectionBorder];
-		gutterScrollView.backgroundColor     = gutterView.backgroundColor;
+		gutterScrollView.backgroundColor     = editorBackgroundColor;
+#if 0
+		// Disabled: the gutter/code divider is intentionally hidden, but
+		// preserve the themed divider color assignment for later.
 		gutterDividerView.activeBackgroundColor = [NSColor colorWithCGColor:styles.divider];
+#endif
 
 		[gutterView setNeedsDisplay:YES];
 	}
