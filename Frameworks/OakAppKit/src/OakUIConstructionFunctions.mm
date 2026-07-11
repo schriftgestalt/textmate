@@ -258,6 +258,11 @@ OakRolloverButton* OakCreateCloseButton (NSString* accessibilityLabel)
 		NSRectFill(aRect);
 	}
 }
+
+- (BOOL)clipsToBounds {
+	return YES;
+}
+
 @end
 
 OakBackgroundFillView* OakCreateVerticalLine (OakBackgroundFillViewStyle style)
