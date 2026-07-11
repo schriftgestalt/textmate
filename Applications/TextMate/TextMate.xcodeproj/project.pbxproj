@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2132F191276AF4C4B224AF61 /* path.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8052B5959FF0049910C /* path.cc */; };
+		23E8FCA2DE0740920771D7FC /* parser_base.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7332B5959FE0049910C /* parser_base.cc */; };
+		2A0FA50962852DA7C6F2910A /* intermediate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D80E2B5959FF0049910C /* intermediate.mm */; };
+		3227B98D00DDCB7AC9BCBCBB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E8FCE980B264A9257252FF2 /* Security.framework */; };
+		32B6B458DA2FFBF3E01F578D /* OakFoundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D71E2B5959FE0049910C /* OakFoundation.mm */; };
+		3645F19772DAB056829C741E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 459247091B895CB06FFDCC1F /* Cocoa.framework */; };
+		41EFEED9782F66A1295CD8A6 /* types.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43D2DF0879500DCE20D /* types.cc */; };
+		44549BCD8ECF6BBFD4BC12CF /* ns.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA4A2B595A000049910C /* ns.mm */; };
+		4EABAF28A3B48231B4159B43 /* format.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43E2DF0879500DCE20D /* format.cc */; };
+		54BC8F15B35C400423510AFC /* glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7382B5959FE0049910C /* glob.cc */; };
 		561C468A2DF0F9C300D6568C /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 561C46892DF0F9C300D6568C /* Icons.xcassets */; };
 		5656C4232DF04F8E00DCE20D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4222DF04F8E00DCE20D /* Cocoa.framework */; };
 		5656C4272DF05D2E00DCE20D /* libonig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4262DF05D2E00DCE20D /* libonig.a */; };
@@ -460,9 +470,54 @@
 		56A4DC8D2B595A010049910C /* InstallBundleItems.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA782B595A000049910C /* InstallBundleItems.mm */; };
 		56A4DD5F2B596F9A0049910C /* KVDBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DCB22B596F990049910C /* KVDBFunctions.m */; };
 		56A4DD602B596F9A0049910C /* kvdb.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DCB32B596F990049910C /* kvdb.m */; };
+		5D9C63D7251F06F030FEFBAF /* indent.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4362DF0879500DCE20D /* indent.cc */; };
+		5DDED5B691D0A3E5F71846C8 /* parse.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43C2DF0879500DCE20D /* parse.cc */; };
+		5DF2CE465F70F833451A9B39 /* move_path.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8012B5959FF0049910C /* move_path.cc */; };
+		623DA31B8159EBAE7FCA18FE /* case.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4412DF0879600DCE20D /* case.cc */; };
+		6592FD263B0AC321E67DB34D /* private.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7322B5959FE0049910C /* private.cc */; };
+		6AD7A1DB822E0A9FE115B04A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4222DF04F8E00DCE20D /* Cocoa.framework */; };
+		728C350B5B54C19D352B4128 /* snippet.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D73F2B5959FE0049910C /* snippet.cc */; };
+		765B5DEE7B86D96D61CC8E22 /* format_string.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7402B5959FE0049910C /* format_string.cc */; };
+		779475879F3A3B46244AD058 /* parser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7392B5959FE0049910C /* parser.cc */; };
+		7F4BF7278165667362F2B809 /* mate in Copy mate to MacOS */ = {isa = PBXBuildFile; fileRef = F3E6451A3442DB0B2374D340 /* mate */; };
+		849B09B32BCB9EEA4F318AA5 /* regexp.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7352B5959FE0049910C /* regexp.cc */; };
+		8C4A7768141ECAAE3928FFFE /* mate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B859C963D4FF719720173012 /* mate.mm */; };
+		B7B41E16960401DC1F79A4FC /* libonig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4262DF05D2E00DCE20D /* libonig.a */; };
+		C9516AEEEF53DE9A4E8D0207 /* cf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9722B595A000049910C /* cf.cc */; };
+		D6A780C336BF807DC8F6D4E6 /* uuid.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8EB2B5959FF0049910C /* uuid.cc */; };
+		E2D2AE5B0572364D63197A34 /* entries.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8022B5959FF0049910C /* entries.cc */; };
+		E7F4B461316B6E4E8DF9173B /* my_ctype.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4442DF0879600DCE20D /* my_ctype.cc */; };
+		F3356496E3484D275F513784 /* parse_glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7342B5959FE0049910C /* parse_glob.cc */; };
+		F9591B7BB797AE44B5CFC561 /* encode.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4352DF0879500DCE20D /* encode.cc */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C7205C198503DF2CAC386488 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A4D5BA2B5958BF0049910C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BFF9C8CC91314FFC8AFAFB1;
+			remoteInfo = mate;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C9FAFD4D5367EFC8F8364268 /* Copy mate to MacOS */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				7F4BF7278165667362F2B809 /* mate in Copy mate to MacOS */,
+			);
+			name = "Copy mate to MacOS";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1E8FCE980B264A9257252FF2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		459247091B895CB06FFDCC1F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		561C46892DF0F9C300D6568C /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		5656C4222DF04F8E00DCE20D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5656C4262DF05D2E00DCE20D /* libonig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libonig.a; path = Onigmo/vendor/.libs/libonig.a; sourceTree = "<group>"; };
@@ -1331,6 +1386,8 @@
 		56A4DCB92B596F990049910C /* FilesTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesTestCase.m; sourceTree = "<group>"; };
 		56A4DCBA2B596F990049910C /* DatabaseTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTestCase.m; sourceTree = "<group>"; };
 		56A4DCBB2B596F990049910C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		B859C963D4FF719720173012 /* mate.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = mate.mm; sourceTree = "<group>"; };
+		F3E6451A3442DB0B2374D340 /* mate */ = {isa = PBXFileReference; includeInIndex = 0; path = mate; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1341,6 +1398,17 @@
 				5656C45D2DF088C900DCE20D /* UserNotifications.framework in Frameworks */,
 				5656C4232DF04F8E00DCE20D /* Cocoa.framework in Frameworks */,
 				5656C4272DF05D2E00DCE20D /* libonig.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2E08E950D5E7C579669CFD2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3645F19772DAB056829C741E /* Cocoa.framework in Frameworks */,
+				6AD7A1DB822E0A9FE115B04A /* Cocoa.framework in Frameworks */,
+				B7B41E16960401DC1F79A4FC /* libonig.a in Frameworks */,
+				3227B98D00DDCB7AC9BCBCBB /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1399,6 +1467,7 @@
 				56A4D6C22B5959C40049910C /* Frameworks */,
 				56A4DC912B596F820049910C /* Vendor */,
 				56A4D5C32B5958BF0049910C /* Products */,
+				917909068AEAC9FFA1C58943 /* mate */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1406,6 +1475,7 @@
 			isa = PBXGroup;
 			children = (
 				56A4D5C22B5958BF0049910C /* TextMate.app */,
+				F3E6451A3442DB0B2374D340 /* mate */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1667,6 +1737,8 @@
 				56A4D93E2B595A000049910C /* TMFileReference */,
 				56A4D79D2B5959FE0049910C /* undo */,
 				56A4D7B02B5959FE0049910C /* updater */,
+				7DE5A761CBD2D3ABDE001B70 /* OS X */,
+				1E8FCE980B264A9257252FF2 /* Security.framework */,
 			);
 			name = Frameworks;
 			path = ../../Frameworks;
@@ -3527,9 +3599,42 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
+		7DE5A761CBD2D3ABDE001B70 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				459247091B895CB06FFDCC1F /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		917909068AEAC9FFA1C58943 /* mate */ = {
+			isa = PBXGroup;
+			children = (
+				B859C963D4FF719720173012 /* mate.mm */,
+			);
+			name = mate;
+			path = ../mate/src;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1BFF9C8CC91314FFC8AFAFB1 /* mate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DE98FD67AEA5DB7E2823D24 /* Build configuration list for PBXNativeTarget "mate" */;
+			buildPhases = (
+				F54C87AA47E289093B0DCDFE /* Sources */,
+				B2E08E950D5E7C579669CFD2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mate;
+			productName = mate;
+			productReference = F3E6451A3442DB0B2374D340 /* mate */;
+			productType = "com.apple.product-type.tool";
+		};
 		56A4D5C12B5958BF0049910C /* TextMate */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 56A4D5D92B5958C10049910C /* Build configuration list for PBXNativeTarget "TextMate" */;
@@ -3537,10 +3642,12 @@
 				56A4D5BE2B5958BF0049910C /* Sources */,
 				56A4D5BF2B5958BF0049910C /* Frameworks */,
 				56A4D5C02B5958BF0049910C /* Resources */,
+				C9FAFD4D5367EFC8F8364268 /* Copy mate to MacOS */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				337CB4D5AE4AA7C9AE025D83 /* PBXTargetDependency */,
 			);
 			name = TextMate;
 			productName = TextMate;
@@ -3575,6 +3682,7 @@
 			projectRoot = "";
 			targets = (
 				56A4D5C12B5958BF0049910C /* TextMate */,
+				1BFF9C8CC91314FFC8AFAFB1 /* mate */,
 			);
 		};
 /* End PBXProject section */
@@ -3584,27 +3692,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				56A4D6882B5959640049910C /* CSS.icns in Resources */,
 				56A4DBEA2B595A010049910C /* small-web.icns in Resources */,
 				56A4DB972B595A010049910C /* RemoveBookmarkTemplate.pdf in Resources */,
 				56A4D61C2B5959420049910C /* DefaultBundles.tbz.bl in Resources */,
-				56A4D6902B5959640049910C /* YAML.icns in Resources */,
 				56A4DB862B595A010049910C /* TabCloseThin_Pressed_Template@2x.png in Resources */,
-				56A4D6A32B5959640049910C /* INI.icns in Resources */,
 				56A4DB4B2B595A010049910C /* Variables.png in Resources */,
 				56A4D61E2B5959420049910C /* TextMate.scriptSuite in Resources */,
 				56A4DADC2B595A010049910C /* Command.png in Resources */,
 				56A4DAD52B595A010049910C /* Bundle.png in Resources */,
-				56A4D69E2B5959640049910C /* Patch.icns in Resources */,
 				56A4D6452B5959560049910C /* contributions.js in Resources */,
 				56A4DAE12B595A010049910C /* Macro.png in Resources */,
 				56A4DC002B595A010049910C /* small-list.icns in Resources */,
 				56A4D62A2B5959420049910C /* glob_string_syntax.md in Resources */,
 				56A4DBF32B595A010049910C /* small-latex-alt.icns in Resources */,
 				56A4DBEF2B595A010049910C /* scm-badge-deleted.icns in Resources */,
-				56A4D68F2B5959640049910C /* PHP.icns in Resources */,
 				56A4DB452B595A010049910C /* TerminalPreferences.xib in Resources */,
-				56A4D69A2B5959640049910C /* reST.icns in Resources */,
 				56A4DADF2B595A010049910C /* Proxy@2x.png in Resources */,
 				56A4DB942B595A010049910C /* Bookmark Template.pdf in Resources */,
 				56A4D6AB2B5959640049910C /* TextMate Settings.icns in Resources */,
@@ -3612,15 +3714,12 @@
 				56A4DB882B595A010049910C /* TabCloseThin_ModifiedRollover_Template.png in Resources */,
 				56A4DAC72B595A010049910C /* Grammar.plist in Resources */,
 				56A4DA822B595A010049910C /* CloseRolloverTemplate@2x.png in Resources */,
-				56A4D6912B5959640049910C /* Python.icns in Resources */,
 				56A4DBD22B595A010049910C /* Update Badge.tiff in Resources */,
 				56A4DAD12B595A010049910C /* Snippet@2x.png in Resources */,
-				56A4D68B2B5959640049910C /* C#.icns in Resources */,
 				56A4DBE22B595A010049910C /* scm-badge-conflicted.icns in Resources */,
 				56A4D6B42B5959640049910C /* TextMate Macro.icns in Resources */,
 				56A4D61A2B5959420049910C /* InfoPlist.strings in Resources */,
 				56A4DBEB2B595A010049910C /* small-header.icns in Resources */,
-				56A4D6982B5959640049910C /* HTML.icns in Resources */,
 				56A4D6C02B5959790049910C /* footer.html in Resources */,
 				56A4DBF82B595A010049910C /* small-structured-text.icns in Resources */,
 				56A4DABE2B595A010049910C /* FileDropProperties.xib in Resources */,
@@ -3630,10 +3729,8 @@
 				56A4DB8A2B595A010049910C /* TabCloseThin_Modified_Template.png in Resources */,
 				56A4DBDD2B595A010049910C /* small-angle-brackets-brown.icns in Resources */,
 				56A4DBF02B595A010049910C /* small-text.icns in Resources */,
-				56A4D6AF2B5959640049910C /* Java.icns in Resources */,
 				561C468A2DF0F9C300D6568C /* Icons.xcassets in Resources */,
 				56A4DB7E2B595A010049910C /* TabOverflowThinTemplate.png in Resources */,
-				56A4D6852B5959640049910C /* SWIG.icns in Resources */,
 				56A4D6442B5959560049910C /* contributions.css in Resources */,
 				56A4D61D2B5959420049910C /* WKWebView.js in Resources */,
 				56A4D62C2B5959420049910C /* events.md in Resources */,
@@ -3653,14 +3750,10 @@
 				56A4DADD2B595A010049910C /* Settings@2x.png in Resources */,
 				56A4DABD2B595A010049910C /* BundleProperties.xib in Resources */,
 				56A4D6282B5959420049910C /* properties.md in Resources */,
-				56A4D6922B5959640049910C /* Text.icns in Resources */,
-				56A4D6BC2B5959640049910C /* Lua.icns in Resources */,
 				56A4DB822B595A010049910C /* TabCloseThinTemplate.png in Resources */,
 				56A4DB6C2B595A010049910C /* TouchBarNewTabTemplate.png in Resources */,
 				56A4D6232B5959420049910C /* bundle_dependencies.md in Resources */,
-				56A4D69F2B5959640049910C /* TextMate.icns in Resources */,
 				56A4D6AC2B5959640049910C /* TextMate Grammar.icns in Resources */,
-				56A4D68D2B5959640049910C /* Blank.icns in Resources */,
 				56A4DC342B595A010049910C /* SearchTemplate@2x.png in Resources */,
 				56A4DAB12B595A010049910C /* .gitignore in Resources */,
 				56A4DB9B2B595A010049910C /* Bookmark Hover Remove Template.pdf in Resources */,
@@ -3669,19 +3762,13 @@
 				56A4DAC32B595A010049910C /* MacroProperties.xib in Resources */,
 				56A4DB9F2B595A010049910C /* FoldingDots Template.pdf in Resources */,
 				56A4DBEC2B595A010049910C /* small-javascript.icns in Resources */,
-				56A4D6942B5959640049910C /* Obj-C++.icns in Resources */,
-				56A4D6A92B5959640049910C /* RHTML.icns in Resources */,
 				56A4D63F2B5959560049910C /* Contributions.md in Resources */,
 				56A4D69C2B5959640049910C /* TextMate Bundle.icns in Resources */,
 				56A4D6272B5959420049910C /* javascript_object.md in Resources */,
-				56A4D68C2B5959640049910C /* Strings.icns in Resources */,
 				56A4DAC92B595A010049910C /* Bundle.plist in Resources */,
 				56A4D6A12B5959640049910C /* TextMate Snippet.icns in Resources */,
-				56A4D68E2B5959640049910C /* SQL.icns in Resources */,
-				56A4D6872B5959640049910C /* Shell.icns in Resources */,
 				56A4DBE42B595A010049910C /* small-charcoal.icns in Resources */,
 				56A4DC362B595A010049910C /* SCMTemplate.png in Resources */,
-				56A4D68A2B5959640049910C /* H.icns in Resources */,
 				56A4DB482B595A010049910C /* Variables@2x.png in Resources */,
 				56A4DBFE2B595A010049910C /* small-red.icns in Resources */,
 				56A4DAD92B595A010049910C /* Proxy.png in Resources */,
@@ -3696,12 +3783,10 @@
 				56A4DACF2B595A010049910C /* MenuItem@2x.png in Resources */,
 				56A4DAC42B595A010049910C /* GrammarProperties.xib in Resources */,
 				56A4DA7C2B595A010049910C /* Pasteboard Selector.xib in Resources */,
-				56A4D69B2B5959640049910C /* Pascal.icns in Resources */,
 				56A4DB912B595A010049910C /* Folding Top Hover Template.pdf in Resources */,
 				56A4DB6D2B595A010049910C /* TouchBarQuickOpenTemplate.png in Resources */,
 				56A4DA842B595A010049910C /* ClosePressedTemplate@2x.png in Resources */,
 				56A4DC372B595A010049910C /* FavoritesTemplate@2x.png in Resources */,
-				56A4D6972B5959640049910C /* TeX.icns in Resources */,
 				56A4DB8F2B595A010049910C /* TabSizeSetting.xib in Resources */,
 				56A4D61F2B5959420049910C /* TextMate.md in Resources */,
 				56A4DBF62B595A010049910C /* scm-badge-added.icns in Resources */,
@@ -3710,7 +3795,6 @@
 				56A4DAD82B595A010049910C /* MenuItem.png in Resources */,
 				56A4D6462B5959560049910C /* Legal.md in Resources */,
 				56A4DB472B595A010049910C /* Projects.png in Resources */,
-				56A4D6992B5959640049910C /* C.icns in Resources */,
 				56A4D6292B5959420049910C /* selection_string_syntax.md in Resources */,
 				56A4DB4A2B595A010049910C /* Projects@2x.png in Resources */,
 				56A4DADE2B595A010049910C /* Grammar@2x.png in Resources */,
@@ -3718,7 +3802,6 @@
 				56A4DACE2B595A010049910C /* Macro@2x.png in Resources */,
 				56A4DBE92B595A010049910C /* small-purple.icns in Resources */,
 				56A4DAE62B595A010049910C /* svn_status.xslt in Resources */,
-				56A4D6862B5959640049910C /* JavaScript.icns in Resources */,
 				56A4DB9D2B595A010049910C /* Folding Collapsed Template.pdf in Resources */,
 				56A4DBE12B595A010049910C /* small-orange.icns in Resources */,
 				56A4DB962B595A010049910C /* Folding Bottom Template.pdf in Resources */,
@@ -3729,21 +3812,15 @@
 				56A4DBFC2B595A010049910C /* small-brown.icns in Resources */,
 				56A4DBFB2B595A010049910C /* small-tree-structure.icns in Resources */,
 				56A4DAC62B595A010049910C /* Settings.plist in Resources */,
-				56A4D6A82B5959640049910C /* CoffeeScript.icns in Resources */,
-				56A4D6B02B5959640049910C /* Diff.icns in Resources */,
 				56A4DACD2B595A010049910C /* Command.plist in Resources */,
 				56A4DB8D2B595A010049910C /* Bookmark Hover Add Template.pdf in Resources */,
 				56A4D6C12B5959790049910C /* header.html in Resources */,
-				56A4D6A72B5959640049910C /* C++.icns in Resources */,
 				56A4DB7D2B595A010049910C /* TabCloseThin_ModifiedRollover_Template@2x.png in Resources */,
 				56A4D6302B5959420049910C /* KeyBindings.dict in Resources */,
 				56A4D6242B5959420049910C /* tm_small.png in Resources */,
-				56A4D6A52B5959640049910C /* XML.icns in Resources */,
 				56A4D62D2B5959420049910C /* scope_selector_syntax.md in Resources */,
 				56A4DAE02B595A010049910C /* Snippet.png in Resources */,
 				56A4DBE02B595A010049910C /* small-ruby.icns in Resources */,
-				56A4D6B92B5959640049910C /* R.icns in Resources */,
-				56A4D6B22B5959640049910C /* GTD.icns in Resources */,
 				56A4DBDE2B595A010049910C /* small-blank.icns in Resources */,
 				56A4DB9C2B595A010049910C /* warning Template.pdf in Resources */,
 				56A4D6962B5959640049910C /* TextMate PlugIn.icns in Resources */,
@@ -3751,35 +3828,24 @@
 				56A4D6262B5959420049910C /* format_string_syntax.md in Resources */,
 				56A4DBE52B595A010049910C /* small-yellow.icns in Resources */,
 				56A4DB902B595A010049910C /* error Template.pdf in Resources */,
-				56A4D6A62B5959640049910C /* Erlang.icns in Resources */,
-				56A4D6892B5959640049910C /* JSON.icns in Resources */,
 				56A4D61B2B5959420049910C /* MainMenu.xib in Resources */,
 				56A4DC352B595A010049910C /* SearchTemplate.png in Resources */,
-				56A4D6B52B5959640049910C /* Obj-C.icns in Resources */,
-				56A4D6B32B5959640049910C /* ASP.icns in Resources */,
 				56A4DAD02B595A010049910C /* Drag Command.png in Resources */,
 				56A4DBF52B595A010049910C /* small-template.icns in Resources */,
 				56A4DAD42B595A010049910C /* Theme.png in Resources */,
 				56A4DB4C2B595A010049910C /* Software Update.png in Resources */,
 				56A4DACC2B595A010049910C /* Drag Command.plist in Resources */,
-				56A4D69D2B5959640049910C /* Plist.icns in Resources */,
 				56A4D6412B5959560049910C /* flower@2x.png in Resources */,
 				5697238730017190005DC1DD /* AppIcon.icon in Resources */,
 				56A4DB6B2B595A010049910C /* TouchBarQuickOpenTemplate@2x.png in Resources */,
 				56A4DBB12B595A010049910C /* cache.capnp in Resources */,
 				56A4DB932B595A010049910C /* search Template.pdf in Resources */,
-				56A4D6A42B5959640049910C /* Lisp.icns in Resources */,
-				56A4D6B72B5959640049910C /* Fortran.icns in Resources */,
 				56A4DC322B595A010049910C /* FavoritesTemplate.png in Resources */,
-				56A4D6A22B5959640049910C /* Perl.icns in Resources */,
 				56A4DB992B595A010049910C /* Folding Bottom Hover Template.pdf in Resources */,
 				56A4DAC02B595A010049910C /* SharedProperties.xib in Resources */,
-				56A4D6AE2B5959640049910C /* Ragel.icns in Resources */,
 				56A4DB952B595A010049910C /* Folding Top Template.pdf in Resources */,
 				56A4DB9E2B595A010049910C /* note Template.pdf in Resources */,
 				56A4DBDC2B595A010049910C /* scm-badge-mixed.icns in Resources */,
-				56A4D6B12B5959640049910C /* BibTeX.icns in Resources */,
-				56A4D6A02B5959640049910C /* AS.icns in Resources */,
 				56A4D62E2B5959420049910C /* TextMate.scriptTerminology in Resources */,
 				56A4D6432B5959560049910C /* flower.png in Resources */,
 				56A4DA7B2B595A010049910C /* CustomizeEncodings.xib in Resources */,
@@ -3802,10 +3868,8 @@
 				56A4D6B82B5959640049910C /* TextMate Bundle Item.icns in Resources */,
 				56A4DBF22B595A010049910C /* small-grey.icns in Resources */,
 				56A4DC882B595A010049910C /* frequencies.capnp in Resources */,
-				56A4D6BA2B5959640049910C /* Ruby.icns in Resources */,
 				56A4DB842B595A010049910C /* TabCloseThin_Rollover_Template@2x.png in Resources */,
 				56A4DB4D2B595A010049910C /* Terminal@2x.png in Resources */,
-				56A4D6952B5959640049910C /* H++.icns in Resources */,
 				56A4DACB2B595A010049910C /* Proxy.plist in Resources */,
 				56A4D6422B5959560049910C /* stylesheet.css in Resources */,
 				56A4D6AD2B5959640049910C /* TextMate Theme.icns in Resources */,
@@ -3813,10 +3877,7 @@
 				56A4DADB2B595A010049910C /* Theme@2x.png in Resources */,
 				56A4DABF2B595A010049910C /* CommandProperties.xib in Resources */,
 				56A4DC332B595A010049910C /* SCMTemplate@2x.png in Resources */,
-				56A4D6BB2B5959640049910C /* Markdown.icns in Resources */,
-				56A4D6932B5959640049910C /* Haskell.icns in Resources */,
 				56A4DB832B595A010049910C /* TabCloseThin_Pressed_Template.png in Resources */,
-				56A4D6AA2B5959640049910C /* Icon Template.psd in Resources */,
 				56A4DA7D2B595A010049910C /* Charsets.plist in Resources */,
 				56A4DC1E2B595A010049910C /* symbolicate in Resources */,
 			);
@@ -4094,7 +4155,47 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F54C87AA47E289093B0DCDFE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C4A7768141ECAAE3928FFFE /* mate.mm in Sources */,
+				4EABAF28A3B48231B4159B43 /* format.cc in Sources */,
+				5DDED5B691D0A3E5F71846C8 /* parse.cc in Sources */,
+				E7F4B461316B6E4E8DF9173B /* my_ctype.cc in Sources */,
+				41EFEED9782F66A1295CD8A6 /* types.cc in Sources */,
+				623DA31B8159EBAE7FCA18FE /* case.cc in Sources */,
+				F9591B7BB797AE44B5CFC561 /* encode.cc in Sources */,
+				5D9C63D7251F06F030FEFBAF /* indent.cc in Sources */,
+				2132F191276AF4C4B224AF61 /* path.cc in Sources */,
+				5DF2CE465F70F833451A9B39 /* move_path.cc in Sources */,
+				2A0FA50962852DA7C6F2910A /* intermediate.mm in Sources */,
+				E2D2AE5B0572364D63197A34 /* entries.cc in Sources */,
+				D6A780C336BF807DC8F6D4E6 /* uuid.cc in Sources */,
+				849B09B32BCB9EEA4F318AA5 /* regexp.cc in Sources */,
+				765B5DEE7B86D96D61CC8E22 /* format_string.cc in Sources */,
+				6592FD263B0AC321E67DB34D /* private.cc in Sources */,
+				779475879F3A3B46244AD058 /* parser.cc in Sources */,
+				23E8FCA2DE0740920771D7FC /* parser_base.cc in Sources */,
+				728C350B5B54C19D352B4128 /* snippet.cc in Sources */,
+				54BC8F15B35C400423510AFC /* glob.cc in Sources */,
+				F3356496E3484D275F513784 /* parse_glob.cc in Sources */,
+				C9516AEEEF53DE9A4E8D0207 /* cf.cc in Sources */,
+				32B6B458DA2FFBF3E01F578D /* OakFoundation.mm in Sources */,
+				44549BCD8ECF6BBFD4BC12CF /* ns.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		337CB4D5AE4AA7C9AE025D83 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mate;
+			target = 1BFF9C8CC91314FFC8AFAFB1 /* mate */;
+			targetProxy = C7205C198503DF2CAC386488 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		56A4D5FE2B5959410049910C /* InfoPlist.strings */ = {
@@ -4257,9 +4358,43 @@
 			};
 			name = Release;
 		};
+		68C0CEE5A47E9441345CE46B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4602DF0AC6500DCE20D /* debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				INFOPLIST_FILE = "";
+				OTHER_LDFLAGS = "-liconv";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		6C5CDF079973A4F78A0A6A37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				INFOPLIST_FILE = "";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-liconv";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1DE98FD67AEA5DB7E2823D24 /* Build configuration list for PBXNativeTarget "mate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C5CDF079973A4F78A0A6A37 /* Release */,
+				68C0CEE5A47E9441345CE46B /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		56A4D5BD2B5958BF0049910C /* Build configuration list for PBXProject "TextMate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
