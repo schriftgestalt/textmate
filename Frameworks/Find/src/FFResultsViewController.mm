@@ -317,7 +317,7 @@ static FFResultNode* PreviousNode (FFResultNode* node)
 		_outlineView.rowHeight                          = std::max(lineHeight, 14.0);
 		_outlineView.columnAutoresizingStyle            = NSTableViewNoColumnAutoresizing;
 
-		if(@available(macos 11.0, *))
+		if(@available(macOS 11.0, *))
 		{
 			_outlineView.style = NSTableViewStylePlain;
 			_outlineView.floatsGroupRows = NO;

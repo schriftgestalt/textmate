@@ -846,7 +846,7 @@ static std::string shell_quote (std::vector<std::string> paths)
 
 	NSString* appearance = [NSUserDefaults.standardUserDefaults stringForKey:@"themeAppearance"];
 	BOOL darkMode = [appearance isEqualToString:@"dark"];
-	if(@available(macos 10.14, *))
+	if(@available(macOS 10.14, *))
 	{
 		if(!darkMode && ![appearance isEqualToString:@"light"]) // If it is not ‘light’ then assume ‘auto’
 			darkMode = [[self.effectiveAppearance bestMatchFromAppearancesWithNames:@[ NSAppearanceNameAqua, NSAppearanceNameDarkAqua ]] isEqualToString:NSAppearanceNameDarkAqua];

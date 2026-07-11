@@ -214,7 +214,7 @@ static be::entry_ptr parent_for_column (NSBrowser* aBrowser, NSInteger aColumn, 
 		browser = [[NSBrowser alloc] initWithFrame:NSZeroRect];
 		browser.autoresizingMask = NSViewWidthSizable|NSViewHeightSizable;
 
-		if(@available(macos 11, *))
+		if(@available(macOS 11, *))
 		{
 			_browserViewController.view = browser;
 		}

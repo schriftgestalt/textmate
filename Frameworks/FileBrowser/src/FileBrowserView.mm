@@ -26,7 +26,7 @@
 		_outlineView.focusRingType            = NSFocusRingTypeNone;
 		_outlineView.headerView               = nil;
 
-		if(@available(macos 11.0, *))
+		if(@available(macOS 11.0, *))
 		{
 			_outlineView.style = NSTableViewStylePlain;
 			_outlineView.floatsGroupRows = NO;

@@ -35,7 +35,7 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 {
 	if(self = [super init])
 	{
-		if(@available(macos 10.14, *))
+		if(@available(macOS 10.14, *))
 		{
 			UNUserNotificationCenter.currentNotificationCenter.delegate = self;
 		}
@@ -137,7 +137,7 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 					if(NSString* locationURLString = ((NSHTTPURLResponse*)response).allHeaderFields[@"Location"])
 					{
 						os_log(OS_LOG_DEFAULT, "Crash report available at %{public}@", locationURLString);
-						if(@available(macos 10.14, *))
+						if(@available(macOS 10.14, *))
 						{
 							[UNUserNotificationCenter.currentNotificationCenter requestAuthorizationWithOptions:UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError* error){
 								if(granted)

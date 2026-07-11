@@ -15,7 +15,7 @@ NSFont* OakControlFont ()
 NSTextField* OakCreateLabel (NSString* label, NSFont* font, NSTextAlignment alignment, NSLineBreakMode lineBreakMode)
 {
 	// This was introduced in 10.12 but does not appear to use controlTextColor until 10.14, which is required for proper highlight when used in a table view
-	if(@available(macos 10.14, *))
+	if(@available(macOS 10.14, *))
 	{
 		NSTextField* res = [NSTextField labelWithString:label];
 		[[res cell] setLineBreakMode:lineBreakMode];
@@ -41,7 +41,7 @@ NSTextField* OakCreateLabel (NSString* label, NSFont* font, NSTextAlignment alig
 
 NSButton* OakCreateCheckBox (NSString* label)
 {
-	if(@available(macos 10.14, *))
+	if(@available(macOS 10.14, *))
 	{
 		NSButton* res = [NSButton checkboxWithTitle:(label ?: @"") target:nil action:nil];
 		// When we have a row that only contains checkboxes (e.g. Find options), nothing restrains the height of that row
@@ -220,7 +220,7 @@ OakRolloverButton* OakCreateCloseButton (NSString* accessibilityLabel)
 
 	if(self.style == OakBackgroundFillViewStyleHeader)
 	{
-		if(@available(macos 10.14, *))
+		if(@available(macOS 10.14, *))
 		{
 			NSVisualEffectView* effectView = [[NSVisualEffectView alloc] initWithFrame:[self bounds]];
 			effectView.material     = NSVisualEffectMaterialHeaderView; // MAC_OS_X_VERSION_10_14

@@ -42,7 +42,7 @@
 		return nil;
 
 #if defined(MAC_OS_X_VERSION_10_15) && (MAC_OS_X_VERSION_10_15 <= MAC_OS_X_VERSION_MAX_ALLOWED)
-	if(@available(macos 10.15, *))
+	if(@available(macOS 10.15, *))
 	{
 		return -[date timeIntervalSinceNow] < 5 ? @"Just now" : [[[NSRelativeDateTimeFormatter alloc] init] localizedStringForDate:date relativeToDate:NSDate.now];
 	}
