@@ -2,60 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleName</key>
-	<string>${PRODUCT_NAME}</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleHelpBookFolder</key>
-	<string>${TARGET_NAME} Help</string>
-	<key>CFBundleHelpBookName</key>
-	<string>${TARGET_NAME} 2 Help</string>
-	<key>CFBundleIconFile</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
 	<string>TextMate</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>LSApplicationCategoryType</key>
-	<string>public.app-category.developer-tools</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
-	<key>NSAppleScriptEnabled</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSAppleEventsUsageDescription</key>
-	<string>TextMate needs to send back a response to the application from which “Edit in TextMate” was invoked. This is done using AppleEvents.</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Your email address is used as a default contact address when you create a new bundle. This can be changed in the bundle editor after the bundle has been created.</string>
-	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-	<key>NSSupportsAutomaticGraphicsSwitching</key>
-	<true/>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string>TextMate URL</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>txmt</string>
-			</array>
-		</dict>
-	</array>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -144,7 +94,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>C</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -156,7 +108,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>C++</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -252,7 +206,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>CSS</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>0</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -276,7 +232,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>Diff</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -384,7 +342,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>H</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -432,7 +392,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>HTML</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -624,7 +586,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>Markdown</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -684,7 +648,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>Obj-C</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -744,7 +710,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>PHP</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -780,7 +748,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>Plist</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -792,7 +762,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>Python</string>
+			<string></string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>0</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -840,7 +812,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>reST</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -960,7 +934,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>Strings</string>
+			<string>TextMateDoc</string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -1331,6 +1307,272 @@
 				<string>com.apple.bundle</string>
 				<string>com.apple.resolvable</string>
 			</array>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleHelpBookFolder</key>
+	<string>${TARGET_NAME} Help</string>
+	<key>CFBundleHelpBookName</key>
+	<string>${TARGET_NAME} 2 Help</string>
+	<key>CFBundleIconFile</key>
+	<string>TextMate</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>TextMate URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>txmt</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.developer-tools</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>TextMate needs to send back a response to the application from which “Edit in TextMate” was invoked. This is done using AppleEvents.</string>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>Your email address is used as a default contact address when you create a new bundle. This can be changed in the bundle editor after the bundle has been created.</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSSupportsAutomaticGraphicsSwitching</key>
+	<true/>
+	<key>TMSigningKeys</key>
+	<dict>
+		<key>org.textmate.duff</key>
+		<string>-----BEGIN PUBLIC KEY-----
+MIIBtjCCASsGByqGSM44BAEwggEeAoGBAPIE9PpXPK3y2eBDJ0dnR/D8xR1TiT9m
+8DnPXYqkxwlqmjSShmJEmxYycnbliv2JpojYF4ikBUPJPuerlZfOvUBC99ERAgz7
+N1HYHfzFIxVo1oTKWurFJ1OOOsfg8AQDBDHnKpS1VnwVoDuvO05gK8jjQs9E5LcH
+e/opThzSrI7/AhUAy02E9H7EOwRyRNLofdtPxpa10o0CgYBKDfcBscidAoH4pkHR
+IOEGTCYl3G2Pd1yrblCp0nCCUEBCnvmrWVSXUTVa2/AyOZUTN9uZSC/Kq9XYgqwj
+hgzqa8h/a8yD+ao4q8WovwGeb6Iso3WlPl8waz6EAPR/nlUTnJ4jzr9t6iSH9owS
+vAmWrgeboia0CI2AH++liCDvigOBhAACgYAFWO66xFvmF2tVIB+4E7CwhrSi2uIk
+deBrpmNcZZ+AVFy1RXJelNe/cZ1aXBYskn/57xigklpkfHR6DGqpEbm6KC/47Jfy
+y5GEx+F/eBWEePi90XnLinytjmXRmS2FNqX6D15XNG1xJfjociA8bzC7s4gfeTUd
+lpQkBq2z71yitA==
+-----END PUBLIC KEY-----
+</string>
+	</dict>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.property-list</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate Snippet</string>
+			<key>UTTypeIconFile</key>
+			<string>TextMate Snippet</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.snippet</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmSnippet</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.property-list</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate Macro</string>
+			<key>UTTypeIconFile</key>
+			<string>TextMate Macro</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.macro</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmMacro</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.property-list</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate Language Grammar</string>
+			<key>UTTypeIconFile</key>
+			<string>TextMate Grammar</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.language</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmLanguage</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.property-list</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate Preferences</string>
+			<key>UTTypeIconFile</key>
+			<string>TextMate Settings</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.preferences</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmPreferences</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.property-list</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate Command</string>
+			<key>UTTypeIconFile</key>
+			<string>TextMate Command</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.command</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmCommand</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.property-list</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate Drag Command</string>
+			<key>UTTypeIconFile</key>
+			<string>TextMate Bundle Item</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.drag-command</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmDragCommand</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.property-list</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate Theme</string>
+			<key>UTTypeIconFile</key>
+			<string>TextMate Theme</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.theme</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmTheme</string>
+					<string>tmtheme</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate release notes</string>
+			<key>UTTypeIconFile</key>
+			<string>Text</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.release-notes</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmReleaseNotes</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate Bundle</string>
+			<key>UTTypeIconFile</key>
+			<string>TextMate Bundle</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.bundle</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmBundle</string>
+					<string>tmbundle</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TextMate PlugIn</string>
+			<key>UTTypeIconFile</key>
+			<string>TextMate PlugIn</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.macromates.textmate.plugin</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tmPlugIn</string>
+					<string>tmPlugin</string>
+					<string>tmplugin</string>
+				</array>
+			</dict>
 		</dict>
 	</array>
 	<key>UTImportedTypeDeclarations</key>
@@ -2480,6 +2722,13 @@
 			<string>Objective-C source</string>
 			<key>UTTypeIconFile</key>
 			<string>Obj-C</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>TextMateDoc</string>
+				<key>UTTypeIconText</key>
+				<string>Obj-C</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>public.objective-c-source</string>
 			<key>UTTypeReferenceURL</key>
@@ -2501,6 +2750,13 @@
 			<string>Objective-C++ source</string>
 			<key>UTTypeIconFile</key>
 			<string>Obj-C++</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>TextMateDoc</string>
+				<key>UTTypeIconText</key>
+				<string>Obj-C++</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>public.objective-c-plus-plus-source</string>
 			<key>UTTypeReferenceURL</key>
@@ -2693,7 +2949,14 @@
 			<key>UTTypeDescription</key>
 			<string>Property List</string>
 			<key>UTTypeIconFile</key>
-			<string>Plist</string>
+			<string></string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>TextMateDoc</string>
+				<key>UTTypeIconText</key>
+				<string>Plist</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>com.apple.property-list</string>
 			<key>UTTypeReferenceURL</key>
@@ -2717,7 +2980,14 @@
 			<key>UTTypeDescription</key>
 			<string>Python source</string>
 			<key>UTTypeIconFile</key>
-			<string>Python</string>
+			<string></string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>TextMateDoc</string>
+				<key>UTTypeIconText</key>
+				<string>Python</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>public.python-script</string>
 			<key>UTTypeReferenceURL</key>
@@ -3027,6 +3297,13 @@
 			<string>Strings document</string>
 			<key>UTTypeIconFile</key>
 			<string>Strings</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>TextMateDoc</string>
+				<key>UTTypeIconText</key>
+				<string>Strings</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>com.apple.xcode.strings-text</string>
 			<key>UTTypeTagSpecification</key>
@@ -3339,219 +3616,5 @@
 			</dict>
 		</dict>
 	</array>
-	<key>UTExportedTypeDeclarations</key>
-	<array>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.property-list</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate Snippet</string>
-			<key>UTTypeIconFile</key>
-			<string>TextMate Snippet</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.snippet</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmSnippet</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.property-list</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate Macro</string>
-			<key>UTTypeIconFile</key>
-			<string>TextMate Macro</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.macro</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmMacro</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.property-list</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate Language Grammar</string>
-			<key>UTTypeIconFile</key>
-			<string>TextMate Grammar</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.language</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmLanguage</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.property-list</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate Preferences</string>
-			<key>UTTypeIconFile</key>
-			<string>TextMate Settings</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.preferences</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmPreferences</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.property-list</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate Command</string>
-			<key>UTTypeIconFile</key>
-			<string>TextMate Command</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.command</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmCommand</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.property-list</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate Drag Command</string>
-			<key>UTTypeIconFile</key>
-			<string>TextMate Bundle Item</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.drag-command</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmDragCommand</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.property-list</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate Theme</string>
-			<key>UTTypeIconFile</key>
-			<string>TextMate Theme</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.theme</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmTheme</string>
-					<string>tmtheme</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.text</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate release notes</string>
-			<key>UTTypeIconFile</key>
-			<string>Text</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.release-notes</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmReleaseNotes</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.package</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate Bundle</string>
-			<key>UTTypeIconFile</key>
-			<string>TextMate Bundle</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.bundle</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmBundle</string>
-					<string>tmbundle</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.package</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>TextMate PlugIn</string>
-			<key>UTTypeIconFile</key>
-			<string>TextMate PlugIn</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.macromates.textmate.plugin</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tmPlugIn</string>
-					<string>tmPlugin</string>
-					<string>tmplugin</string>
-				</array>
-			</dict>
-		</dict>
-	</array>
-	<key>TMSigningKeys</key>
-	<dict>
-		<key>org.textmate.duff</key>
-		<string>-----BEGIN PUBLIC KEY-----
-MIIBtjCCASsGByqGSM44BAEwggEeAoGBAPIE9PpXPK3y2eBDJ0dnR/D8xR1TiT9m
-8DnPXYqkxwlqmjSShmJEmxYycnbliv2JpojYF4ikBUPJPuerlZfOvUBC99ERAgz7
-N1HYHfzFIxVo1oTKWurFJ1OOOsfg8AQDBDHnKpS1VnwVoDuvO05gK8jjQs9E5LcH
-e/opThzSrI7/AhUAy02E9H7EOwRyRNLofdtPxpa10o0CgYBKDfcBscidAoH4pkHR
-IOEGTCYl3G2Pd1yrblCp0nCCUEBCnvmrWVSXUTVa2/AyOZUTN9uZSC/Kq9XYgqwj
-hgzqa8h/a8yD+ao4q8WovwGeb6Iso3WlPl8waz6EAPR/nlUTnJ4jzr9t6iSH9owS
-vAmWrgeboia0CI2AH++liCDvigOBhAACgYAFWO66xFvmF2tVIB+4E7CwhrSi2uIk
-deBrpmNcZZ+AVFy1RXJelNe/cZ1aXBYskn/57xigklpkfHR6DGqpEbm6KC/47Jfy
-y5GEx+F/eBWEePi90XnLinytjmXRmS2FNqX6D15XNG1xJfjociA8bzC7s4gfeTUd
-lpQkBq2z71yitA==
------END PUBLIC KEY-----
-</string>
-	</dict>
 </dict>
 </plist>
