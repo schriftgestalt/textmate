@@ -1,10 +1,10 @@
-#include <authorization/constants.h>
-#include <authorization/authorization.h>
+#include <authorization/src/constants.h>
+#include <authorization/src/authorization.h>
 #include <oak/oak.h>
-#include <text/format.h>
-#include <text/parse.h>
-#include <io/path.h>
-#include <plist/uuid.h>
+#include <text/src/format.h>
+#include <text/src/parse.h>
+#include <io/src/path.h>
+#include <plist/src/uuid.h>
 
 static char const* const AppVersion = "2.13.3";
 
