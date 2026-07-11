@@ -98,10 +98,7 @@ static void show_command_error (std::string const& message, oak::uuid_t const& u
 @property (nonatomic) OakTextView*                textView;
 @property (nonatomic) FileBrowserViewController*  fileBrowser;
 
-@property (nonatomic) BOOL                        disableFileBrowserWindowResize;
 @property (nonatomic) BOOL                        autoRevealFile;
-@property (nonatomic) NSRect                      oldWindowFrame;
-@property (nonatomic) NSRect                      newWindowFrame;
 
 @property (nonatomic) HTMLOutputWindowController* htmlOutputWindowController;
 @property (nonatomic) OakHTMLOutputView*          htmlOutputView;
@@ -186,6 +183,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		self.identifier = [NSUUID UUID];
 
 		self.tabBarView = [[OakTabBarView alloc] initWithFrame:NSZeroRect];
+		self.tabBarView.translatesAutoresizingMaskIntoConstraints = NO;
 		self.tabBarView.dataSource = self;
 		self.tabBarView.delegate   = self;
 
@@ -193,31 +191,42 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		self.textView = self.documentView.textView;
 		self.textView.delegate = self;
 
-		self.layoutView = [[ProjectLayoutView alloc] initWithFrame:NSZeroRect];
+		self.layoutView = [[ProjectLayoutView alloc] init];
 		self.layoutView.documentView = self.documentView;
 
 		NSUInteger windowStyle = (NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskResizable|NSWindowStyleMaskMiniaturizable);
+		if(@available(macOS 26, *)) {
+			windowStyle |= NSWindowStyleMaskFullSizeContentView;
+		}
 		self.window = [[NSWindow alloc] initWithContentRect:[NSWindow contentRectForFrameRect:[self frameRectForNewWindow] styleMask:windowStyle] styleMask:windowStyle backing:NSBackingStoreBuffered defer:NO];
 		self.window.animationBehavior  = NSWindowAnimationBehaviorDocumentWindow;
 		self.window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
 		self.window.delegate           = self;
 		self.window.releasedWhenClosed = NO;
-
+		if(@available(macOS 11.0, *)) {
+			self.window.titlebarSeparatorStyle = NSTitlebarSeparatorStyleLine;
+		}
 		_titlebarViewController = [[NSTitlebarAccessoryViewController alloc] init];
 		// intrinsicContentSize.width is NSViewNoIntrinsicMetric (-1) — only the
 		// height matters here (fullScreenMinHeight below); a negative frame
 		// width trips AppKit’s geometry check on recent SDKs.
 		NSSize const tabBarSize = self.tabBarView.intrinsicContentSize;
 		self.tabBarView.frameSize = NSMakeSize(MAX(tabBarSize.width, 0), tabBarSize.height);
-		_titlebarViewController.view = self.tabBarView;
-		_titlebarViewController.fullScreenMinHeight = NSHeight(self.tabBarView.frame);
+		NSView* tabBarAccessoryView = [[NSView alloc] initWithFrame:self.tabBarView.frame];
+		[tabBarAccessoryView addSubview:self.tabBarView];
+		[tabBarAccessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tabBarView]|" options:0 metrics:nil views:@{ @"tabBarView": self.tabBarView }]];
+		[tabBarAccessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[tabBarView(height)]|" options:0 metrics:@{ @"height": @(tabBarSize.height) } views:@{ @"tabBarView": self.tabBarView }]];
+		_titlebarViewController.view = tabBarAccessoryView;
+		_titlebarViewController.fullScreenMinHeight = tabBarSize.height;
 		[self.window addTitlebarAccessoryViewController:_titlebarViewController];
 
-		OakAddAutoLayoutViewsToSuperview(@[ self.layoutView ], self.window.contentView);
-		self.window.initialFirstResponder = self.textView;
+		OakAddAutoLayoutViewsToSuperview(@[ self.layoutView.view ], self.window.contentView);
 
-		[self.window.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{ @"view": self.layoutView }]];
-		[self.window.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{ @"view": self.layoutView }]];
+		[self.window.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{ @"view": self.layoutView.view }]];
+		[self.window.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{ @"view": self.layoutView.view }]];
+
+		[self.window.contentView layoutSubtreeIfNeeded];
+		self.window.initialFirstResponder = self.textView;
 
 		_arrayController = [[NSArrayController alloc] init];
 		[_arrayController bind:NSContentBinding toObject:self withKeyPath:@"documents" options:nil];
@@ -259,8 +268,6 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 - (NSRect)windowFrame
 {
 	NSRect res = [self.window frame];
-	if(self.fileBrowserVisible && !self.disableFileBrowserWindowResize)
-		res.size.width -= self.fileBrowserWidth;
 	return res;
 }
 
@@ -377,18 +384,12 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 - (void)userDefaultsDidChange:(NSNotification*)aNotification
 {
 	self.htmlOutputInWindow = [[NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsHTMLOutputPlacementKey] isEqualToString:@"window"];
-	self.disableFileBrowserWindowResize = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsDisableFileBrowserWindowResizeKey];
 	self.autoRevealFile = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsAutoRevealFileKey];
 	self.documentView.hideStatusBar = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsHideStatusBarKey];
 
-	if(self.layoutView.fileBrowserOnRight != [[NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsFileBrowserPlacementKey] isEqualToString:@"right"])
-	{
-		self.oldWindowFrame = self.newWindowFrame = NSZeroRect;
-		self.layoutView.fileBrowserOnRight = !self.layoutView.fileBrowserOnRight;
-	}
-
 	BOOL disableTabBarCollapsingKey = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsDisableTabBarCollapsingKey];
 	self.titlebarViewController.hidden = !disableTabBarCollapsingKey && self.documents.count <= 1;
+	[self.documentView setNeedsUpdateConstraints:YES];
 }
 
 - (void)applicationDidBecomeActiveNotification:(NSNotification*)aNotification
@@ -551,7 +552,9 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 
 - (void)performClose:(id)sender
 {
-	[self.tabBarView performClose:sender];
+	if(self.layoutView.htmlOutputView && [[self.window firstResponder] isKindOfClass:[NSView class]] && [(NSView*)[self.window firstResponder] isDescendantOf:self.layoutView.htmlOutputView])
+			[NSApp sendAction:@selector(performCloseSplit:) to:nil from:self.layoutView.htmlOutputView];
+	else	[self.tabBarView performClose:sender];
 }
 
 - (IBAction)performCloseTab:(id)sender
@@ -1519,6 +1522,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 
 	BOOL disableTabBarCollapsingKey = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsDisableTabBarCollapsingKey];
 	self.titlebarViewController.hidden = !disableTabBarCollapsingKey && self.documents.count <= 1;
+	[self.documentView setNeedsUpdateConstraints:YES];
 
 	[self updateTouchBarButtons];
 	[[self class] scheduleSessionBackup:self];
@@ -1820,47 +1824,6 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		{
 			if(self.autoRevealFile && self.selectedDocument.path)
 				[self revealFileInProject:self];
-		}
-
-		if(!self.disableFileBrowserWindowResize && ([self.window styleMask] & NSWindowStyleMaskFullScreen) != NSWindowStyleMaskFullScreen)
-		{
-			NSRect windowFrame = self.window.frame;
-
-			if(NSEqualRects(windowFrame, self.newWindowFrame))
-			{
-				windowFrame = self.oldWindowFrame;
-			}
-			else if(makeVisibleFlag)
-			{
-				NSRect screenFrame = [[self.window screen] visibleFrame];
-				CGFloat minX = NSMinX(windowFrame);
-				CGFloat maxX = NSMaxX(windowFrame);
-
-				if(self.layoutView.fileBrowserOnRight)
-						maxX += self.fileBrowserWidth + 1;
-				else	minX -= self.fileBrowserWidth + 1;
-
-				if(minX < NSMinX(screenFrame))
-					maxX += NSMinX(screenFrame) - minX;
-				if(maxX > NSMaxX(screenFrame))
-					minX -= maxX - NSMaxX(screenFrame);
-
-				minX = MAX(minX, NSMinX(screenFrame));
-				maxX = MIN(maxX, NSMaxX(screenFrame));
-
-				windowFrame.origin.x   = minX;
-				windowFrame.size.width = maxX - minX;
-			}
-			else
-			{
-				windowFrame.size.width -= self.fileBrowserWidth + 1;
-				if(!self.layoutView.fileBrowserOnRight)
-					windowFrame.origin.x += self.fileBrowserWidth + 1;
-			}
-
-			self.oldWindowFrame = self.window.frame;
-			[self.window setFrame:windowFrame display:YES];
-			self.newWindowFrame = self.window.frame;
 		}
 	}
 	[[self class] scheduleSessionBackup:self];
