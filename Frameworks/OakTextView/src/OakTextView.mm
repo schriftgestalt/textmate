@@ -284,6 +284,12 @@ struct document_view_t : ng::buffer_api_t
 		return [_document_editor buffer].prev_mark(SIZE_T_MAX, type).second != NULL_STR;
 	}
 
+	std::multimap<size_t, std::pair<std::string, std::string>> all_marks () const
+	{
+		ng::buffer_t const& buf = [_document_editor buffer];
+		return buf.get_marks(0, buf.size());
+	}
+
 	bool current_line_has_marks (std::string const& type) const
 	{
 		ng::buffer_t const& buf = [_document_editor buffer];
@@ -470,6 +476,23 @@ private:
 
 	NSImage* spellingDotImage;
 	NSImage* foldingDotsImage;
+
+	// ======================
+	// = Diagnostic Overlay =
+	// ======================
+
+	struct diagnostic_info_t
+	{
+		std::string type;    // error / warning / note
+		std::string message; // message with length prefix and fix payload stripped
+		std::string fixJSON; // empty when the mark carries no fix
+		size_t index;        // buffer index of the mark
+	};
+	std::map<size_t, std::vector<diagnostic_info_t>> diagnosticsByLine; // rebuilt in drawDiagnosticMarksInRect
+	std::map<size_t, NSRect> diagnosticPillRects;                      // line → clickable icon capsule
+	std::map<size_t, NSRect> diagnosticBannerRects;                    // line → full banner; clicks here are swallowed
+	NSPopover* diagnosticsPopover;
+	NSMutableArray<NSDictionary*>* diagnosticFixQueue;
 
 	// =================
 	// = Mouse Support =
@@ -870,6 +893,7 @@ static std::string shell_quote (std::vector<std::string> paths)
 		[NSNotificationCenter.defaultCenter removeObserver:self name:OakDocumentDidSaveNotification object:_document];
 		[NSNotificationCenter.defaultCenter removeObserver:self name:OakDocumentWillReloadNotification object:_document];
 		[NSNotificationCenter.defaultCenter removeObserver:self name:OakDocumentDidReloadNotification object:_document];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:OakDocumentMarksDidChangeNotification object:_document];
 
 		[self updateDocumentMetadata];
 
@@ -952,6 +976,7 @@ static std::string shell_quote (std::vector<std::string> paths)
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentDidSave:) name:OakDocumentDidSaveNotification object:_document];
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentWillReload:) name:OakDocumentWillReloadNotification object:_document];
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentDidReload:) name:OakDocumentDidReloadNotification object:_document];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentMarksDidChange:) name:OakDocumentMarksDidChangeNotification object:_document];
 
 		[self resetBlinkCaretTimer];
 		[self setNeedsDisplay:YES];
@@ -1040,6 +1065,40 @@ static std::string shell_quote (std::vector<std::string> paths)
 {
 	for(auto const& item : bundles::query(bundles::kFieldSemanticClass, "callback.document.did-reload", [self scopeContext], bundles::kItemTypeMost, oak::uuid_t(), false))
 		[self performBundleItem:item];
+}
+
+- (void)documentMarksDidChange:(NSNotification*)aNotification
+{
+	[self setNeedsDisplay:YES];
+}
+
+- (void)viewDidMoveToSuperview
+{
+	[super viewDidMoveToSuperview];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:NSViewBoundsDidChangeNotification object:nil];
+	if(NSClipView* clipView = [[self enclosingScrollView] contentView])
+	{
+		clipView.postsBoundsChangedNotifications = YES;
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(diagnosticScrollBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:clipView];
+	}
+}
+
+- (void)diagnosticScrollBoundsDidChange:(NSNotification*)aNotification
+{
+	if(diagnosticPillRects.empty())
+		return;
+
+	// The message pills anchor to the visible rect’s right edge, so scrolling
+	// must redraw the horizontal band of every marked line — both to erase the
+	// pill at its old position and to draw it at the new one.
+	NSRect const visible = self.visibleRect;
+	for(auto const& pair : diagnosticPillRects)
+	{
+		NSRect band = pair.second;
+		band.origin.x   = NSMinX(visible);
+		band.size.width = NSWidth(visible);
+		[self setNeedsDisplayInRect:band];
+	}
 }
 
 - (void)reflectDocumentSize
@@ -1177,11 +1236,347 @@ doScroll:
 	_links.reset();
 }
 
+- (BOOL)clipsToBounds {
+	return YES;
+}
+
+// ====================
+// = Diagnostic Marks =
+// ====================
+
+static NSColor* OTVColorForDiagnosticMark (std::string const& markType, CGFloat alpha)
+{
+	if(markType == "error")
+		return [NSColor colorWithSRGBRed:0.90 green:0.23 blue:0.20 alpha:alpha];
+	else if(markType == "warning")
+		return [NSColor colorWithSRGBRed:0.95 green:0.68 blue:0.09 alpha:alpha];
+	else if(markType == "note")
+		return [NSColor colorWithSRGBRed:0.33 green:0.60 blue:0.90 alpha:alpha];
+	return nil;
+}
+
+static size_t OTVDiagnosticSeverity (std::string const& markType)
+{
+	if(markType == "error")   return 3;
+	if(markType == "warning") return 2;
+	if(markType == "note")    return 1;
+	return 0;
+}
+
+// Mark content format: “<length>|<message>” optionally followed by U+001F and
+// a JSON fix payload ({ "message": …, "edits": [ { "content": …, "location":
+// { "row": …, "column": … }, "end_location": … } ] }, rows/columns 1-based).
+// The length (in characters) sizes the squiggle; without it we underline to
+// the end of the word at the mark’s position.
+static size_t OTVParseDiagnosticContent (std::string const& content, std::string& message, std::string& fixJSON)
+{
+	size_t len = 0, i = 0;
+	while(i < content.size() && isdigit(content[i]))
+		len = len * 10 + (content[i++] - '0');
+	if(!(i && i < content.size() && content[i] == '|'))
+		i = len = 0;
+	else
+		++i;
+
+	std::string::size_type sep = content.find('\x1F', i);
+	message = content.substr(i, sep == std::string::npos ? std::string::npos : sep - i);
+	fixJSON = sep == std::string::npos ? std::string() : content.substr(sep + 1);
+	return len;
+}
+
+- (void)drawDiagnosticMarksInRect:(NSRect)aRect
+{
+	std::map<size_t, std::string> lineTint; // line → most severe mark type
+	std::vector<std::pair<ng::range_t, std::string>> squiggles;
+
+	diagnosticsByLine.clear();
+	diagnosticPillRects.clear();
+	diagnosticBannerRects.clear();
+
+	for(auto const& pair : documentView->all_marks())
+	{
+		size_t const index         = pair.first;
+		std::string const& type    = pair.second.first;
+		std::string const& content = pair.second.second;
+
+		size_t const severity = OTVDiagnosticSeverity(type);
+		if(severity == 0)
+			continue;
+
+		size_t const line = documentView->convert(index).line;
+		auto tint = lineTint.find(line);
+		if(tint == lineTint.end() || OTVDiagnosticSeverity(tint->second) < severity)
+			lineTint[line] = type;
+
+		diagnostic_info_t info;
+		info.type  = type;
+		info.index = index;
+		size_t markLen = OTVParseDiagnosticContent(content, info.message, info.fixJSON);
+		auto& lineInfos = diagnosticsByLine[line];
+		auto insertAt = std::find_if(lineInfos.begin(), lineInfos.end(), [&type](diagnostic_info_t const& rhs){ return OTVDiagnosticSeverity(rhs.type) < OTVDiagnosticSeverity(type); });
+		lineInfos.insert(insertAt, info);
+
+		size_t const eol = documentView->eol(line);
+		size_t to = index + markLen;
+		if(to == index) // no length given: extend to end of word
+		{
+			std::string const rest = documentView->substr(index, eol);
+			while(to - index < rest.size() && (isalnum(rest[to - index]) || rest[to - index] == '_'))
+				++to;
+		}
+		to = std::clamp(to, std::min(index + 1, eol), eol);
+		if(index < to)
+			squiggles.emplace_back(ng::range_t(ng::index_t(index), ng::index_t(to)), type);
+	}
+
+	for(auto const& pair : lineTint)
+	{
+		CGRect r = documentView->rect_for_range(documentView->begin(pair.first), documentView->eol(pair.first));
+		r.origin.x   = NSMinX(self.bounds);
+		r.size.width = NSWidth(self.bounds);
+		if(!NSIntersectsRect(r, aRect))
+			continue;
+		[OTVColorForDiagnosticMark(pair.second, 0.12) set];
+		NSRectFillUsingOperation(NSIntersectionRect(r, aRect), NSCompositingOperationSourceOver);
+	}
+
+	for(auto const& pair : squiggles)
+	{
+		NSColor* color = OTVColorForDiagnosticMark(pair.second, 0.85);
+		for(CGRect rect : documentView->rects_for_ranges(pair.first))
+		{
+			if(!NSIntersectsRect(NSInsetRect(rect, -2, -2), aRect))
+				continue;
+
+			CGFloat const amplitude  = 0.7;
+			CGFloat const wavelength = 6;
+			CGFloat const y = NSMaxY(rect) - amplitude * 3;
+
+			NSBezierPath* path = [NSBezierPath bezierPath];
+			[path moveToPoint:NSMakePoint(NSMinX(rect), y)];
+			CGFloat x = NSMinX(rect);
+			BOOL up = YES;
+			while(x < NSMaxX(rect))
+			{
+				CGFloat nextX = std::min(x + wavelength/2, NSMaxX(rect));
+				[path curveToPoint:NSMakePoint(nextX, y)
+					 controlPoint1:NSMakePoint(x + (nextX-x)/2, y + (up ? -amplitude*2 : amplitude*2))
+					 controlPoint2:NSMakePoint(x + (nextX-x)/2, y + (up ? -amplitude*2 : amplitude*2))];
+				up = !up;
+				x = nextX;
+			}
+			path.lineWidth = 1;
+			[color set];
+			[path stroke];
+		}
+	}
+
+	// Xcode-style issue banner per marked line, right-aligned and never
+	// overlapping the code: a solid icon capsule (with issue count when a line
+	// has several) plus a tinted message section that truncates — or vanishes,
+	// leaving only the icon — when the code runs long. Clicking it opens the
+	// diagnostics popover (see mouseDown:). Rects are stored for hit-testing
+	// even when outside the dirty rect.
+	NSRect const visible = self.visibleRect;
+	NSFont* pillFont = [NSFont systemFontOfSize:documentView->font().pointSize * documentView->font_scale_factor()]; // match the editor’s effective text size
+	BOOL const isDark = self.theme->is_dark();
+	NSColor* messageColor = [NSColor colorWithCGColor:self.theme->foreground()] ?: (isDark ? NSColor.whiteColor : NSColor.blackColor);
+
+	for(auto const& pair : diagnosticsByLine)
+	{
+		size_t const line = pair.first;
+		auto const& infos = pair.second;
+		std::string const& type = infos.front().type;
+
+		CGRect const lineRect = documentView->rect_for_range(documentView->begin(line), documentView->eol(line));
+
+		CGFloat const pillH     = NSHeight(lineRect); // banner and icon share the full height of the line bar
+		CGFloat const iconW     = std::max<CGFloat>(round(pillH), 20);
+		CGFloat const padX      = 7;
+		CGFloat const rightEdge = NSMaxX(visible) - 8;
+		CGFloat const codeGap   = 16; // minimum distance kept between end of code and banner
+
+		// Space available to the right of the code on this line
+		CGFloat const available = rightEdge - (NSMaxX(lineRect) + codeGap);
+
+		NSMutableParagraphStyle* pStyle = [NSMutableParagraphStyle new];
+		pStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+		NSDictionary* attrs = @{
+			NSFontAttributeName: pillFont,
+			NSForegroundColorAttributeName: messageColor,
+			NSParagraphStyleAttributeName: pStyle
+		};
+		NSAttributedString* str = [[NSAttributedString alloc] initWithString:[NSString stringWithUTF8String:infos.front().message.c_str()] ?: @"" attributes:attrs];
+
+		CGFloat textWidth = ceil(str.size.width) + 2 * padX;
+
+		// Shrink the message into the free space; drop it entirely when tight.
+		if(available < iconW + 40)
+			textWidth = 0; // icon-only capsule
+		else if(iconW + textWidth > available)
+			textWidth = available - iconW;
+
+		NSRect pill;
+		pill.size.width  = iconW + textWidth;
+		pill.size.height = pillH;
+		pill.origin.x    = rightEdge - pill.size.width;
+		pill.origin.y    = NSMinY(lineRect);
+
+		NSRect const iconRect = NSMakeRect(NSMinX(pill), NSMinY(pill), iconW, pillH);
+		diagnosticPillRects[line]   = iconRect; // only the icon capsule opens the popover
+		diagnosticBannerRects[line] = pill;     // the rest of the banner swallows clicks
+
+		if(!NSIntersectsRect(pill, aRect))
+			continue;
+
+		CGFloat const radius = std::min<CGFloat>(5, pillH / 2);
+		NSBezierPath* capsule = [NSBezierPath bezierPathWithRoundedRect:pill xRadius:radius yRadius:radius];
+
+		[NSGraphicsContext saveGraphicsState];
+		[capsule addClip];
+
+		// opaque base so the banner stays readable over anything beneath it
+		//[(isDark ? [NSColor colorWithWhite:0.12 alpha:1] : [NSColor colorWithWhite:1 alpha:1]) set];
+		//NSRectFill(pill);
+		[OTVColorForDiagnosticMark(type, 0.16) set];
+		NSRectFillUsingOperation(pill, NSCompositingOperationSourceOver);
+
+		// solid icon section
+		[OTVColorForDiagnosticMark(type, 0.7) set];
+		//NSRectFill(iconRect);
+		NSRectFillUsingOperation(iconRect, NSCompositingOperationSourceOver);
+
+		[NSGraphicsContext restoreGraphicsState];
+
+		// icon glyph — issue count when the line has more than one diagnostic
+		std::string glyph = infos.size() > 1 ? std::to_string(infos.size()) : (type == "error" ? "✕" : (type == "warning" ? "!" : "i"));
+		NSAttributedString* glyphStr = [[NSAttributedString alloc] initWithString:[NSString stringWithUTF8String:glyph.c_str()] ?: @"" attributes:@{ NSFontAttributeName: [NSFont boldSystemFontOfSize:pillFont.pointSize], NSForegroundColorAttributeName: NSColor.whiteColor }];
+		NSSize const glyphSize = glyphStr.size;
+		[glyphStr drawAtPoint:NSMakePoint(round(NSMidX(iconRect) - glyphSize.width/2), round(NSMidY(iconRect) - glyphSize.height/2) - 1)];
+
+		if (textWidth > 0)
+			[str drawWithRect:NSMakeRect(NSMinX(pill) + iconW + padX, round(NSMidY(pill) - str.size.height/2) - 1, textWidth - 2*padX, str.size.height) options:NSStringDrawingUsesLineFragmentOrigin];
+	}
+}
+
+- (void)showDiagnosticsPopoverForLine:(size_t)line fromRect:(NSRect)aRect
+{
+	auto it = diagnosticsByLine.find(line);
+	if(it == diagnosticsByLine.end())
+		return;
+
+	[diagnosticsPopover close];
+	diagnosticFixQueue = [NSMutableArray array];
+
+	NSStackView* stack = [NSStackView new];
+	stack.orientation = NSUserInterfaceLayoutOrientationVertical;
+	stack.alignment   = NSLayoutAttributeWidth; // rows stretch so Apply buttons right-align
+	stack.spacing     = 8;
+	stack.edgeInsets  = NSEdgeInsetsMake(12, 12, 12, 12);
+
+	// Wrapping labels report no intrinsic width, so the popover would collapse
+	// unless we measure the content and pin the stack to an explicit width.
+	NSFont* messageFont = [NSFont systemFontOfSize:documentView->font().pointSize * documentView->font_scale_factor()]; // match the editor’s effective text size
+	CGFloat maxMessageWidth = 0;
+	BOOL anyFix = NO;
+	for(auto const& info : it->second)
+	{
+		NSString* message = [NSString stringWithUTF8String:info.message.c_str()] ?: @"";
+		NSSize const size = [[[NSAttributedString alloc] initWithString:[@"● " stringByAppendingString:message] attributes:@{ NSFontAttributeName: messageFont }] size];
+		maxMessageWidth = std::max(maxMessageWidth, std::ceil(size.width));
+		anyFix = anyFix || !info.fixJSON.empty();
+	}
+	CGFloat const buttonWidth = anyFix ? 90 : 0;
+	CGFloat const stackWidth  = std::clamp<CGFloat>(maxMessageWidth + buttonWidth + 24, 280, 540);
+	CGFloat const labelWidth  = stackWidth - 24 - buttonWidth;
+
+	for(auto const& info : it->second)
+	{
+		NSString* message = [NSString stringWithUTF8String:info.message.c_str()] ?: @"";
+		NSMutableAttributedString* str = [[NSMutableAttributedString alloc] initWithString:@"● " attributes:@{ NSForegroundColorAttributeName: OTVColorForDiagnosticMark(info.type, 1), NSFontAttributeName: messageFont }];
+		[str appendAttributedString:[[NSAttributedString alloc] initWithString:message attributes:@{ NSForegroundColorAttributeName: NSColor.labelColor, NSFontAttributeName: messageFont }]];
+
+		NSTextField* label = [NSTextField labelWithAttributedString:str];
+		label.lineBreakMode = NSLineBreakByWordWrapping;
+		label.preferredMaxLayoutWidth = labelWidth;
+		[label setContentHuggingPriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
+		[label setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
+		[label.widthAnchor constraintLessThanOrEqualToConstant:labelWidth].active = YES;
+
+		NSStackView* row = [NSStackView new];
+		row.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+		row.alignment   = NSLayoutAttributeCenterY;
+		row.spacing     = 12;
+		[row addView:label inGravity:NSStackViewGravityLeading];
+
+		if(!info.fixJSON.empty())
+		{
+			NSData* data = [NSData dataWithBytes:info.fixJSON.data() length:info.fixJSON.size()];
+			if(NSDictionary* fix = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil])
+			{
+				if(NSArray* edits = fix[@"edits"])
+				{
+					label.toolTip = fix[@"message"] ?: @"";
+					NSButton* button = [NSButton buttonWithTitle:@"Apply" target:self action:@selector(applyDiagnosticFix:)];
+					button.controlSize = NSControlSizeSmall;
+					button.tag = diagnosticFixQueue.count;
+					[button setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
+					[diagnosticFixQueue addObject:@{ @"edits": edits, @"type": [NSString stringWithUTF8String:info.type.c_str()] ?: @"", @"index": @(info.index) }];
+					[row addView:button inGravity:NSStackViewGravityTrailing];
+				}
+			}
+		}
+
+		[stack addArrangedSubview:row];
+	}
+
+	[stack.widthAnchor constraintEqualToConstant:stackWidth].active = YES;
+
+	NSViewController* vc = [NSViewController new];
+	vc.view = stack;
+
+	diagnosticsPopover = [NSPopover new];
+	diagnosticsPopover.behavior = NSPopoverBehaviorTransient;
+	diagnosticsPopover.contentViewController = vc;
+	[diagnosticsPopover showRelativeToRect:aRect ofView:self preferredEdge:NSRectEdgeMaxY];
+}
+
+- (void)applyDiagnosticFix:(NSButton*)sender
+{
+	if(!documentView || sender.tag < 0 || (NSUInteger)sender.tag >= diagnosticFixQueue.count)
+		return;
+
+	NSDictionary* info = diagnosticFixQueue[sender.tag];
+	NSArray* edits = [info[@"edits"] sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* lhs, NSDictionary* rhs){
+		NSComparisonResult res = [rhs[@"location"][@"row"] compare:lhs[@"location"][@"row"]];
+		return res != NSOrderedSame ? res : [rhs[@"location"][@"column"] compare:lhs[@"location"][@"column"]];
+	}];
+
+	// Remove the mark before edits shift positions around.
+	size_t markIndex = [info[@"index"] unsignedLongValue];
+	[self.document removeMarkOfType:info[@"type"] atPosition:documentView->convert(markIndex)];
+
+	AUTO_REFRESH;
+	documentView->begin_change_grouping();
+	for(NSDictionary* edit in edits) // bottom-up so earlier positions stay valid
+	{
+		size_t from = documentView->convert(text::pos_t([edit[@"location"][@"row"] unsignedLongValue] - 1, [edit[@"location"][@"column"] unsignedLongValue] - 1));
+		size_t to   = documentView->convert(text::pos_t([edit[@"end_location"][@"row"] unsignedLongValue] - 1, [edit[@"end_location"][@"column"] unsignedLongValue] - 1));
+		documentView->set_ranges(ng::range_t(ng::index_t(std::min(from, to)), ng::index_t(std::max(from, to))));
+		documentView->insert(to_s((NSString*)edit[@"content"] ?: @""));
+	}
+	documentView->end_change_grouping();
+
+	[diagnosticsPopover close];
+	[self setNeedsDisplay:YES];
+}
+
 - (void)drawRect:(NSRect)aRect
 {
 	if(!documentView || !self.theme)
 	{
 		NSEraseRect(aRect);
+		//NSEraseRect(NSIntersectionRect(aRect, self.bounds));
 		return;
 	}
 
@@ -1189,6 +1584,7 @@ doScroll:
 	{
 		[NSColor.clearColor set];
 		NSRectFill(aRect);
+		//NSRectFill(NSIntersectionRect(aRect, self.bounds));
 	}
 
 	CGContextRef context = NSGraphicsContext.currentContext.CGContext;
@@ -1196,11 +1592,18 @@ doScroll:
 		CGContextSetShouldAntialias(context, false);
 
 	BOOL disableFontSmoothing = NO;
-	switch(self.fontSmoothing)
-	{
-		case OTVFontSmoothingDisabled:             disableFontSmoothing = YES;                                                         break;
-		case OTVFontSmoothingDisabledForDark:      disableFontSmoothing = self.theme->is_dark();                                            break;
-		case OTVFontSmoothingDisabledForDarkHiDPI: disableFontSmoothing = self.theme->is_dark() && [[self window] backingScaleFactor] == 2; break;
+	switch(self.fontSmoothing) {
+		case OTVFontSmoothingDisabled:
+			disableFontSmoothing = YES;
+			break;
+		case OTVFontSmoothingDisabledForDark:
+			disableFontSmoothing = self.theme->is_dark();
+			break;
+		case OTVFontSmoothingDisabledForDarkHiDPI:
+			disableFontSmoothing = self.theme->is_dark() && [[self window] backingScaleFactor] == 2;
+			break;
+		case OTVFontSmoothingEnabled:
+			break;
 	}
 
 	if(disableFontSmoothing)
@@ -1218,6 +1621,8 @@ doScroll:
 	};
 
 	documentView->draw(ng::context_t(context, _showInvisibles ? documentView->invisibles_map : NULL_STR, [spellingDotImage CGImageForProposedRect:NULL context:[NSGraphicsContext currentContext] hints:nil], foldingDotsFactory), aRect, [self isFlipped], merge(documentView->ranges(), [self markedRanges]), _liveSearchRanges);
+
+	[self drawDiagnosticMarksInRect:aRect];
 }
 
 // =====================
@@ -4136,6 +4541,18 @@ static scope::context_t add_modifiers_to_scope (scope::context_t scope, NSUInteg
 {
 	if([self.inputContext handleEvent:anEvent] || !documentView || [anEvent type] != NSEventTypeLeftMouseDown || ignoreMouseDown)
 		return (void)(ignoreMouseDown = NO);
+
+	NSPoint const clickPos = [self convertPoint:[anEvent locationInWindow] fromView:nil];
+	for(auto const& pair : diagnosticPillRects)
+	{
+		if(NSMouseInRect(clickPos, pair.second, [self isFlipped]))
+			return [self showDiagnosticsPopoverForLine:pair.first fromRect:pair.second];
+	}
+	for(auto const& pair : diagnosticBannerRects)
+	{
+		if(NSMouseInRect(clickPos, pair.second, [self isFlipped]))
+			return; // don’t let clicks on the banner text reach the code beneath
+	}
 
 	if(ng::range_t r = documentView->folded_range_at_point([self convertPoint:[anEvent locationInWindow] fromView:nil]))
 	{

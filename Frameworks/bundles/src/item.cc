@@ -28,6 +28,8 @@ namespace bundles
 
 	std::string const kFieldSemanticClass            = "semanticClass";
 	std::string const kFieldContentMatch             = "contentMatch";
+	std::string const kFieldUserDefaultsState        = "userDefaultsState";
+	std::string const kFieldShowIfExecutableMissing  = "showOnlyIfExecutableMissing";
 	std::string const kFieldDropExtension            = "draggedFileExtensions"; // array
 	std::string const kFieldGrammarExtension         = "fileTypes";             // array
 	std::string const kFieldGrammarFirstLineMatch    = "firstLineMatch";
@@ -77,7 +79,7 @@ namespace bundles
 
 		for(auto const& pair : plist)
 		{
-			static std::set<std::string> const stringKeys     = { kFieldName, kFieldKeyEquivalent, kFieldTabTrigger, kFieldScopeSelector, kFieldSemanticClass, kFieldContentMatch, kFieldGrammarFirstLineMatch, kFieldGrammarScope, kFieldGrammarInjectionSelector };
+			static std::set<std::string> const stringKeys     = { kFieldName, kFieldKeyEquivalent, kFieldTabTrigger, kFieldScopeSelector, kFieldSemanticClass, kFieldContentMatch, kFieldGrammarFirstLineMatch, kFieldGrammarScope, kFieldGrammarInjectionSelector, kFieldUserDefaultsState, kFieldShowIfExecutableMissing };
 			static std::set<std::string> const arrayKeys      = { kFieldDropExtension, kFieldGrammarExtension };
 
 			if(pair.first == kFieldScopeSelector)

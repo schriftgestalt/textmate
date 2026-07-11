@@ -460,9 +460,25 @@
 		56A4DC8D2B595A010049910C /* InstallBundleItems.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA782B595A000049910C /* InstallBundleItems.mm */; };
 		56A4DD5F2B596F9A0049910C /* KVDBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DCB22B596F990049910C /* KVDBFunctions.m */; };
 		56A4DD602B596F9A0049910C /* kvdb.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DCB32B596F990049910C /* kvdb.m */; };
+		5656C9022DF0AAAA00DCE20D /* Python Diagnostics.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = 5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		5656C9032DF0AAAA00DCE20D /* Copy Bundles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "Contents/SharedSupport/Bundles";
+			dstSubfolderSpec = 1;
+			files = (
+				5656C9022DF0AAAA00DCE20D /* Python Diagnostics.tmbundle in Copy Bundles */,
+			);
+			name = "Copy Bundles";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Python Diagnostics.tmbundle"; path = "../../Bundles/Python Diagnostics.tmbundle"; sourceTree = "<group>"; };
 		561C46892DF0F9C300D6568C /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		5656C4222DF04F8E00DCE20D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5656C4262DF05D2E00DCE20D /* libonig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libonig.a; path = Onigmo/vendor/.libs/libonig.a; sourceTree = "<group>"; };
@@ -1398,6 +1414,7 @@
 				56A4D5DC2B5958F80049910C /* TextMate */,
 				56A4D6C22B5959C40049910C /* Frameworks */,
 				56A4DC912B596F820049910C /* Vendor */,
+				5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */,
 				56A4D5C32B5958BF0049910C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -3537,6 +3554,7 @@
 				56A4D5BE2B5958BF0049910C /* Sources */,
 				56A4D5BF2B5958BF0049910C /* Frameworks */,
 				56A4D5C02B5958BF0049910C /* Resources */,
+				5656C9032DF0AAAA00DCE20D /* Copy Bundles */,
 			);
 			buildRules = (
 			);

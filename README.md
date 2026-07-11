@@ -62,6 +62,49 @@ Some sources are generated and committed to the repository, so a normal build do
  * **Cap’n Proto** — `*.capnp` → `*.capnp.c++` / `*.capnp.h` (requires `capnp`)
  * **Ragel** — `Frameworks/plist/src/ascii.rl` → `ascii.cc` (requires `ragel`)
 
+# Python Diagnostics
+
+This fork ships a *Python Diagnostics* bundle (in `Bundles/`, copied into the app at build time). Whenever a Python file is saved, it runs [Ruff][] and [Pyright][] and shows the results directly in the editor: a gutter icon, a tinted line, a squiggly underline under the offending range, and an Xcode-style message banner at the right edge. Clicking the banner’s icon opens a popover with all issues on that line — with one-click **Apply** buttons for Ruff’s auto-fixes.
+
+## Getting started
+
+1. Install the checkers (either one alone also works):
+
+   ```sh
+   brew install ruff pyright
+   ```
+
+2. Save a Python file. That’s it — diagnostics appear a moment later (Ruff instantly, Pyright after a few seconds). If something is missing, a notification tells you what to install.
+
+If neither checker is installed, or the `mate` command-line tool cannot be found, the bundle posts a macOS notification (at most once per hour) explaining what to do. Detailed logging for troubleshooting: `tail -f /tmp/tm-python-diagnostics.log`.
+
+## Disabling
+
+Add to any `.tm_properties` file (global `~/.tm_properties`, per project, or per directory — TextMate’s usual scoping applies):
+
+```
+TM_PYTHON_DIAGNOSTICS = disabled
+```
+
+You can also disable the whole bundle under *Preferences → Bundles → Python Diagnostics*, or scope the variable to specific paths:
+
+```
+[ vendor/** ]
+TM_PYTHON_DIAGNOSTICS = disabled
+```
+
+## Configuration
+
+Both tools use their native configuration files:
+
+ * **Ruff** looks for `ruff.toml` / `.ruff.toml` / `pyproject.toml` next to (or above) the checked file; without one it falls back to the user-level `~/.config/ruff/ruff.toml`.
+ * **Pyright** — the bundle searches upward from the file for a `pyrightconfig.json`; without one it uses `~/Library/Application Support/TextMate/pyrightconfig.json` (e.g. for `extraPaths` to custom module stubs). Override the fallback with the `TM_PYRIGHT_PROJECT` variable.
+
+Extra command-line flags can be passed via the `TM_RUFF_ARGS` and `TM_PYRIGHT_ARGS` variables; `TM_RUFF` / `TM_PYRIGHT` override the tool binaries themselves.
+
+[Ruff]:    https://docs.astral.sh/ruff/
+[Pyright]: https://microsoft.github.io/pyright/
+
 # Legal
 
 The source for TextMate is released under the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
