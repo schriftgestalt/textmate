@@ -61,8 +61,10 @@
 		OakSetupKeyViewLoop(@[ self, _headerView, _outlineView, _actionsView ]);
 
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[files(==header,==actions)]|" options:0 metrics:nil views:views]];
-		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[header]-(>=0)-[actions]"     options:NSLayoutFormatAlignAllLeading metrics:nil views:views]];
-		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[files][actions]|"            options:NSLayoutFormatAlignAllLeading metrics:nil views:views]];
+		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[header]-(>=0)-[actions]"      options:NSLayoutFormatAlignAllLeading metrics:nil views:views]];
+		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[files][actions]|"             options:NSLayoutFormatAlignAllLeading metrics:nil views:views]];
+		[_headerView.topAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.topAnchor].active = YES;
+		[_scrollView.topAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.topAnchor].active = YES;
 
 		NSEdgeInsets insets = _scrollView.contentInsets;
 		insets.top += _headerView.fittingSize.height;

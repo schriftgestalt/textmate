@@ -253,6 +253,7 @@ static void* kOakTabViewSelectedContext  = &kOakTabViewSelectedContext;
 		_tabBarView = tabBarView;
 
 		_backgroundView = [[OakBox alloc] initWithFrame:NSZeroRect];
+		_backgroundView.translatesAutoresizingMaskIntoConstraints = NO;
 		_topBorderView  = [[OakBox alloc] initWithFrame:NSZeroRect];
 		_leftBorderView = [[OakBox alloc] initWithFrame:NSZeroRect];
 
@@ -717,7 +718,7 @@ static void* kOakTabViewSelectedContext  = &kOakTabViewSelectedContext;
 
 - (NSSize)intrinsicContentSize
 {
-	return NSMakeSize(NSViewNoIntrinsicMetric, 23);
+	return NSMakeSize(NSViewNoIntrinsicMetric, 26);
 }
 
 - (BOOL)mouseDownCanMoveWindow

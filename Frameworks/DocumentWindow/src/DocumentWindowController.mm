@@ -195,17 +195,14 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		self.layoutView.documentView = self.documentView;
 
 		NSUInteger windowStyle = (NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskResizable|NSWindowStyleMaskMiniaturizable);
-		if(@available(macOS 26, *)) {
-			windowStyle |= NSWindowStyleMaskFullSizeContentView;
-		}
+		windowStyle |= NSWindowStyleMaskFullSizeContentView;
+
 		self.window = [[NSWindow alloc] initWithContentRect:[NSWindow contentRectForFrameRect:[self frameRectForNewWindow] styleMask:windowStyle] styleMask:windowStyle backing:NSBackingStoreBuffered defer:NO];
 		self.window.animationBehavior  = NSWindowAnimationBehaviorDocumentWindow;
 		self.window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
 		self.window.delegate           = self;
 		self.window.releasedWhenClosed = NO;
-		if(@available(macOS 11.0, *)) {
-			self.window.titlebarSeparatorStyle = NSTitlebarSeparatorStyleLine;
-		}
+
 		_titlebarViewController = [[NSTitlebarAccessoryViewController alloc] init];
 		// intrinsicContentSize.width is NSViewNoIntrinsicMetric (-1) — only the
 		// height matters here (fullScreenMinHeight below); a negative frame

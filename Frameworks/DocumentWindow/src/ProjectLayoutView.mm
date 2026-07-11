@@ -15,13 +15,6 @@ static NSColor* DividerColor ()
 	return NSColor.gridColor;
 }
 
-static BOOL ShouldInsetFileBrowserFromTitlebar ()
-{
-	if(@available(macOS 26.0, *))
-		return NO;
-	return YES;
-}
-
 @interface ProjectLayoutView ()
 {
 	CGFloat _fileBrowserWidth;
@@ -98,11 +91,6 @@ static BOOL ShouldInsetFileBrowserFromTitlebar ()
 
 - (void)replaceViewController:(NSViewController*)viewController view:(NSView*)view
 {
-	[self replaceViewController:viewController view:view useSafeAreaTopInset:NO];
-}
-
-- (void)replaceViewController:(NSViewController*)viewController view:(NSView*)view useSafeAreaTopInset:(BOOL)useSafeAreaTopInset
-{
 	for(NSView* subview in viewController.view.subviews.copy)
 		[subview removeFromSuperview];
 
@@ -110,15 +98,7 @@ static BOOL ShouldInsetFileBrowserFromTitlebar ()
 	{
 		OakAddAutoLayoutViewsToSuperview(@[ view ], viewController.view);
 		[viewController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{ @"view": view }]];
-		if(useSafeAreaTopInset)
-		{
-			[view.topAnchor constraintEqualToAnchor:viewController.view.safeAreaLayoutGuide.topAnchor].active = YES;
-			[view.bottomAnchor constraintEqualToAnchor:viewController.view.bottomAnchor].active = YES;
-		}
-		else
-		{
-			[viewController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{ @"view": view }]];
-		}
+		[viewController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{ @"view": view }]];
 	}
 }
 
@@ -155,7 +135,7 @@ static BOOL ShouldInsetFileBrowserFromTitlebar ()
 		if(!_fileBrowserViewController)
 		{
 			_fileBrowserViewController = [self viewControllerWithView:nil];
-			[self replaceViewController:_fileBrowserViewController view:_fileBrowserView useSafeAreaTopInset:ShouldInsetFileBrowserFromTitlebar()];
+			[self replaceViewController:_fileBrowserViewController view:_fileBrowserView];
 			_fileBrowserViewItem = [NSSplitViewItem sidebarWithViewController:_fileBrowserViewController];
 			_fileBrowserViewItem.minimumThickness = kFileBrowserMinimumWidth;
 			_fileBrowserViewItem.maximumThickness = NSSplitViewItemUnspecifiedDimension;
@@ -165,7 +145,7 @@ static BOOL ShouldInsetFileBrowserFromTitlebar ()
 		}
 		else
 		{
-			[self replaceViewController:_fileBrowserViewController view:_fileBrowserView useSafeAreaTopInset:ShouldInsetFileBrowserFromTitlebar()];
+			[self replaceViewController:_fileBrowserViewController view:_fileBrowserView];
 			if(![self.splitViewItems containsObject:_fileBrowserViewItem])
 				[self insertSplitViewItem:_fileBrowserViewItem atIndex:0];
 		}
