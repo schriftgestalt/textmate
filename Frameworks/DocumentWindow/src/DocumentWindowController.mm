@@ -204,7 +204,11 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		self.window.releasedWhenClosed = NO;
 
 		_titlebarViewController = [[NSTitlebarAccessoryViewController alloc] init];
-		self.tabBarView.frameSize = self.tabBarView.intrinsicContentSize;
+		// intrinsicContentSize.width is NSViewNoIntrinsicMetric (-1) — only the
+		// height matters here (fullScreenMinHeight below); a negative frame
+		// width trips AppKit’s geometry check on recent SDKs.
+		NSSize const tabBarSize = self.tabBarView.intrinsicContentSize;
+		self.tabBarView.frameSize = NSMakeSize(MAX(tabBarSize.width, 0), tabBarSize.height);
 		_titlebarViewController.view = self.tabBarView;
 		_titlebarViewController.fullScreenMinHeight = NSHeight(self.tabBarView.frame);
 		[self.window addTitlebarAccessoryViewController:_titlebarViewController];
