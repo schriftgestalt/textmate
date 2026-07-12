@@ -160,6 +160,7 @@ namespace ng
 		bool repair_folds (size_t from, size_t to);
 		void refresh_line_at_index (size_t index, bool fullRefresh);
 		void did_fold (size_t from, size_t to);
+		std::vector<CGRect> current_line_rects_for_ranges (ng::ranges_t const& ranges) const;
 
 		static int row_y_comp (CGFloat y, row_key_t const& offset, row_key_t const& node)       { return y < offset._height ? -1 : (y == offset._height ? 0 : +1); }
 		static int row_offset_comp (size_t i, row_key_t const& offset, row_key_t const& node)   { return i < offset._length ? -1 : (i == offset._length ? 0 : +1); }
@@ -192,6 +193,7 @@ namespace ng
 		size_t _pre_refresh_revision;
 		size_t _pre_refresh_caret;
 		std::vector<CGRect> _pre_refresh_carets;
+		std::vector<CGRect> _pre_refresh_current_line;
 		std::vector<CGRect> _pre_refresh_selections;
 		std::vector<CGRect> _pre_refresh_highlight_border;
 		std::vector<CGRect> _pre_refresh_highlight_interior;

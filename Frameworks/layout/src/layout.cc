@@ -20,6 +20,30 @@ static CGRect OakRectMake (CGFloat x, CGFloat y, CGFloat w, CGFloat h)
 	return CGRectMake(round(x), round(y), round(x+w) - round(x), round(y+h) - round(y));
 }
 
+static CGFloat const kCurrentLineHighlightHorizontalInset = 6;
+
+static void OakFillRightRoundedRect (CGContextRef context, CGColorRef color, CGRect rect)
+{
+	rect.size.width = std::max<CGFloat>(0, rect.size.width - kCurrentLineHighlightHorizontalInset);
+	if(CGRectIsEmpty(rect))
+		return;
+
+	CGFloat radius = CGRectGetHeight(rect) * 0.25;
+	CGFloat minX = CGRectGetMinX(rect), maxX = CGRectGetMaxX(rect);
+	CGFloat minY = CGRectGetMinY(rect), maxY = CGRectGetMaxY(rect);
+
+	CGContextSetFillColorWithColor(context, color);
+	CGContextBeginPath(context);
+	CGContextMoveToPoint(context, minX, minY);
+	CGContextAddLineToPoint(context, maxX - radius, minY);
+	CGContextAddArcToPoint(context, maxX, minY, maxX, minY + radius, radius);
+	CGContextAddLineToPoint(context, maxX, maxY - radius);
+	CGContextAddArcToPoint(context, maxX, maxY, maxX - radius, maxY, radius);
+	CGContextAddLineToPoint(context, minX, maxY);
+	CGContextClosePath(context);
+	CGContextFillPath(context);
+}
+
 static size_t count_columns (ng::buffer_t const& buf, size_t from, size_t to)
 {
 	size_t const tabSize = buf.indent().tab_size();
@@ -341,6 +365,23 @@ namespace ng
 		return res;
 	}
 
+	std::vector<CGRect> layout_t::current_line_rects_for_ranges (ng::ranges_t const& ranges) const
+	{
+		std::vector<CGRect> res;
+		if(ranges.size() == 1)
+		{
+			ng::range_t const& range = ranges.last();
+			if(range.empty() && !range.columnar)
+			{
+				ng::line_record_t record = line_record_for(_buffer.convert(range.last.index));
+				CGFloat height = record.bottom - record.top;
+				if(height > 0)
+					res.push_back(OakRectMake(0, record.top, width(), height));
+			}
+		}
+		return res;
+	}
+
 	ng::index_t layout_t::index_at_point (CGPoint point) const
 	{
 		CGFloat clickedY = point.y - _margin.top;
@@ -530,10 +571,11 @@ namespace ng
 	{
 		if(++_refresh_counter == 1)
 		{
-			_pre_refresh_carets     = _draw_caret && !_drop_marker ? rects_for_ranges(selection, kRectsIncludeCarets) : std::vector<CGRect>();
-			_pre_refresh_selections = rects_for_ranges(selection, kRectsIncludeSelections);
-			_pre_refresh_revision   = _buffer.revision();
-			_pre_refresh_caret      = selection.last().last.index;
+			_pre_refresh_carets       = _draw_caret && !_drop_marker ? rects_for_ranges(selection, kRectsIncludeCarets) : std::vector<CGRect>();
+			_pre_refresh_current_line = current_line_rects_for_ranges(selection);
+			_pre_refresh_selections   = rects_for_ranges(selection, kRectsIncludeSelections);
+			_pre_refresh_revision     = _buffer.revision();
+			_pre_refresh_caret        = selection.last().last.index;
 
 			for(auto const& range : highlightRanges)
 			{
@@ -593,11 +635,13 @@ namespace ng
 				}
 			}
 
-			auto postCarets     = _draw_caret && !_drop_marker ? rects_for_ranges(selection, kRectsIncludeCarets) : std::vector<CGRect>();
-			auto postSelections = rects_for_ranges(selection, kRectsIncludeSelections);
+			auto postCarets       = _draw_caret && !_drop_marker ? rects_for_ranges(selection, kRectsIncludeCarets) : std::vector<CGRect>();
+			auto postCurrentLine  = current_line_rects_for_ranges(selection);
+			auto postSelections   = rects_for_ranges(selection, kRectsIncludeSelections);
 
-			OakRectSymmetricDifference(_pre_refresh_carets,     postCarets,     back_inserter(_dirty_rects));
-			OakRectSymmetricDifference(_pre_refresh_selections, postSelections, back_inserter(_dirty_rects));
+			OakRectSymmetricDifference(_pre_refresh_carets,       postCarets,       back_inserter(_dirty_rects));
+			OakRectSymmetricDifference(_pre_refresh_current_line, postCurrentLine,  back_inserter(_dirty_rects));
+			OakRectSymmetricDifference(_pre_refresh_selections,   postSelections,   back_inserter(_dirty_rects));
 
 			std::vector<CGRect> postHighlightBorder;
 			std::vector<CGRect> postHighlightInterior;
@@ -612,6 +656,7 @@ namespace ng
 			OakRectSymmetricDifference(_pre_refresh_highlight_interior, postHighlightInterior, back_inserter(_dirty_rects));
 
 			_pre_refresh_carets.clear();
+			_pre_refresh_current_line.clear();
 			_pre_refresh_selections.clear();
 			_pre_refresh_highlight_border.clear();
 			_pre_refresh_highlight_interior.clear();
@@ -773,6 +818,7 @@ namespace ng
 			CGColorRef margin_indicator       = nil;
 			CGColorRef drop_marker            = nil;
 			CGColorRef indent_guides          = nil;
+			CGColorRef current_line           = nil;
 		};
 
 		base_colors_t const& get_base_colors (bool darkTheme)
@@ -788,6 +834,7 @@ namespace ng
 				dark.drop_marker              = CGColorCreateGenericGray(0.50, 0.50);
 				// works for most darks, including very black backgrounds
 				dark.indent_guides            = CGColorCreateGenericGray(1.0, 0.06);
+				dark.current_line             = CGColorCreateGenericGray(1.0, 0.08);
 
 				bright.marked_text_foreground = CGColorRetain(CGColorGetConstantColor(kCGColorBlack));
 				bright.marked_text_background = CGColorRetain(CGColorGetConstantColor(kCGColorWhite));
@@ -796,6 +843,7 @@ namespace ng
 				bright.drop_marker            = CGColorCreateGenericGray(0.25, 0.50);
 				// works for most light schemes, including very white backgrounds
 				bright.indent_guides          = CGColorCreateGenericGray(0.0, 0.04);
+				bright.current_line           = CGColorCreateGenericGray(0.0, 0.06);
 			});
 
 			return darkTheme ? dark : bright;
@@ -827,8 +875,13 @@ namespace ng
 		}
 
 		base_colors_t const& baseColors = get_base_colors(_theme->is_dark());
+#if 0
+		// Disabled: the wrap-column guide draws as a stray vertical line in the
+		// editor, especially near the trailing scroller area. Keep the drawing
+		// code here in case the visual guide is restored later.
 		if(_draw_wrap_column)
 			render::fill_rect(context, baseColors.margin_indicator, OakRectMake(_margin.left + _metrics->column_width() * effective_wrap_column(), CGRectGetMinY(visibleRect), 1, CGRectGetHeight(visibleRect)));
+#endif
 
 		if(_draw_indent_guides)
 		{
@@ -838,6 +891,12 @@ namespace ng
 				render::fill_rect(context, baseColors.indent_guides, OakRectMake(x, CGRectGetMinY(visibleRect), 1, CGRectGetHeight(visibleRect)));
 				x = _margin.left + _metrics->column_width() * i;
 			}
+		}
+
+		if(baseColors.current_line)
+		{
+			for(auto const& rect : current_line_rects_for_ranges(selection))
+				OakFillRightRoundedRect(context, baseColors.current_line, rect);
 		}
 
 		for(auto const& range : selection)

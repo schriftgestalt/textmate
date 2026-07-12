@@ -14,7 +14,10 @@
 NSString* GVColumnDataSourceDidChange   = @"GVColumnDataSourceDidChange";
 NSString* GVLineNumbersColumnIdentifier = @"lineNumbers";
 
+static CGFloat const kCurrentLineHighlightHorizontalInset = 6;
+
 static CGFloat WidthOfLineNumbers (NSUInteger lineNumber, NSFont* font);
+static NSBezierPath* CurrentLineHighlightPath (CGRect const& rect);
 
 struct data_source_t
 {
@@ -121,7 +124,7 @@ struct data_source_t
 		auto fragment = [self.delegate lineFragmentForLine:to.line column:to.column];
 		CGFloat lastY = to.column == 0 && from.line != to.line ? fragment.firstY : fragment.lastY;
 
-		backgroundRects.push_back(CGRectMake(0, firstY+1, self.frame.size.width, lastY - firstY - 2));
+		backgroundRects.push_back(CGRectMake(kCurrentLineHighlightHorizontalInset, firstY, std::max<CGFloat>(0, self.frame.size.width - kCurrentLineHighlightHorizontalInset), lastY - firstY));
 #if 0
 		// Disabled: keep the old current-line top/bottom gutter strokes here in
 		// case we want to restore the bordered gutter highlight later.
@@ -295,6 +298,26 @@ static CGFloat WidthOfLineNumbers (NSUInteger lineNumber, NSFont* font)
 	return ceil(width);
 }
 
+static NSBezierPath* CurrentLineHighlightPath (CGRect const& rect)
+{
+	if(CGRectIsEmpty(rect))
+		return [NSBezierPath bezierPath];
+
+	CGFloat radius = CGRectGetHeight(rect) * 0.25;
+	CGFloat minX = CGRectGetMinX(rect), maxX = CGRectGetMaxX(rect);
+	CGFloat minY = CGRectGetMinY(rect), maxY = CGRectGetMaxY(rect);
+
+	NSBezierPath* path = [NSBezierPath bezierPath];
+	[path moveToPoint:NSMakePoint(maxX, minY)];
+	[path lineToPoint:NSMakePoint(minX + radius, minY)];
+	[path appendBezierPathWithArcFromPoint:NSMakePoint(minX, minY) toPoint:NSMakePoint(minX, minY + radius) radius:radius];
+	[path lineToPoint:NSMakePoint(minX, maxY - radius)];
+	[path appendBezierPathWithArcFromPoint:NSMakePoint(minX, maxY) toPoint:NSMakePoint(minX + radius, maxY) radius:radius];
+	[path lineToPoint:NSMakePoint(maxX, maxY)];
+	[path closePath];
+	return path;
+}
+
 static void DrawText (std::string const& text, CGRect const& rect, CGFloat baseline, NSFont* font, NSColor* color)
 {
 	CGContextRef context = NSGraphicsContext.currentContext.CGContext;
@@ -319,7 +342,10 @@ static void DrawText (std::string const& text, CGRect const& rect, CGFloat basel
 
 	[self.selectionBackgroundColor set];
 	for(auto const& rect : backgroundRects)
-		NSRectFillUsingOperation(NSIntersectionRect(rect, NSIntersectionRect(aRect, self.frame)), NSCompositingOperationSourceOver);
+	{
+		if(NSIntersectsRect(rect, aRect))
+			[CurrentLineHighlightPath(rect) fill];
+	}
 
 #if 0
 	// Disabled: current-line gutter fill no longer draws top/bottom border
