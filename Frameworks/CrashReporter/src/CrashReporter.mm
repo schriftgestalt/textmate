@@ -21,7 +21,8 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 	return @"???";
 }
 
-@interface CrashReporter () <UNUserNotificationCenterDelegate, NSUserNotificationCenterDelegate>
+@interface CrashReporter () <UNUserNotificationCenterDelegate>
+@property (nonatomic) NSBackgroundActivityScheduler* activity;
 @end
 
 @implementation CrashReporter
@@ -35,14 +36,7 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 {
 	if(self = [super init])
 	{
-		if(@available(macOS 10.14, *))
-		{
-			UNUserNotificationCenter.currentNotificationCenter.delegate = self;
-		}
-		else
-		{
-			NSUserNotificationCenter.defaultUserNotificationCenter.delegate = self;
-		}
+		UNUserNotificationCenter.currentNotificationCenter.delegate = self;
 	}
 	return self;
 }
@@ -56,28 +50,7 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 
 - (void)userNotificationCenter:(UNUserNotificationCenter*)center willPresentNotification:(UNNotification*)notification withCompletionHandler:(void(^)(UNNotificationPresentationOptions options))completionHandler API_AVAILABLE(macosx(10.14))
 {
-	completionHandler(UNNotificationPresentationOptionAlert);
-}
-
-- (BOOL)userNotificationCenter:(NSUserNotificationCenter*)center shouldPresentNotification:(NSUserNotification*)notification
-{
-	return YES;
-}
-
-- (void)userNotificationCenter:(NSUserNotificationCenter*)center didActivateNotification:(NSUserNotification*)notification
-{
-	NSDictionary* userInfo = notification.userInfo;
-	if(NSString* urlString = userInfo[@"url"])
-		[NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:urlString]];
-}
-
-- (void)applicationDidFinishLaunching:(NSNotification*)aNotification
-{
-	if(NSDictionary* userInfo = [aNotification userInfo])
-	{
-		if(NSUserNotification* notification = userInfo[NSApplicationLaunchUserNotificationKey])
-			[self userNotificationCenter:NSUserNotificationCenter.defaultUserNotificationCenter didActivateNotification:notification];
-	}
+	completionHandler(UNNotificationPresentationOptionBanner);
 }
 
 - (void)postNewCrashReportsToURLString:(NSString*)urlString
@@ -85,9 +58,15 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 	if([NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsDisableCrashReportingKey])
 		return;
 
-	NSBackgroundActivityScheduler* activity = [[NSBackgroundActivityScheduler alloc] initWithIdentifier:[NSString stringWithFormat:@"%@.%@", NSBundle.mainBundle.bundleIdentifier, @"CrashReporting"]];
-	activity.interval = 30;
-	[activity scheduleWithBlock:^(NSBackgroundActivityCompletionHandler completionHandler){
+	self.activity = [[NSBackgroundActivityScheduler alloc] initWithIdentifier:[NSString stringWithFormat:@"%@.%@", NSBundle.mainBundle.bundleIdentifier, @"CrashReporting"]];
+	self.activity.interval = 30;
+	[self.activity scheduleWithBlock:^(NSBackgroundActivityCompletionHandler completionHandler){
+		if([NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsDisableCrashReportingKey])
+		{
+			completionHandler(NSBackgroundActivityResultFinished);
+			return;
+		}
+
 		NSDate* date   = [NSDate dateWithTimeIntervalSinceNow:-7*24*60*60];
 		NSURL* url     = [NSURL URLWithString:urlString];
 		NSString* name = NSProcessInfo.processInfo.processName;
@@ -122,10 +101,19 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 				@"contact":  [NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsCrashReportsContactInfoKey] ?: @"Anonymous",
 				@"report":   [@"@" stringByAppendingString:gzippedReport],
 			}];
+			if(!body)
+			{
+				unlink(gzippedReport.fileSystemRepresentation);
+				continue;
+			}
 
 			NSURLSessionUploadTask* uploadTask = [NSURLSession.sharedSession uploadTaskWithRequest:request fromData:body completionHandler:^(NSData* data, NSURLResponse* response, NSError* error){
 				NSInteger rc = ((NSHTTPURLResponse*)response).statusCode;
-				if(200 <= rc && rc < 300 || 400 <= rc && rc < 500) // We don’t resend reports on a 4xx failure.
+				if(error)
+				{
+					os_log_error(OS_LOG_DEFAULT, "Failed uploading crash report to %{public}@: %{public}@", request.URL, error.localizedDescription);
+				}
+				else if((200 <= rc && rc < 300) || (400 <= rc && rc < 500)) // We don’t resend reports on a 4xx failure.
 				{
 					@synchronized(NSUserDefaults.standardUserDefaults) {
 						NSArray<NSString*>* updatedHasSent = @[ reportPath ];
@@ -137,41 +125,30 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 					if(NSString* locationURLString = ((NSHTTPURLResponse*)response).allHeaderFields[@"Location"])
 					{
 						os_log(OS_LOG_DEFAULT, "Crash report available at %{public}@", locationURLString);
-						if(@available(macOS 10.14, *))
-						{
-							[UNUserNotificationCenter.currentNotificationCenter requestAuthorizationWithOptions:UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError* error){
-								if(granted)
-								{
-									UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
-									content.title    = @"Crash Report Sent";
-									content.body     = @"Diagnostic information has been sent to MacroMates.com regarding your last crash.";
-									content.userInfo = @{ @"path": reportPath, @"url": locationURLString };
+						[UNUserNotificationCenter.currentNotificationCenter requestAuthorizationWithOptions:UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError* error){
+							if(granted)
+							{
+								UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
+								content.title    = @"Crash Report Sent";
+								content.body     = @"Diagnostic information has been sent to MacroMates.com regarding your last crash.";
+								content.userInfo = @{ @"path": reportPath, @"url": locationURLString };
 
-									UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:[NSUUID UUID].UUIDString content:content trigger:nil];
-									[UNUserNotificationCenter.currentNotificationCenter addNotificationRequest:request withCompletionHandler:^(NSError* error){
-										if(error)
-											os_log_error(OS_LOG_DEFAULT, "Failed to show notification: %{public}@", error.localizedDescription);
-									}];
-								}
-								else
-								{
-									os_log_info(OS_LOG_DEFAULT, "User notifications disallowed");
-								}
-							}];
-						}
-						else
-						{
-							NSUserNotification* notification = [[NSUserNotification alloc] init];
-							notification.title           = @"Crash Report Sent";
-							notification.informativeText = @"Diagnostic information has been sent to MacroMates.com regarding your last crash.";
-							notification.userInfo        = @{ @"path": reportPath, @"url": locationURLString };
-							[NSUserNotificationCenter.defaultUserNotificationCenter deliverNotification:notification];
-						}
+								UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:[NSUUID UUID].UUIDString content:content trigger:nil];
+								[UNUserNotificationCenter.currentNotificationCenter addNotificationRequest:request withCompletionHandler:^(NSError* error){
+									if(error)
+										os_log_error(OS_LOG_DEFAULT, "Failed to show notification: %{public}@", error.localizedDescription);
+								}];
+							}
+							else
+							{
+								os_log_info(OS_LOG_DEFAULT, "User notifications disallowed");
+							}
+						}];
 					}
 				}
 				else
 				{
-					os_log_error(OS_LOG_DEFAULT, "Unexpected status code (%ld) from %{publuc}@", rc, request.URL);
+					os_log_error(OS_LOG_DEFAULT, "Unexpected status code (%ld) from %{public}@", rc, request.URL);
 				}
 				unlink(gzippedReport.fileSystemRepresentation);
 			}];
@@ -214,6 +191,7 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 	[urlRequest setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=\"%@\"", boundary] forHTTPHeaderField:@"Content-Type"];
 
 	NSMutableData* body = [NSMutableData data];
+	__block BOOL success = YES;
 	[payload enumerateKeysAndObjectsUsingBlock:^(NSString* name, NSString* value, BOOL* stop) {
 		NSMutableArray<NSString*>* head = [NSMutableArray arrayWithObject:[NSString stringWithFormat:@"--%@", boundary]];
 		NSData* data;
@@ -231,12 +209,21 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 			[head addObject:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"", name]];
 			data = [value dataUsingEncoding:NSUTF8StringEncoding];
 		}
+		if(!data)
+		{
+			os_log_error(OS_LOG_DEFAULT, "Failed creating crash report form field %{public}@", name);
+			success = NO;
+			*stop = YES;
+			return;
+		}
 
 		[body appendData:[[head componentsJoinedByString:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
 		[body appendData:[@"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
 		[body appendData:data];
 		[body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
 	}];
+	if(!success)
+		return nil;
 	[body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
 
 	return body;
@@ -257,23 +244,36 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 		{
 			if(gzFile fp = gzopen(gzPath.fileSystemRepresentation, "wb"))
 			{
-				gzwrite(fp, data.bytes, data.length);
+				uint8_t const* bytes = (uint8_t const*)data.bytes;
+				NSUInteger remaining = data.length;
+				while(remaining)
+				{
+					unsigned int length = (unsigned int)MIN(remaining, (NSUInteger)UINT_MAX);
+					if(gzwrite(fp, bytes, length) != length)
+					{
+						os_log_error(OS_LOG_DEFAULT, "Failed writing gzip file %{public}@", gzPath);
+						break;
+					}
+					bytes += length;
+					remaining -= length;
+				}
 				gzclose(fp);
-				res = gzPath;
+				if(!remaining)
+					res = gzPath;
 			}
 			else
 			{
-				os_log_error(OS_LOG_DEFAULT, "Failed creating file %{publuc}@", gzPath);
+				os_log_error(OS_LOG_DEFAULT, "Failed creating file %{public}@", gzPath);
 			}
 		}
 		else
 		{
-			os_log_error(OS_LOG_DEFAULT, "Failed creating directory %{publuc}@", gzPath.stringByDeletingLastPathComponent);
+			os_log_error(OS_LOG_DEFAULT, "Failed creating directory %{public}@", gzPath.stringByDeletingLastPathComponent);
 		}
 	}
 	else
 	{
-		os_log_error(OS_LOG_DEFAULT, "Failed reading %{publuc}@", path);
+		os_log_error(OS_LOG_DEFAULT, "Failed reading %{public}@", path);
 	}
 	return res;
 }
