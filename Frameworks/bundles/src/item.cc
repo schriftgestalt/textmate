@@ -387,7 +387,7 @@ namespace bundles
 		}
 
 		plist::dictionary_t newPlist = erase_false_values(plist());
-		bool saveAsDelta = useDeltaIfNonLocal && (!_local && !_paths.empty() || _paths.size() > 1);
+		bool saveAsDelta = useDeltaIfNonLocal && ((!_local && !_paths.empty()) || _paths.size() > 1);
 		if(saveAsDelta)
 		{
 			plist::dictionary_t oldPlist = erase_false_values(plist::load(_paths[_local ? 1 : 0]));

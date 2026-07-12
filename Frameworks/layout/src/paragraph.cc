@@ -22,7 +22,7 @@ namespace ng
 				0xFEFF  // ZERO WIDTH NO-BREAK SPACE
 			};
 
-			if(0x20 <= ch && ch <= 0x7E || ch == '\t' || ch == '\n')
+			if((0x20 <= ch && ch <= 0x7E) || ch == '\t' || ch == '\n')
 				return NULL_STR;
 
 			switch(ch)

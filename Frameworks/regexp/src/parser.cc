@@ -218,7 +218,7 @@ bool parse_context_t::parse_condition (nodes_t& nodes)
 	{
 		variable_condition_t res;
 		res.name = std::to_string(captureRegister);
-		if(parse_format_string(":)", res.if_set) && (it[-1] == ')' || it[-1] == ':' && parse_format_string(")", res.if_not_set) && it[-1] == ')'))
+		if(parse_format_string(":)", res.if_set) && (it[-1] == ')' || (it[-1] == ':' && parse_format_string(")", res.if_not_set) && it[-1] == ')')))
 			return nodes.push_back(res), true;
 	}
 	return it = backtrack, false;

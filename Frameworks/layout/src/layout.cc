@@ -327,7 +327,7 @@ namespace ng
 		std::vector<CGRect> res;
 		for(auto const& range : ng::dissect_columnar(_buffer, ranges))
 		{
-			if(mode == kRectsIncludeCarets && !range.empty() || mode == kRectsIncludeSelections && range.empty())
+			if((mode == kRectsIncludeCarets && !range.empty()) || (mode == kRectsIncludeSelections && range.empty()))
 				continue;
 
 			bool includeCarry = range.freehanded;

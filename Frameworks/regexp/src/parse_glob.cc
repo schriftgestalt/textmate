@@ -232,7 +232,7 @@ namespace
 				|| parse_any()
 				|| parse_brace_expansion()
 				|| parse_character_class()
-				|| !parsingBraces && parse_exclude()
+				|| (!parsingBraces && parse_exclude())
 				|| parse_text(parsingBraces ? "\\?*{[,}" : "\\?*{[!~"))
 				continue;
 

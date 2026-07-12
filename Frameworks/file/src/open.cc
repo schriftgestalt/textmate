@@ -213,7 +213,7 @@ namespace file
 
 static bool not_ascii (char ch)
 {
-	return !(0x20 <= ch && ch < 0x80 || ch && strchr("\t\n\f\r\e", ch));
+	return !((0x20 <= ch && ch < 0x80) || (ch && strchr("\t\n\f\r\e", ch)));
 }
 
 static io::bytes_ptr convert (io::bytes_ptr content, std::string const& from, std::string const& to)

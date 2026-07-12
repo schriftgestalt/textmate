@@ -631,8 +631,9 @@ static void* kDocumentEditedObserverContext = &kDocumentEditedObserverContext;
 		}
 
 		bool error = _buffer->visit_data([fd](char const* bytes, size_t offset, size_t len, bool* stop){
-			if(*stop = write(fd, bytes, len) != len)
+			if((*stop = write(fd, bytes, len) != len)) {
 				perrorf("saveBackup: write");
+			}
 		});
 
 		close(fd);
@@ -704,7 +705,7 @@ static void* kDocumentEditedObserverContext = &kDocumentEditedObserverContext;
 		[_fileReference decreaseModifiedCount];
 	[_fileReference decreaseOpenCount];
 
-	if(_fileReference = newFileReference)
+	if((_fileReference = newFileReference))
 	{
 		[_fileReference increaseOpenCount];
 		if(self.isDocumentEdited)
@@ -1584,7 +1585,7 @@ static void* kDocumentEditedObserverContext = &kDocumentEditedObserverContext;
 
 	if(flag)
 	{
-		if(_scmInfo = scm::info(path::parent(to_s(self.path))))
+		if((_scmInfo = scm::info(path::parent(to_s(self.path)))))
 		{
 			_scmStatus    = _scmInfo->status(to_s(self.path));
 			_scmVariables = _scmInfo->scm_variables();
@@ -1673,7 +1674,7 @@ static void* kDocumentEditedObserverContext = &kDocumentEditedObserverContext;
 	if(_needsImportDocumentChanges == flag)
 		return;
 
-	if(_needsImportDocumentChanges = flag)
+	if((_needsImportDocumentChanges = flag))
 	{
 		if(_undoManager->in_undo_group())
 			return;

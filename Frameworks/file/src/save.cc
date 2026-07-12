@@ -231,9 +231,9 @@ namespace
 					_next_state = kStateExecuteTextExportFilter;
 
 					file_status_t status = file::status(_path);
-					if(status == kFileTestWritable || status == kFileTestNotWritableButOwner && _make_writable)
+					if(status == kFileTestWritable || (status == kFileTestNotWritableButOwner && _make_writable))
 						proceed();
-					else if(status == kFileTestWritableByRoot || status == kFileTestNotWritable && _make_writable)
+					else if(status == kFileTestWritableByRoot || (status == kFileTestNotWritable && _make_writable))
 						_callback->obtain_authorization(_path, _content, _authorization, shared_from_this());
 				}
 				break;
@@ -303,9 +303,12 @@ namespace
 					else
 					{
 						io::bytes_ptr encodedContent = _content;
-						if(encodedContent = encoding::convert(_content, kCharsetUTF8, _encoding.charset()))
-								_content = encodedContent;
-						else	_next_state = kStateSelectEncoding;
+						if((encodedContent = encoding::convert(_content, kCharsetUTF8, _encoding.charset()))) {
+							_content = encodedContent;
+						}
+						else {
+							_next_state = kStateSelectEncoding;
+						}
 					}
 
 					proceed();

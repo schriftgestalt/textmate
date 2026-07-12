@@ -160,7 +160,7 @@ namespace ng
 				size_t& index = mark.position.index;
 				if(std::clamp(index, from, to) == index)
 				{
-					if(mark.type == mark_t::kUnpairedMark || index != from && index != to)
+					if(mark.type == mark_t::kUnpairedMark || (index != from && index != to))
 					{
 						index = from + len - std::min(to - index, len);
 					}
@@ -242,7 +242,7 @@ namespace ng
 					// FIXME This is a heuristic to figure out which of the returned ranges correspond to our caret, as multiple ranges will be returned when the snippet has mirrors. Ideally we would update the API to return the new caret range. Though I am postponing that to a potential refactor that would also allow snippets to work with multiple carets.
 
 					original = ng::range_t(from + pad.size(), caret, false, orgRange.freehanded, true);
-					goodCaretMatch = snippets.current().min().index < from + pad.size() && caret < snippets.current().max().index || (from + pad.size() != caret && (snippets.current().min().index < from + pad.size() || caret < snippets.current().max().index));
+					goodCaretMatch = (snippets.current().min().index < from + pad.size() && caret < snippets.current().max().index) || (from + pad.size() != caret && (snippets.current().min().index < from + pad.size() || caret < snippets.current().max().index));
 				}
 				adjustment += str.size() - (to - from);
 			}
@@ -333,7 +333,7 @@ namespace ng
 
 	bool editor_t::disallow_tab_expansion () const
 	{
-		if(!_snippets.empty() && _snippets.current() == ranges().last() && !_snippets.in_last_placeholder() || ranges().last().unanchored)
+		if((!_snippets.empty() && _snippets.current() == ranges().last() && !_snippets.in_last_placeholder()) || ranges().last().unanchored)
 			return true;
 		return false;
 	}

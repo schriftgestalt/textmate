@@ -140,9 +140,9 @@ static void parse_event_string (std::string const& eventString, std::string& key
 		bool scanningFlags = true, real = true;
 		foreach(ch, utf8::make(eventString.data()), utf8::make(eventString.data() + eventString.size()))
 		{
-			if(scanningFlags = scanningFlags && ns_flag_for_char(*ch) != 0)
+			if((scanningFlags = scanningFlags && ns_flag_for_char(*ch) != 0))
 				flags |= ns_flag_for_char(*ch);
-			else if(real = (!real || *ch != '\\'))
+			else if((real = (!real || *ch != '\\')))
 				key.append(&ch, ch.length());
 		}
 	}

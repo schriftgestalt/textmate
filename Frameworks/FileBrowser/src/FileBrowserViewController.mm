@@ -375,7 +375,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 		[menu removeItemAtIndex:menu.numberOfItems-1];
 
 	FileItem* fileItem = self.fileItem;
-	while(fileItem = [FileItem fileItemWithURL:fileItem.parentURL])
+	while((fileItem = [FileItem fileItemWithURL:fileItem.parentURL]))
 	{
 		NSMenuItem* menuItem = [menu addItemWithTitle:fileItem.localizedName action:@selector(takeURLFrom:) keyEquivalent:@""];
 		menuItem.representedObject = fileItem.resolvedURL;
@@ -412,9 +412,9 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 	{
 		if(commandKeyDown)
 			[itemsToShowInFinder addObject:item];
-		else if(item.isDirectory && (treatPackageAsDirectory || !item.isPackage) || item.isLinkToDirectory && (treatPackageAsDirectory || !item.isLinkToPackage) || optionKeyDown && (item.isPackage || item.isLinkToDirectory))
+		else if((item.isDirectory && (treatPackageAsDirectory || !item.isPackage)) || (item.isLinkToDirectory && (treatPackageAsDirectory || !item.isLinkToPackage)) || (optionKeyDown && (item.isPackage || item.isLinkToDirectory)))
 			[itemsToShowInFileBrowser addObject:item];
-		else if(item.isPackage || item.isLinkToPackage || item.URL.isFileURL && is_binary(item.URL.fileSystemRepresentation))
+		else if(item.isPackage || item.isLinkToPackage || (item.URL.isFileURL && is_binary(item.URL.fileSystemRepresentation)))
 			[itemsToOpen addObject:item];
 		else
 			[itemsToOpenInTextMate addObject:item];
@@ -1014,7 +1014,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 	else if(menuItem.action == @selector(openSelectedItems:))
 		hideAndDisable = previewableItems.count == 0;
 	else if(menuItem.action == @selector(openWithMenuAction:))
-		hideAndDisable = previewableItems.count == 0 || selectedItems.count == 1 && selectedItems.firstObject.isApplication;
+		hideAndDisable = previewableItems.count == 0 || (selectedItems.count == 1 && selectedItems.firstObject.isApplication);
 	else if(menuItem.action == @selector(showSelectedEntriesInFinder:))
 		hideAndDisable = previewableItems.count == 0;
 	else if(menuItem.action == @selector(showOriginal:))
@@ -1047,7 +1047,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 		hideAndDisable = previewableItems.count == 0;
 
 	menuItem.hidden = hideAndDisable && menuItem.target == self;
-	if(res = res && !hideAndDisable)
+	if((res = res && !hideAndDisable))
 	{
 		NSString* copyAsPathnameTitle = previewableItems.count > 1 ? @"Copy%@ as Pathnames" : @"Copy%@ as Pathname";
 
@@ -1835,7 +1835,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 
 		for(FileItem* child in item.arrangedChildren)
 		{
-			if((flag && !child.isSymbolicLink || [_expandedURLs containsObject:child.URL] || [child.URL.scheme isEqualToString:@"scm"]) && [self.outlineView isExpandable:child])
+			if(((flag && !child.isSymbolicLink) || [_expandedURLs containsObject:child.URL] || [child.URL.scheme isEqualToString:@"scm"]) && [self.outlineView isExpandable:child])
 				[self.outlineView expandItem:child expandChildren:flag && !child.isSymbolicLink];
 
 			if([_selectedURLs containsObject:child.URL])
@@ -2053,7 +2053,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 
 - (BOOL)outlineView:(NSOutlineView*)outlineView isItemExpandable:(FileItem*)item
 {
-	return item.isDirectory && (_canExpandPackages || !item.isPackage) || (_canExpandSymbolicLinks && item.isLinkToDirectory && (_canExpandPackages || !item.isLinkToPackage));
+	return (item.isDirectory && (_canExpandPackages || !item.isPackage)) || (_canExpandSymbolicLinks && item.isLinkToDirectory && (_canExpandPackages || !item.isLinkToPackage));
 }
 
 - (BOOL)outlineView:(NSOutlineView*)outlineView isGroupItem:(FileItem*)item

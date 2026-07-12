@@ -35,7 +35,7 @@ static size_t lines_matched_by_regexp (std::string const& pattern)
 			continue;
 		}
 
-		if(esc && ch == 'n' || ch == '\n')
+		if((esc && ch == 'n') || ch == '\n')
 			++newlines;
 		esc = false;
 	}

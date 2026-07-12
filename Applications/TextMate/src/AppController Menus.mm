@@ -115,7 +115,7 @@ static NSString* NameForLocaleIdentifier (NSString* languageCode)
 	if(item.action == @selector(takeThemeAppearanceFrom:))
 	{
 		NSString* savedValue = [NSUserDefaults.standardUserDefaults stringForKey:@"themeAppearance"];
-		item.state = !item.representedObject && !savedValue || [item.representedObject isEqualToString:savedValue] ? NSControlStateValueOn : NSControlStateValueOff;
+		item.state = ((!item.representedObject && !savedValue) || [item.representedObject isEqualToString:savedValue]) ? NSControlStateValueOn : NSControlStateValueOff;
 
 		NSString* label;
 		NSString* defaultsKey;

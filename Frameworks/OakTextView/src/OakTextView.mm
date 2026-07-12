@@ -910,7 +910,7 @@ static std::string shell_quote (std::vector<std::string> paths)
 		documentView.reset();
 	}
 
-	if(_document = aDocument)
+	if((_document = aDocument))
 	{
 		_scmStatus = scm::status::unknown;
 
@@ -2886,7 +2886,7 @@ static void update_menu_key_equivalents (NSMenu* menu, std::multimap<std::string
 	ng::index_t index = documentView->index_at_point(point);
 	bool clickInSelection = false;
 	for(auto const& range : documentView->ranges())
-		clickInSelection = clickInSelection || range.min() <= index && index <= range.max();
+		clickInSelection = clickInSelection || (range.min() <= index && index <= range.max());
 	return [self contextMenuForRanges:(clickInSelection ? documentView->ranges() : index)];
 }
 

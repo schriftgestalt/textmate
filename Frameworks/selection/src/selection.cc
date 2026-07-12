@@ -144,7 +144,7 @@ namespace ng
 				map.emplace(record.index, range);
 				last = max;
 			}
-			else if(last < max || last == max && range.empty())
+			else if(last < max || (last == max && range.empty()))
 			{
 				auto min = range.normalized().min();
 				if(min < last)

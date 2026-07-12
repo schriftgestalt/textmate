@@ -438,7 +438,7 @@ namespace format_string
 
 				case '$': case '(': case '\\':
 				{
-					if(format[i] != '\\' || i+1 != format.size() && strchr("\\$(trn", format[i+1]))
+					if(format[i] != '\\' || (i+1 != format.size() && strchr("\\$(trn", format[i+1])))
 						res.append("\\");
 				}
 				/* continue */

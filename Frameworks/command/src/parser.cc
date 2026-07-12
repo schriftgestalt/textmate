@@ -91,7 +91,7 @@ plist::dictionary_t convert_command_from_v1 (plist::dictionary_t plist)
 	}
 
 	bool flag;
-	plist["autoScrollOutput"] = plist::get_key_path(plist, "dontFollowNewOutput", flag) && !flag || plist::get_key_path(plist, "autoScrollOutput", flag) && flag;
+	plist["autoScrollOutput"] = (plist::get_key_path(plist, "dontFollowNewOutput", flag) && !flag) || (plist::get_key_path(plist, "autoScrollOutput", flag) && flag);
 
 	return plist;
 }

@@ -220,7 +220,7 @@ namespace utf8
 			bool valid = false;
 			for(auto const& code : UTF8LengthCodes)
 			{
-				if(valid = ((*bt & code.mask) == code.expect))
+				if((valid = ((*bt & code.mask) == code.expect)))
 					break;
 				if(++it == last || (*it & 0b11000000) != 0b10000000)
 					break;

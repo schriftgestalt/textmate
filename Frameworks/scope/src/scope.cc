@@ -77,7 +77,7 @@ namespace scope
 
 	scope_t::scope_t (scope_t const& rhs)
 	{
-		if(node = rhs.node)
+		if((node = rhs.node))
 			node->retain();
 	}
 
@@ -93,7 +93,7 @@ namespace scope
 		{
 			if(node)
 				node->release();
-			if(node = rhs.node)
+			if((node = rhs.node))
 				node->retain();
 		}
 		return *this;
@@ -126,7 +126,7 @@ namespace scope
 	{
 		ASSERT(node);
 		node_t* old = node;
-		if(node = node->parent())
+		if((node = node->parent()))
 			node->retain();
 		old->release();
 	}

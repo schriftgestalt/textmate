@@ -76,7 +76,7 @@ namespace scm
 	{
 		if(_shared_info)
 			_shared_info->remove_client(this);
-		if(_shared_info = sharedInfo)
+		if((_shared_info = sharedInfo))
 			_shared_info->add_client(this);
 	}
 
