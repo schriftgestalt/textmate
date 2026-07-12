@@ -1,4 +1,8 @@
 #import "CrashReporter.h"
+
+#define UploadCrashReport 0
+
+#if UploadCrashReport
 #import <Preferences/src/Keys.h>
 #import <UserNotifications/UserNotifications.h>
 #import <oak/misc.h>
@@ -20,10 +24,13 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 
 	return @"???";
 }
+#endif
 
+#if UploadCrashReport
 @interface CrashReporter () <UNUserNotificationCenterDelegate>
 @property (nonatomic) NSBackgroundActivityScheduler* activity;
 @end
+#endif
 
 @implementation CrashReporter
 + (instancetype)sharedInstance
@@ -32,6 +39,7 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 	return sharedInstance;
 }
 
+#if UploadCrashReport
 - (id)init
 {
 	if(self = [super init])
@@ -277,4 +285,9 @@ static NSString* GetHardwareInfo (int field, BOOL isInteger = NO)
 	}
 	return res;
 }
+#else
+- (void)postNewCrashReportsToURLString:(NSString*)urlString
+{
+}
+#endif
 @end
