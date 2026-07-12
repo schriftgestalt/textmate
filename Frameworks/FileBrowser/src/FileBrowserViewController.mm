@@ -1182,7 +1182,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 {
 	if([state isKindOfClass:[NSData class]])
 	{
-		if(NSCoder* coder = [[NSKeyedUnarchiver alloc] initForReadingWithData:state])
+		if(NSCoder* coder = [[NSKeyedUnarchiver alloc] initForReadingFromData:state error:nil])
 			[self restoreStateWithCoder:coder];
 	}
 	else if([state isKindOfClass:[NSDictionary class]])

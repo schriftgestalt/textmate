@@ -1,4 +1,5 @@
 #import "AppController.h"
+#import "TextMateResponderActions.h"
 #import <oak/oak.h>
 #import <text/src/my_ctype.h>
 #import <text/src/parse.h>
@@ -170,12 +171,12 @@ static NSString* NameForLocaleIdentifier (NSString* languageCode)
 
 	MBMenu const items = {
 		{ @"Appearance",       @selector(nop:),                                                                          },
-		{ @"Light",            @selector(takeThemeAppearanceFrom:), .indent = 1, .target = self, .representedObject = @"light" },
-		{ @"Dark",             @selector(takeThemeAppearanceFrom:), .indent = 1, .target = self, .representedObject = @"dark"  },
-		{ @"Auto",             @selector(takeThemeAppearanceFrom:), .indent = 1, .target = self, .representedObject = nil      },
+		MBMenuItem{ @"Light", @selector(takeThemeAppearanceFrom:) }.withIndent(1).withTarget(self).withRepresentedObject(@"light"),
+		MBMenuItem{ @"Dark", @selector(takeThemeAppearanceFrom:) }.withIndent(1).withTarget(self).withRepresentedObject(@"dark"),
+		MBMenuItem{ @"Auto", @selector(takeThemeAppearanceFrom:) }.withIndent(1).withTarget(self).withRepresentedObject(nil),
 		{ /* -------- */ },
-		{ @"Theme for Light Appearance", .submenuRef = &lightMenu },
-		{ @"Theme for Dark Appearance",  .submenuRef = &darkMenu  },
+		MBMenuItem{ @"Theme for Light Appearance" }.withSubmenuRef(&lightMenu),
+		MBMenuItem{ @"Theme for Dark Appearance" }.withSubmenuRef(&darkMenu),
 	};
 	MBCreateMenu(items, aMenu);
 

@@ -68,8 +68,15 @@ enum OTVFontSmoothing : NSUInteger
 - (IBAction)toggleFoldingAtLine:(NSUInteger)lineNumber recursive:(BOOL)flag;
 - (IBAction)toggleShowInvisibles:(id)sender;
 - (IBAction)toggleScrollPastEnd:(id)sender;
+- (IBAction)toggleSoftWrap:(id)sender;
+- (IBAction)toggleShowWrapColumn:(id)sender;
+- (IBAction)takeWrapColumnFrom:(id)sender;
+- (IBAction)goToNextBookmark:(id)sender;
+- (IBAction)goToPreviousBookmark:(id)sender;
 
 - (IBAction)saveScratchMacro:(id)sender;
+- (IBAction)undo:(id)sender;
+- (IBAction)redo:(id)sender;
 
 - (void)performBundleItem:(bundles::item_ptr)anItem;
 - (void)updateEnvironment:(std::map<std::string, std::string>&)res;

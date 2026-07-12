@@ -8,6 +8,8 @@
 @property (nonatomic) OakDocument* document;
 @property (nonatomic) BOOL hideStatusBar;
 - (IBAction)toggleLineNumbers:(id)sender;
+- (IBAction)takeTabSizeFrom:(id)sender;
+- (IBAction)showTabSizeSelectorPanel:(id)sender;
 
 - (void)addAuxiliaryView:(NSView*)aView atEdge:(NSRectEdge)anEdge;
 - (void)removeAuxiliaryView:(NSView*)aView;

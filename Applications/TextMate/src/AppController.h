@@ -37,6 +37,7 @@
 
 @interface AppController (Documents)
 - (void)newDocument:(id)sender;
+- (void)newFileBrowser:(id)sender;
 - (void)openDocument:(id)sender;
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication*)sender;
 @end

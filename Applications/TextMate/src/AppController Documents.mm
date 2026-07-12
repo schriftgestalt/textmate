@@ -1,4 +1,5 @@
 #import "AppController.h"
+#import "TextMateResponderActions.h"
 #import <DocumentWindow/src/DocumentWindowController.h>
 #import "ODBEditorSuite.h"
 #import <Preferences/src/Keys.h>
