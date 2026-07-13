@@ -37,6 +37,38 @@
 		5656C45F2DF089FA00DCE20D /* ascii.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C45E2DF089FA00DCE20D /* ascii.cc */; };
 		5656C9022DF0AAAA00DCE20D /* Python Diagnostics.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = 5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */; };
 		5656C9042DF0AAAA00DCE20D /* SyntaxMate.tmBundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = 5656C9052DF0AAAA00DCE20D /* SyntaxMate.tmBundle */; };
+		ABCDEF000000000000000100 /* Mail.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000120 /* Mail.tmbundle */; };
+		ABCDEF000000000000000101 /* SCM.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000121 /* SCM.tmbundle */; };
+		ABCDEF000000000000000102 /* TODO.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000122 /* TODO.tmbundle */; };
+		ABCDEF000000000000000103 /* SQL.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000123 /* SQL.tmbundle */; };
+		ABCDEF000000000000000104 /* Apache.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000124 /* Apache.tmbundle */; };
+		ABCDEF000000000000000105 /* JSON.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000125 /* JSON.tmbundle */; };
+		ABCDEF000000000000000106 /* Subversion.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000126 /* Subversion.tmbundle */; };
+		ABCDEF000000000000000107 /* TextMate.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000127 /* TextMate.tmbundle */; };
+		ABCDEF000000000000000108 /* Diff.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000128 /* Diff.tmbundle */; };
+		ABCDEF000000000000000109 /* CSS.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000129 /* CSS.tmbundle */; };
+		ABCDEF00000000000000010A /* Bundle Development.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012A /* Bundle Development.tmbundle */; };
+		ABCDEF00000000000000010B /* Mercurial.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012B /* Mercurial.tmbundle */; };
+		ABCDEF00000000000000010C /* Hyperlink Helper.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */; };
+		ABCDEF00000000000000010D /* XML.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012D /* XML.tmbundle */; };
+		ABCDEF00000000000000010E /* Math.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012E /* Math.tmbundle */; };
+		ABCDEF00000000000000010F /* PHP.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012F /* PHP.tmbundle */; };
+		ABCDEF000000000000000110 /* SCM Diff Gutter.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000130 /* SCM Diff Gutter.tmbundle */; };
+		ABCDEF000000000000000111 /* Themes.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000131 /* Themes.tmbundle */; };
+		ABCDEF000000000000000112 /* Git.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000132 /* Git.tmbundle */; };
+		ABCDEF000000000000000113 /* HTML.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000133 /* HTML.tmbundle */; };
+		ABCDEF000000000000000114 /* Source.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000134 /* Source.tmbundle */; };
+		ABCDEF000000000000000115 /* Make.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000135 /* Make.tmbundle */; };
+		ABCDEF000000000000000116 /* Ruby.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000136 /* Ruby.tmbundle */; };
+		ABCDEF000000000000000117 /* Text.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000137 /* Text.tmbundle */; };
+		ABCDEF000000000000000118 /* Objective-C.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000138 /* Objective-C.tmbundle */; };
+		ABCDEF000000000000000119 /* Markdown.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000139 /* Markdown.tmbundle */; };
+		ABCDEF00000000000000011A /* Property List.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013A /* Property List.tmbundle */; };
+		ABCDEF00000000000000011B /* C.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013B /* C.tmbundle */; };
+		ABCDEF00000000000000011C /* Python.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013C /* Python.tmbundle */; };
+		ABCDEF00000000000000011D /* Bundle Support.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013D /* Bundle Support.tmbundle */; };
+		ABCDEF00000000000000011E /* Shell Script.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013E /* Shell Script.tmbundle */; };
+		ABCDEF00000000000000011F /* JavaScript.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013F /* JavaScript.tmbundle */; };
 		5697238730017190005DC1DD /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5697238630017190005DC1DD /* AppIcon.icon */; };
 		569723893002423E005DC1DD /* OakAssert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7152B5959FE0049910C /* OakAssert.mm */; };
 		56A4D5F12B5959340049910C /* AboutWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D5DE2B5959340049910C /* AboutWindowController.mm */; };
@@ -53,7 +85,6 @@
 		56A4D5FC2B5959340049910C /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D5EE2B5959340049910C /* AppController.mm */; };
 		56A4D61A2B5959420049910C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D5FE2B5959410049910C /* InfoPlist.strings */; };
 		56A4D61B2B5959420049910C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6002B5959410049910C /* MainMenu.xib */; };
-		56A4D61C2B5959420049910C /* DefaultBundles.tbz.bl in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6022B5959410049910C /* DefaultBundles.tbz.bl */; };
 		56A4D61D2B5959420049910C /* WKWebView.js in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6032B5959410049910C /* WKWebView.js */; };
 		56A4D61E2B5959420049910C /* TextMate.scriptSuite in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6042B5959410049910C /* TextMate.scriptSuite */; };
 		56A4D61F2B5959420049910C /* TextMate.md in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6062B5959410049910C /* TextMate.md */; };
@@ -485,6 +516,60 @@
 		7F4BF7278165667362F2B809 /* mate in Copy mate to MacOS */ = {isa = PBXBuildFile; fileRef = F3E6451A3442DB0B2374D340 /* mate */; };
 		849B09B32BCB9EEA4F318AA5 /* regexp.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7352B5959FE0049910C /* regexp.cc */; };
 		8C4A7768141ECAAE3928FFFE /* mate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B859C963D4FF719720173012 /* mate.mm */; };
+		ABCDEF000000000000000059 /* bl.cc in Sources */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000051 /* bl.cc */; };
+		ABCDEF000000000000000060 /* updater.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7B62B5959FE0049910C /* updater.cc */; };
+		ABCDEF000000000000000061 /* download.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7B32B5959FE0049910C /* download.cc */; };
+		ABCDEF000000000000000062 /* download_tbz.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9812B595A000049910C /* download_tbz.cc */; };
+		ABCDEF000000000000000063 /* tbz.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9832B595A000049910C /* tbz.cc */; };
+		ABCDEF000000000000000064 /* network.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9872B595A000049910C /* network.cc */; };
+		ABCDEF000000000000000065 /* key_chain.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9882B595A000049910C /* key_chain.cc */; };
+		ABCDEF000000000000000066 /* download.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9892B595A000049910C /* download.cc */; };
+		ABCDEF000000000000000067 /* constants.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D98C2B595A000049910C /* constants.cc */; };
+		ABCDEF000000000000000068 /* proxy.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9902B595A000049910C /* proxy.cc */; };
+		ABCDEF000000000000000069 /* user_agent.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9912B595A000049910C /* user_agent.cc */; };
+		ABCDEF00000000000000006A /* filter_check_signature.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9932B595A000049910C /* filter_check_signature.cc */; };
+		ABCDEF00000000000000006B /* plist.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8F62B5959FF0049910C /* plist.cc */; };
+		ABCDEF00000000000000006C /* ascii.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C45E2DF089FA00DCE20D /* ascii.cc */; };
+		ABCDEF00000000000000006D /* date.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8EA2B5959FF0049910C /* date.cc */; };
+		ABCDEF00000000000000006E /* uuid.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8EB2B5959FF0049910C /* uuid.cc */; };
+		ABCDEF00000000000000006F /* to_s.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8F52B5959FF0049910C /* to_s.cc */; };
+		ABCDEF000000000000000070 /* decode.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4332DF0879500DCE20D /* decode.cc */; };
+		ABCDEF000000000000000071 /* case.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4412DF0879600DCE20D /* case.cc */; };
+		ABCDEF000000000000000072 /* my_ctype.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4442DF0879600DCE20D /* my_ctype.cc */; };
+		ABCDEF000000000000000073 /* format.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43E2DF0879500DCE20D /* format.cc */; };
+		ABCDEF000000000000000074 /* trim.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43A2DF0879500DCE20D /* trim.cc */; };
+		ABCDEF000000000000000075 /* parse.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43C2DF0879500DCE20D /* parse.cc */; };
+		ABCDEF000000000000000076 /* types.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43D2DF0879500DCE20D /* types.cc */; };
+		ABCDEF000000000000000077 /* private.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7322B5959FE0049910C /* private.cc */; };
+		ABCDEF000000000000000078 /* parser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7392B5959FE0049910C /* parser.cc */; };
+		ABCDEF000000000000000079 /* parser_base.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7332B5959FE0049910C /* parser_base.cc */; };
+		ABCDEF00000000000000007A /* parse_glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7342B5959FE0049910C /* parse_glob.cc */; };
+		ABCDEF00000000000000007B /* regexp.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7352B5959FE0049910C /* regexp.cc */; };
+		ABCDEF00000000000000007C /* glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7382B5959FE0049910C /* glob.cc */; };
+		ABCDEF00000000000000007D /* format_string.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7402B5959FE0049910C /* format_string.cc */; };
+		ABCDEF00000000000000007E /* path.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8052B5959FF0049910C /* path.cc */; };
+		ABCDEF00000000000000007F /* move_path.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8012B5959FF0049910C /* move_path.cc */; };
+		ABCDEF000000000000000080 /* entries.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8022B5959FF0049910C /* entries.cc */; };
+		ABCDEF000000000000000081 /* pipe.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8032B5959FF0049910C /* pipe.cc */; };
+		ABCDEF000000000000000082 /* environment.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8092B5959FF0049910C /* environment.cc */; };
+		ABCDEF000000000000000083 /* exec.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D80C2B5959FF0049910C /* exec.cc */; };
+		ABCDEF000000000000000084 /* cf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9722B595A000049910C /* cf.cc */; };
+		ABCDEF000000000000000085 /* run_loop.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D96F2B595A000049910C /* run_loop.cc */; };
+		ABCDEF000000000000000086 /* application.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9CD2B595A000049910C /* application.cc */; };
+		ABCDEF000000000000000087 /* process.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9CE2B595A000049910C /* process.cc */; };
+		ABCDEF000000000000000088 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4222DF04F8E00DCE20D /* Cocoa.framework */; };
+		ABCDEF000000000000000089 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E8FCE980B264A9257252FF2 /* Security.framework */; };
+		ABCDEF00000000000000008A /* libonig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4262DF05D2E00DCE20D /* libonig.a */; };
+		ABCDEF00000000000000008F /* OakAssert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7152B5959FE0049910C /* OakAssert.mm */; };
+		ABCDEF000000000000000090 /* OakFoundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D71E2B5959FE0049910C /* OakFoundation.mm */; };
+		ABCDEF000000000000000091 /* intermediate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D80E2B5959FF0049910C /* intermediate.mm */; };
+		ABCDEF000000000000000092 /* encode.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4352DF0879500DCE20D /* encode.cc */; };
+		ABCDEF000000000000000093 /* snippet.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D73F2B5959FE0049910C /* snippet.cc */; };
+		ABCDEF000000000000000094 /* NSString Additions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D71D2B5959FE0049910C /* NSString Additions.mm */; };
+		ABCDEF000000000000000096 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000095 /* SystemConfiguration.framework */; };
+		ABCDEF000000000000000097 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */; };
+		ABCDEF000000000000000098 /* ns.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA4A2B595A000049910C /* ns.mm */; };
+		ABCDEF000000000000000099 /* indent.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4362DF0879500DCE20D /* indent.cc */; };
 		B7B41E16960401DC1F79A4FC /* libonig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4262DF05D2E00DCE20D /* libonig.a */; };
 		C9516AEEEF53DE9A4E8D0207 /* cf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9722B595A000049910C /* cf.cc */; };
 		D6A780C336BF807DC8F6D4E6 /* uuid.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8EB2B5959FF0049910C /* uuid.cc */; };
@@ -495,13 +580,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C7205C198503DF2CAC386488 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 56A4D5BA2B5958BF0049910C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1BFF9C8CC91314FFC8AFAFB1;
-			remoteInfo = mate;
-		};
+			C7205C198503DF2CAC386488 /* PBXContainerItemProxy */ = {
+				isa = PBXContainerItemProxy;
+				containerPortal = 56A4D5BA2B5958BF0049910C /* Project object */;
+				proxyType = 1;
+				remoteGlobalIDString = 1BFF9C8CC91314FFC8AFAFB1;
+				remoteInfo = mate;
+			};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -513,6 +598,38 @@
 			files = (
 				5656C9022DF0AAAA00DCE20D /* Python Diagnostics.tmbundle in Copy Bundles */,
 				5656C9042DF0AAAA00DCE20D /* SyntaxMate.tmBundle in Copy Bundles */,
+				ABCDEF000000000000000104 /* Apache.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000010A /* Bundle Development.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000011D /* Bundle Support.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000011B /* C.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000109 /* CSS.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000108 /* Diff.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000112 /* Git.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000113 /* HTML.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000010C /* Hyperlink Helper.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000011F /* JavaScript.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000105 /* JSON.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000100 /* Mail.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000115 /* Make.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000119 /* Markdown.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000010E /* Math.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000010B /* Mercurial.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000118 /* Objective-C.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000010F /* PHP.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000011A /* Property List.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000011C /* Python.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000116 /* Ruby.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000110 /* SCM Diff Gutter.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000101 /* SCM.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000011E /* Shell Script.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000114 /* Source.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000103 /* SQL.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000106 /* Subversion.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000117 /* Text.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000107 /* TextMate.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000111 /* Themes.tmbundle in Copy Bundles */,
+				ABCDEF000000000000000102 /* TODO.tmbundle in Copy Bundles */,
+				ABCDEF00000000000000010D /* XML.tmbundle in Copy Bundles */,
 			);
 			name = "Copy Bundles";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -588,6 +705,38 @@
 		5656C46F2DF0AD0F00DCE20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TerminalPreferences.xib; sourceTree = "<group>"; };
 		5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Python Diagnostics.tmbundle"; path = "../../Bundles/Python Diagnostics.tmbundle"; sourceTree = "<group>"; };
 		5656C9052DF0AAAA00DCE20D /* SyntaxMate.tmBundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SyntaxMate.tmBundle; path = ../SyntaxMate/resources/SyntaxMate.tmBundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000120 /* Mail.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Mail.tmbundle; path = ../../Bundles/Core/mail.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000121 /* SCM.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SCM.tmbundle; path = ../../Bundles/Core/scm.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000122 /* TODO.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TODO.tmbundle; path = ../../Bundles/Core/todo.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000123 /* SQL.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SQL.tmbundle; path = ../../Bundles/Core/sql.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000124 /* Apache.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Apache.tmbundle; path = ../../Bundles/Core/apache.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000125 /* JSON.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JSON.tmbundle; path = ../../Bundles/Core/json.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000126 /* Subversion.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Subversion.tmbundle; path = ../../Bundles/Core/subversion.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000127 /* TextMate.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TextMate.tmbundle; path = ../../Bundles/Core/textmate.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000128 /* Diff.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Diff.tmbundle; path = ../../Bundles/Core/diff.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000129 /* CSS.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CSS.tmbundle; path = ../../Bundles/Core/css.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000012A /* Bundle Development.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Bundle Development.tmbundle"; path = ../../Bundles/Core/bundle-development.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000012B /* Mercurial.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Mercurial.tmbundle; path = ../../Bundles/Core/mercurial.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Hyperlink Helper.tmbundle"; path = ../../Bundles/Core/hyperlink-helper.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000012D /* XML.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = XML.tmbundle; path = ../../Bundles/Core/xml.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000012E /* Math.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Math.tmbundle; path = ../../Bundles/Core/math.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000012F /* PHP.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PHP.tmbundle; path = ../../Bundles/Core/php.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000130 /* SCM Diff Gutter.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "SCM Diff Gutter.tmbundle"; path = ../../Bundles/Core/scm-diff-gutter.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000131 /* Themes.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Themes.tmbundle; path = ../../Bundles/Core/themes.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000132 /* Git.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Git.tmbundle; path = ../../Bundles/Core/git.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000133 /* HTML.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = HTML.tmbundle; path = ../../Bundles/Core/html.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000134 /* Source.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Source.tmbundle; path = ../../Bundles/Core/source.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000135 /* Make.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Make.tmbundle; path = ../../Bundles/Core/make.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000136 /* Ruby.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Ruby.tmbundle; path = ../../Bundles/Core/ruby.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000137 /* Text.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Text.tmbundle; path = ../../Bundles/Core/text.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000138 /* Objective-C.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Objective-C.tmbundle"; path = ../../Bundles/Core/objective-c.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000139 /* Markdown.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Markdown.tmbundle; path = ../../Bundles/Core/markdown.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013A /* Property List.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Property List.tmbundle"; path = ../../Bundles/Core/property-list.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013B /* C.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = C.tmbundle; path = ../../Bundles/Core/c.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013C /* Python.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Python.tmbundle; path = ../../Bundles/Core/python.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013D /* Bundle Support.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Bundle Support.tmbundle"; path = ../../Bundles/Core/bundle-support.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013E /* Shell Script.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Shell Script.tmbundle"; path = ../../Bundles/Core/shellscript.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013F /* JavaScript.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JavaScript.tmbundle; path = ../../Bundles/Core/javascript.tmbundle; sourceTree = "<group>"; };
 		5697238630017190005DC1DD /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		56A4D5C22B5958BF0049910C /* TextMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A4D5DE2B5959340049910C /* AboutWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AboutWindowController.mm; sourceTree = "<group>"; };
@@ -609,7 +758,6 @@
 		56A4D5EE2B5959340049910C /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = "<group>"; };
 		56A4D5EF2B5959340049910C /* AboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindowController.h; sourceTree = "<group>"; };
 		56A4D5F02B5959340049910C /* Favorites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Favorites.h; sourceTree = "<group>"; };
-		56A4D6022B5959410049910C /* DefaultBundles.tbz.bl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DefaultBundles.tbz.bl; sourceTree = "<group>"; };
 		56A4D6032B5959410049910C /* WKWebView.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WKWebView.js; sourceTree = "<group>"; };
 		56A4D6042B5959410049910C /* TextMate.scriptSuite */ = {isa = PBXFileReference; lastKnownFileType = text.plist.scriptSuite; path = TextMate.scriptSuite; sourceTree = "<group>"; };
 		56A4D6062B5959410049910C /* TextMate.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = TextMate.md; sourceTree = "<group>"; };
@@ -642,62 +790,16 @@
 		56A4D63D2B5959560049910C /* Changes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Changes.md; sourceTree = "<group>"; };
 		56A4D63E2B5959560049910C /* About.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = About.md; sourceTree = "<group>"; };
 		56A4D64A2B59595D0049910C /* Entitlements.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Entitlements.entitlements; sourceTree = "<group>"; };
-		56A4D64D2B5959640049910C /* SWIG.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = SWIG.icns; sourceTree = "<group>"; };
-		56A4D64E2B5959640049910C /* JavaScript.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = JavaScript.icns; sourceTree = "<group>"; };
-		56A4D64F2B5959640049910C /* Shell.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Shell.icns; sourceTree = "<group>"; };
-		56A4D6502B5959640049910C /* CSS.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CSS.icns; sourceTree = "<group>"; };
-		56A4D6512B5959640049910C /* JSON.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = JSON.icns; sourceTree = "<group>"; };
-		56A4D6522B5959640049910C /* H.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = H.icns; sourceTree = "<group>"; };
-		56A4D6532B5959640049910C /* C#.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "C#.icns"; sourceTree = "<group>"; };
-		56A4D6542B5959640049910C /* Strings.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Strings.icns; sourceTree = "<group>"; };
-		56A4D6552B5959640049910C /* Blank.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Blank.icns; sourceTree = "<group>"; };
-		56A4D6562B5959640049910C /* SQL.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = SQL.icns; sourceTree = "<group>"; };
-		56A4D6572B5959640049910C /* PHP.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = PHP.icns; sourceTree = "<group>"; };
-		56A4D6582B5959640049910C /* YAML.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = YAML.icns; sourceTree = "<group>"; };
-		56A4D6592B5959640049910C /* Python.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Python.icns; sourceTree = "<group>"; };
-		56A4D65A2B5959640049910C /* Text.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Text.icns; sourceTree = "<group>"; };
-		56A4D65B2B5959640049910C /* Haskell.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Haskell.icns; sourceTree = "<group>"; };
-		56A4D65C2B5959640049910C /* Obj-C++.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "Obj-C++.icns"; sourceTree = "<group>"; };
-		56A4D65D2B5959640049910C /* H++.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "H++.icns"; sourceTree = "<group>"; };
 		56A4D65E2B5959640049910C /* TextMate PlugIn.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TextMate PlugIn.icns"; sourceTree = "<group>"; };
-		56A4D65F2B5959640049910C /* TeX.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = TeX.icns; sourceTree = "<group>"; };
-		56A4D6602B5959640049910C /* HTML.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HTML.icns; sourceTree = "<group>"; };
-		56A4D6612B5959640049910C /* C.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = C.icns; sourceTree = "<group>"; };
-		56A4D6622B5959640049910C /* reST.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = reST.icns; sourceTree = "<group>"; };
-		56A4D6632B5959640049910C /* Pascal.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Pascal.icns; sourceTree = "<group>"; };
 		56A4D6642B5959640049910C /* TextMate Bundle.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TextMate Bundle.icns"; sourceTree = "<group>"; };
-		56A4D6652B5959640049910C /* Plist.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Plist.icns; sourceTree = "<group>"; };
-		56A4D6662B5959640049910C /* Patch.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Patch.icns; sourceTree = "<group>"; };
-		56A4D6672B5959640049910C /* TextMate.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = TextMate.icns; sourceTree = "<group>"; };
-		56A4D6682B5959640049910C /* AS.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AS.icns; sourceTree = "<group>"; };
 		56A4D6692B5959640049910C /* TextMate Snippet.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TextMate Snippet.icns"; sourceTree = "<group>"; };
-		56A4D66A2B5959640049910C /* Perl.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Perl.icns; sourceTree = "<group>"; };
-		56A4D66B2B5959640049910C /* INI.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = INI.icns; sourceTree = "<group>"; };
-		56A4D66C2B5959640049910C /* Lisp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Lisp.icns; sourceTree = "<group>"; };
-		56A4D66D2B5959640049910C /* XML.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = XML.icns; sourceTree = "<group>"; };
-		56A4D66E2B5959640049910C /* Erlang.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Erlang.icns; sourceTree = "<group>"; };
-		56A4D66F2B5959640049910C /* C++.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "C++.icns"; sourceTree = "<group>"; };
-		56A4D6702B5959640049910C /* CoffeeScript.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CoffeeScript.icns; sourceTree = "<group>"; };
-		56A4D6712B5959640049910C /* RHTML.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = RHTML.icns; sourceTree = "<group>"; };
 		56A4D6722B5959640049910C /* Icon Template.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Icon Template.psd"; sourceTree = "<group>"; };
 		56A4D6732B5959640049910C /* TextMate Settings.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TextMate Settings.icns"; sourceTree = "<group>"; };
 		56A4D6742B5959640049910C /* TextMate Grammar.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TextMate Grammar.icns"; sourceTree = "<group>"; };
 		56A4D6752B5959640049910C /* TextMate Theme.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TextMate Theme.icns"; sourceTree = "<group>"; };
-		56A4D6762B5959640049910C /* Ragel.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Ragel.icns; sourceTree = "<group>"; };
-		56A4D6772B5959640049910C /* Java.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Java.icns; sourceTree = "<group>"; };
-		56A4D6782B5959640049910C /* Diff.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Diff.icns; sourceTree = "<group>"; };
-		56A4D6792B5959640049910C /* BibTeX.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = BibTeX.icns; sourceTree = "<group>"; };
-		56A4D67A2B5959640049910C /* GTD.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = GTD.icns; sourceTree = "<group>"; };
-		56A4D67B2B5959640049910C /* ASP.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ASP.icns; sourceTree = "<group>"; };
 		56A4D67C2B5959640049910C /* TextMate Macro.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TextMate Macro.icns"; sourceTree = "<group>"; };
-		56A4D67D2B5959640049910C /* Obj-C.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "Obj-C.icns"; sourceTree = "<group>"; };
 		56A4D67E2B5959640049910C /* TextMate Command.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TextMate Command.icns"; sourceTree = "<group>"; };
-		56A4D67F2B5959640049910C /* Fortran.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Fortran.icns; sourceTree = "<group>"; };
 		56A4D6802B5959640049910C /* TextMate Bundle Item.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TextMate Bundle Item.icns"; sourceTree = "<group>"; };
-		56A4D6812B5959640049910C /* R.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = R.icns; sourceTree = "<group>"; };
-		56A4D6822B5959640049910C /* Ruby.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Ruby.icns; sourceTree = "<group>"; };
-		56A4D6832B5959640049910C /* Markdown.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Markdown.icns; sourceTree = "<group>"; };
-		56A4D6842B5959640049910C /* Lua.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Lua.icns; sourceTree = "<group>"; };
 		56A4D6BE2B5959780049910C /* footer.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = footer.html; sourceTree = "<group>"; };
 		56A4D6BF2B5959780049910C /* header.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = header.html; sourceTree = "<group>"; };
 		56A4D6C62B5959FE0049910C /* info.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = info.cc; sourceTree = "<group>"; };
@@ -1403,9 +1505,12 @@
 		56A4DCB82B596F990049910C /* SerializationTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerializationTestCase.m; sourceTree = "<group>"; };
 		56A4DCB92B596F990049910C /* FilesTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesTestCase.m; sourceTree = "<group>"; };
 		56A4DCBA2B596F990049910C /* DatabaseTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTestCase.m; sourceTree = "<group>"; };
-		56A4DCBB2B596F990049910C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		B859C963D4FF719720173012 /* mate.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = mate.mm; sourceTree = "<group>"; };
-		F3E6451A3442DB0B2374D340 /* mate */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mate; sourceTree = BUILT_PRODUCTS_DIR; };
+			56A4DCBB2B596F990049910C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+			B859C963D4FF719720173012 /* mate.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = mate.mm; sourceTree = "<group>"; };
+			ABCDEF000000000000000050 /* bl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bl; sourceTree = BUILT_PRODUCTS_DIR; };
+			ABCDEF000000000000000051 /* bl.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; path = bl.cc; sourceTree = "<group>"; };
+			ABCDEF000000000000000095 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+			F3E6451A3442DB0B2374D340 /* mate */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mate; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1419,17 +1524,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B2E08E950D5E7C579669CFD2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
+			B2E08E950D5E7C579669CFD2 /* Frameworks */ = {
+				isa = PBXFrameworksBuildPhase;
+				buildActionMask = 2147483647;
 			files = (
 				3E6B2A128D6A47B58B016A64 /* ExceptionHandling.framework in Frameworks */,
 				6AD7A1DB822E0A9FE115B04A /* Cocoa.framework in Frameworks */,
 				B7B41E16960401DC1F79A4FC /* libonig.a in Frameworks */,
 				3227B98D00DDCB7AC9BCBCBB /* Security.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+				);
+				runOnlyForDeploymentPostprocessing = 0;
+			};
+			ABCDEF000000000000000053 /* Frameworks */ = {
+				isa = PBXFrameworksBuildPhase;
+				buildActionMask = 2147483647;
+				files = (
+					ABCDEF000000000000000088 /* Cocoa.framework in Frameworks */,
+					ABCDEF000000000000000089 /* Security.framework in Frameworks */,
+					ABCDEF000000000000000096 /* SystemConfiguration.framework in Frameworks */,
+					ABCDEF000000000000000097 /* ExceptionHandling.framework in Frameworks */,
+					ABCDEF00000000000000008A /* libonig.a in Frameworks */,
+				);
+				runOnlyForDeploymentPostprocessing = 0;
+			};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -1484,11 +1601,52 @@
 				56A4D5DC2B5958F80049910C /* TextMate */,
 				56A4D6C22B5959C40049910C /* Frameworks */,
 				56A4DC912B596F820049910C /* Vendor */,
+				ABCDEF000000000000000140 /* Core Bundles */,
 				5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */,
 				5656C9052DF0AAAA00DCE20D /* SyntaxMate.tmBundle */,
 				56A4D5C32B5958BF0049910C /* Products */,
 				917909068AEAC9FFA1C58943 /* mate */,
+				ABCDEF000000000000000052 /* bl */,
 			);
+			sourceTree = "<group>";
+		};
+		ABCDEF000000000000000140 /* Core Bundles */ = {
+			isa = PBXGroup;
+			children = (
+				ABCDEF000000000000000124 /* Apache.tmbundle */,
+				ABCDEF00000000000000012A /* Bundle Development.tmbundle */,
+				ABCDEF00000000000000013D /* Bundle Support.tmbundle */,
+				ABCDEF00000000000000013B /* C.tmbundle */,
+				ABCDEF000000000000000129 /* CSS.tmbundle */,
+				ABCDEF000000000000000128 /* Diff.tmbundle */,
+				ABCDEF000000000000000132 /* Git.tmbundle */,
+				ABCDEF000000000000000133 /* HTML.tmbundle */,
+				ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */,
+				ABCDEF00000000000000013F /* JavaScript.tmbundle */,
+				ABCDEF000000000000000125 /* JSON.tmbundle */,
+				ABCDEF000000000000000120 /* Mail.tmbundle */,
+				ABCDEF000000000000000135 /* Make.tmbundle */,
+				ABCDEF000000000000000139 /* Markdown.tmbundle */,
+				ABCDEF00000000000000012E /* Math.tmbundle */,
+				ABCDEF00000000000000012B /* Mercurial.tmbundle */,
+				ABCDEF000000000000000138 /* Objective-C.tmbundle */,
+				ABCDEF00000000000000012F /* PHP.tmbundle */,
+				ABCDEF00000000000000013A /* Property List.tmbundle */,
+				ABCDEF00000000000000013C /* Python.tmbundle */,
+				ABCDEF000000000000000136 /* Ruby.tmbundle */,
+				ABCDEF000000000000000130 /* SCM Diff Gutter.tmbundle */,
+				ABCDEF000000000000000121 /* SCM.tmbundle */,
+				ABCDEF00000000000000013E /* Shell Script.tmbundle */,
+				ABCDEF000000000000000134 /* Source.tmbundle */,
+				ABCDEF000000000000000123 /* SQL.tmbundle */,
+				ABCDEF000000000000000126 /* Subversion.tmbundle */,
+				ABCDEF000000000000000137 /* Text.tmbundle */,
+				ABCDEF000000000000000127 /* TextMate.tmbundle */,
+				ABCDEF000000000000000131 /* Themes.tmbundle */,
+				ABCDEF000000000000000122 /* TODO.tmbundle */,
+				ABCDEF00000000000000012D /* XML.tmbundle */,
+			);
+			name = "Core Bundles";
 			sourceTree = "<group>";
 		};
 		56A4D5C32B5958BF0049910C /* Products */ = {
@@ -1496,6 +1654,7 @@
 			children = (
 				56A4D5C22B5958BF0049910C /* TextMate.app */,
 				F3E6451A3442DB0B2374D340 /* mate */,
+				ABCDEF000000000000000050 /* bl */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1545,7 +1704,6 @@
 				56A4DC8E2B595B820049910C /* Info.plist */,
 				56A4D5FE2B5959410049910C /* InfoPlist.strings */,
 				56A4D6002B5959410049910C /* MainMenu.xib */,
-				56A4D6022B5959410049910C /* DefaultBundles.tbz.bl */,
 				56A4D6032B5959410049910C /* WKWebView.js */,
 				56A4D6042B5959410049910C /* TextMate.scriptSuite */,
 				56A4D6052B5959410049910C /* TextMate Help */,
@@ -1633,62 +1791,16 @@
 		56A4D64C2B5959640049910C /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				56A4D64D2B5959640049910C /* SWIG.icns */,
-				56A4D64E2B5959640049910C /* JavaScript.icns */,
-				56A4D64F2B5959640049910C /* Shell.icns */,
-				56A4D6502B5959640049910C /* CSS.icns */,
-				56A4D6512B5959640049910C /* JSON.icns */,
-				56A4D6522B5959640049910C /* H.icns */,
-				56A4D6532B5959640049910C /* C#.icns */,
-				56A4D6542B5959640049910C /* Strings.icns */,
-				56A4D6552B5959640049910C /* Blank.icns */,
-				56A4D6562B5959640049910C /* SQL.icns */,
-				56A4D6572B5959640049910C /* PHP.icns */,
-				56A4D6582B5959640049910C /* YAML.icns */,
-				56A4D6592B5959640049910C /* Python.icns */,
-				56A4D65A2B5959640049910C /* Text.icns */,
-				56A4D65B2B5959640049910C /* Haskell.icns */,
-				56A4D65C2B5959640049910C /* Obj-C++.icns */,
-				56A4D65D2B5959640049910C /* H++.icns */,
 				56A4D65E2B5959640049910C /* TextMate PlugIn.icns */,
-				56A4D65F2B5959640049910C /* TeX.icns */,
-				56A4D6602B5959640049910C /* HTML.icns */,
-				56A4D6612B5959640049910C /* C.icns */,
-				56A4D6622B5959640049910C /* reST.icns */,
-				56A4D6632B5959640049910C /* Pascal.icns */,
 				56A4D6642B5959640049910C /* TextMate Bundle.icns */,
-				56A4D6652B5959640049910C /* Plist.icns */,
-				56A4D6662B5959640049910C /* Patch.icns */,
-				56A4D6672B5959640049910C /* TextMate.icns */,
-				56A4D6682B5959640049910C /* AS.icns */,
 				56A4D6692B5959640049910C /* TextMate Snippet.icns */,
-				56A4D66A2B5959640049910C /* Perl.icns */,
-				56A4D66B2B5959640049910C /* INI.icns */,
-				56A4D66C2B5959640049910C /* Lisp.icns */,
-				56A4D66D2B5959640049910C /* XML.icns */,
-				56A4D66E2B5959640049910C /* Erlang.icns */,
-				56A4D66F2B5959640049910C /* C++.icns */,
-				56A4D6702B5959640049910C /* CoffeeScript.icns */,
-				56A4D6712B5959640049910C /* RHTML.icns */,
 				56A4D6722B5959640049910C /* Icon Template.psd */,
 				56A4D6732B5959640049910C /* TextMate Settings.icns */,
 				56A4D6742B5959640049910C /* TextMate Grammar.icns */,
 				56A4D6752B5959640049910C /* TextMate Theme.icns */,
-				56A4D6762B5959640049910C /* Ragel.icns */,
-				56A4D6772B5959640049910C /* Java.icns */,
-				56A4D6782B5959640049910C /* Diff.icns */,
-				56A4D6792B5959640049910C /* BibTeX.icns */,
-				56A4D67A2B5959640049910C /* GTD.icns */,
-				56A4D67B2B5959640049910C /* ASP.icns */,
 				56A4D67C2B5959640049910C /* TextMate Macro.icns */,
-				56A4D67D2B5959640049910C /* Obj-C.icns */,
 				56A4D67E2B5959640049910C /* TextMate Command.icns */,
-				56A4D67F2B5959640049910C /* Fortran.icns */,
 				56A4D6802B5959640049910C /* TextMate Bundle Item.icns */,
-				56A4D6812B5959640049910C /* R.icns */,
-				56A4D6822B5959640049910C /* Ruby.icns */,
-				56A4D6832B5959640049910C /* Markdown.icns */,
-				56A4D6842B5959640049910C /* Lua.icns */,
 				5697238630017190005DC1DD /* AppIcon.icon */,
 				561C46892DF0F9C300D6568C /* Icons.xcassets */,
 			);
@@ -1708,6 +1820,7 @@
 			isa = PBXGroup;
 			children = (
 				3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */,
+				ABCDEF000000000000000095 /* SystemConfiguration.framework */,
 				5656C45C2DF088C900DCE20D /* UserNotifications.framework */,
 				5656C4222DF04F8E00DCE20D /* Cocoa.framework */,
 				56A4D9332B5959FF0049910C /* authorization */,
@@ -3637,6 +3750,15 @@
 			path = ../mate/src;
 			sourceTree = "<group>";
 		};
+		ABCDEF000000000000000052 /* bl */ = {
+			isa = PBXGroup;
+			children = (
+				ABCDEF000000000000000051 /* bl.cc */,
+			);
+			name = bl;
+			path = ../bl/src;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3654,6 +3776,23 @@
 			name = mate;
 			productName = mate;
 			productReference = F3E6451A3442DB0B2374D340 /* mate */;
+			productType = "com.apple.product-type.tool";
+		};
+		ABCDEF000000000000000055 /* bl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ABCDEF000000000000000056 /* Build configuration list for PBXNativeTarget "bl" */;
+			buildPhases = (
+				ABCDEF00000000000000008E /* Create bl Include Links */,
+				ABCDEF000000000000000054 /* Sources */,
+				ABCDEF000000000000000053 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = bl;
+			productName = bl;
+			productReference = ABCDEF000000000000000050 /* bl */;
 			productType = "com.apple.product-type.tool";
 		};
 		56A4D5C12B5958BF0049910C /* TextMate */ = {
@@ -3705,6 +3844,7 @@
 			targets = (
 				56A4D5C12B5958BF0049910C /* TextMate */,
 				1BFF9C8CC91314FFC8AFAFB1 /* mate */,
+				ABCDEF000000000000000055 /* bl */,
 			);
 		};
 /* End PBXProject section */
@@ -3716,7 +3856,6 @@
 			files = (
 				56A4DBEA2B595A010049910C /* small-web.icns in Resources */,
 				56A4DB972B595A010049910C /* RemoveBookmarkTemplate.pdf in Resources */,
-				56A4D61C2B5959420049910C /* DefaultBundles.tbz.bl in Resources */,
 				56A4DB862B595A010049910C /* TabCloseThin_Pressed_Template@2x.png in Resources */,
 				56A4DB4B2B595A010049910C /* Variables.png in Resources */,
 				56A4D61E2B5959420049910C /* TextMate.scriptSuite in Resources */,
@@ -3906,6 +4045,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		ABCDEF00000000000000008E /* Create bl Include Links */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create bl Include Links";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\n\ninclude_dir=\"${DERIVED_FILE_DIR}/bl-includes\"\nframeworks_dir=\"${SRCROOT}/../../Frameworks\"\nrm -rf \"$include_dir\"\nmkdir -p \"$include_dir\"\n\nfor name in updater regexp text io OakSystem; do\n\tmkdir -p \"$include_dir/$name\"\n\tfor header in \"$frameworks_dir/$name/src\"/*.h; do\n\t\tln -s \"$header\" \"$include_dir/$name/$(basename \"$header\")\"\n\tdone\ndone\n\nln -s \"$frameworks_dir/text/src/my_ctype.h\" \"$include_dir/text/ctype.h\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		56A4D5BE2B5958BF0049910C /* Sources */ = {
@@ -4209,6 +4366,62 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ABCDEF000000000000000054 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABCDEF000000000000000059 /* bl.cc in Sources */,
+				ABCDEF000000000000000060 /* updater.cc in Sources */,
+				ABCDEF000000000000000061 /* download.cc in Sources */,
+				ABCDEF000000000000000062 /* download_tbz.cc in Sources */,
+				ABCDEF000000000000000063 /* tbz.cc in Sources */,
+				ABCDEF000000000000000064 /* network.cc in Sources */,
+				ABCDEF000000000000000065 /* key_chain.cc in Sources */,
+				ABCDEF000000000000000066 /* download.cc in Sources */,
+				ABCDEF000000000000000067 /* constants.cc in Sources */,
+				ABCDEF000000000000000068 /* proxy.cc in Sources */,
+				ABCDEF000000000000000069 /* user_agent.cc in Sources */,
+				ABCDEF00000000000000006A /* filter_check_signature.cc in Sources */,
+				ABCDEF00000000000000006B /* plist.cc in Sources */,
+				ABCDEF00000000000000006C /* ascii.cc in Sources */,
+				ABCDEF00000000000000006D /* date.cc in Sources */,
+				ABCDEF00000000000000006E /* uuid.cc in Sources */,
+				ABCDEF00000000000000006F /* to_s.cc in Sources */,
+				ABCDEF000000000000000070 /* decode.cc in Sources */,
+				ABCDEF000000000000000092 /* encode.cc in Sources */,
+				ABCDEF000000000000000099 /* indent.cc in Sources */,
+				ABCDEF000000000000000071 /* case.cc in Sources */,
+				ABCDEF000000000000000072 /* my_ctype.cc in Sources */,
+				ABCDEF000000000000000073 /* format.cc in Sources */,
+				ABCDEF000000000000000074 /* trim.cc in Sources */,
+				ABCDEF000000000000000075 /* parse.cc in Sources */,
+				ABCDEF000000000000000076 /* types.cc in Sources */,
+				ABCDEF000000000000000077 /* private.cc in Sources */,
+				ABCDEF000000000000000078 /* parser.cc in Sources */,
+				ABCDEF000000000000000079 /* parser_base.cc in Sources */,
+				ABCDEF00000000000000007A /* parse_glob.cc in Sources */,
+				ABCDEF00000000000000007B /* regexp.cc in Sources */,
+				ABCDEF00000000000000007C /* glob.cc in Sources */,
+				ABCDEF00000000000000007D /* format_string.cc in Sources */,
+				ABCDEF000000000000000093 /* snippet.cc in Sources */,
+				ABCDEF00000000000000007E /* path.cc in Sources */,
+				ABCDEF00000000000000007F /* move_path.cc in Sources */,
+				ABCDEF000000000000000080 /* entries.cc in Sources */,
+				ABCDEF000000000000000081 /* pipe.cc in Sources */,
+				ABCDEF000000000000000082 /* environment.cc in Sources */,
+				ABCDEF000000000000000083 /* exec.cc in Sources */,
+				ABCDEF000000000000000091 /* intermediate.mm in Sources */,
+				ABCDEF000000000000000084 /* cf.cc in Sources */,
+				ABCDEF000000000000000085 /* run_loop.cc in Sources */,
+				ABCDEF000000000000000086 /* application.cc in Sources */,
+				ABCDEF000000000000000087 /* process.cc in Sources */,
+				ABCDEF00000000000000008F /* OakAssert.mm in Sources */,
+				ABCDEF000000000000000094 /* NSString Additions.mm in Sources */,
+				ABCDEF000000000000000090 /* OakFoundation.mm in Sources */,
+				ABCDEF000000000000000098 /* ns.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -4367,7 +4580,9 @@
 			baseConfigurationReference = 5656C4602DF0AC6500DCE20D /* debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 			};
 			name = Debug;
 		};
@@ -4375,8 +4590,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Entitlements.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Release;
@@ -4397,10 +4617,45 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
+				CODE_SIGN_ENTITLEMENTS = Entitlements.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-liconv";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		ABCDEF000000000000000057 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4602DF0AC6500DCE20D /* debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				HEADER_SEARCH_PATHS = "$(inherited) $(DERIVED_FILE_DIR)/bl-includes";
+				INFOPLIST_FILE = "";
+				OTHER_LDFLAGS = "-lcurl -liconv";
+				PRODUCT_NAME = bl;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		ABCDEF000000000000000058 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
+			buildSettings = {
+				ARCHS = arm64;
+				CODE_SIGN_ENTITLEMENTS = Entitlements.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "$(inherited) $(DERIVED_FILE_DIR)/bl-includes";
+				INFOPLIST_FILE = "";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-lcurl -liconv";
+				PRODUCT_NAME = bl;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -4414,6 +4669,15 @@
 			buildConfigurations = (
 				6C5CDF079973A4F78A0A6A37 /* Release */,
 				68C0CEE5A47E9441345CE46B /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ABCDEF000000000000000056 /* Build configuration list for PBXNativeTarget "bl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABCDEF000000000000000058 /* Release */,
+				ABCDEF000000000000000057 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

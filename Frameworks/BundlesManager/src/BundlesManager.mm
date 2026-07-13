@@ -114,6 +114,8 @@ static NSString* SafeBasename (NSString* name)
 
 - (void)tryUpdateBundleIndexAndCallback:(void(^)(BOOL wasUpdated))completionHandler
 {
+	path::make_dir(path::parent(_remoteIndexPath.fileSystemRepresentation));
+
 	[OakDownloadManager.sharedInstance downloadFileAtURL:_remoteIndexURL replacingFileAtURL:[NSURL fileURLWithPath:_remoteIndexPath] publicKeys:self.publicKeys completionHandler:^(BOOL wasUpdated, NSError* error){
 		path::set_attr(_remoteIndexPath.fileSystemRepresentation, "last-check", to_s(oak::date_t::now()));
 		if(!error)
@@ -275,6 +277,7 @@ static NSString* SafeBasename (NSString* name)
 
 			Bundle* bundle = bundles[i];
 			bundle.installed   = YES;
+			bundle.bundled     = NO;
 			bundle.path        = to_ns(res[i]);
 			bundle.lastUpdated = bundle.downloadLastUpdated;
 
@@ -292,6 +295,9 @@ static NSString* SafeBasename (NSString* name)
 
 - (void)uninstallBundle:(Bundle*)bundle
 {
+	if(bundle.isBundled)
+		return;
+
 	bundle.installed = NO;
 	if(!bundle.path || ![NSFileManager.defaultManager removeItemAtPath:bundle.path error:nil])
 		return;
@@ -515,7 +521,14 @@ namespace
 	// LEGACY locations used by 2.0-beta.12.22 and earlier
 	[self moveAvianBundles];
 
-	for(auto path : bundles::locations())
+	std::vector<std::string> bundleLocations = bundles::locations();
+	if(NSString* sharedSupportPath = NSBundle.mainBundle.sharedSupportPath)
+	{
+		if(!bundleLocations.empty())
+			bundleLocations.back() = sharedSupportPath.fileSystemRepresentation;
+	}
+
+	for(auto path : bundleLocations)
 		bundlesPaths.push_back(path::join(path, "Bundles"));
 	bundlesIndexPath = path::join(path::home(), "Library/Caches/com.macromates.TextMate/BundlesIndex.binary");
 	cache.set_content_filter(&prune_dictionary);
@@ -533,12 +546,33 @@ namespace
 		cache.load_capnp(bundlesIndexPath);
 	}
 
+	for(auto path : bundlesPaths)
+		cache.reload(path, true);
+
 	_needsCreateBundlesIndex = YES;
 	[self createBundlesIndex:self];
+
+	if(self.autoUpdateBundles && !path::exists(_remoteIndexPath.fileSystemRepresentation))
+	{
+		[self tryUpdateBundleIndexAndCallback:^(BOOL wasUpdated){
+			if(wasUpdated)
+				self.bundles = [self bundlesByLoadingIndex];
+		}];
+	}
 }
 
 namespace
 {
+	static NSDictionary* BundleInfoForPath (NSString* bundlePath)
+	{
+		for(NSString* name in @[ @"info.plist", @"Info.plist" ])
+		{
+			if(NSDictionary* info = [NSDictionary dictionaryWithContentsOfFile:[bundlePath stringByAppendingPathComponent:name]])
+				return info;
+		}
+		return nil;
+	}
+
 	static NSArray<Bundle*>* BundlesFromIndex (NSString* remoteIndexPath, NSString* localIndexPath, NSString* installDir, NSDictionary<NSUUID*, Bundle*>* cache = nil)
 	{
 		NSMutableDictionary* res = [NSMutableDictionary dictionary];
@@ -554,6 +588,12 @@ namespace
 		{
 			NSUUID* identifier = [[NSUUID alloc] initWithUUIDString:item[@"uuid"]];
 			Bundle* bundle = cache[identifier] ?: [[Bundle alloc] initWithIdentifier:identifier];
+			if(bundle.isBundled)
+			{
+				bundle.installed = NO;
+				bundle.bundled   = NO;
+				bundle.path      = nil;
+			}
 
 			bundle.name              = item[@"name"];
 			bundle.minimumAppVersion = item[@"requires"];
@@ -629,6 +669,7 @@ namespace
 			Bundle* bundle = res[identifier] ?: [[Bundle alloc] initWithIdentifier:identifier];
 
 			bundle.installed   = YES;
+			bundle.bundled     = NO;
 			bundle.path        = [installDir stringByAppendingPathComponent:item[@"path"]];
 			bundle.category    = item[@"category"] ?: bundle.category ?: @"Discontinued";
 			bundle.lastUpdated = item[@"updated"];
@@ -659,12 +700,13 @@ namespace
 					continue;
 			}
 
-			if(NSDictionary* info = [NSDictionary dictionaryWithContentsOfFile:[bundlePath stringByAppendingPathComponent:@"info.plist"]])
+			if(NSDictionary* info = BundleInfoForPath(bundlePath))
 			{
 				NSUUID* identifier = [[NSUUID alloc] initWithUUIDString:info[@"uuid"]];
 				Bundle* bundle = res[identifier] ?: [[Bundle alloc] initWithIdentifier:identifier];
 
 				bundle.installed    = YES;
+				bundle.bundled      = NO;
 				bundle.path         = bundlePath;
 				bundle.category     = bundle.category     ?: @"Orphaned";
 				bundle.name         = bundle.name         ?: info[@"name"];
@@ -687,6 +729,33 @@ namespace
 		{
 			bundle.installed = NO;
 			NSLog(@"Missing: ‘%@’ not on disk.", bundle.name);
+		}
+
+		NSString* bundledBundlesDir = [NSBundle.mainBundle.sharedSupportPath stringByAppendingPathComponent:@"Bundles"];
+		for(auto const& entry : path::entries(to_s(bundledBundlesDir), "*.tm[Bb]undle"))
+		{
+			NSString* bundlePath = [bundledBundlesDir stringByAppendingPathComponent:to_ns(entry->d_name)];
+			NSDictionary* info = BundleInfoForPath(bundlePath);
+			NSUUID* identifier = [[NSUUID alloc] initWithUUIDString:info[@"uuid"]];
+			if(!identifier)
+				continue;
+
+			Bundle* bundle = res[identifier] ?: [[Bundle alloc] initWithIdentifier:identifier];
+			if(bundle.isInstalled && bundle.path && path::is_child(to_s(bundle.path), to_s(installDir)))
+				continue;
+
+			bundle.installed    = YES;
+			bundle.bundled      = YES;
+			bundle.path         = bundlePath;
+			bundle.category     = bundle.category     ?: @"Bundled";
+			bundle.name         = bundle.name         ?: info[@"name"];
+			bundle.contactName  = bundle.contactName  ?: info[@"contactName"];
+			bundle.contactEmail = bundle.contactEmail ?: to_ns(decode::rot13(to_s(info[@"contactEmailRot13"])));
+			bundle.summary      = bundle.summary      ?: info[@"description"];
+			if(bundle.downloadLastUpdated && !bundle.lastUpdated)
+				bundle.lastUpdated = bundle.downloadLastUpdated;
+
+			res[bundle.identifier] = bundle;
 		}
 
 		return [[res allValues] sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedCompare:)] ]];
@@ -733,7 +802,7 @@ namespace
 		return;
 
 	NSMutableArray* bundles = [NSMutableArray array];
-	for(Bundle* bundle : [_bundles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"isInstalled == YES AND path != NULL"]])
+	for(Bundle* bundle : [_bundles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"isInstalled == YES AND isBundled == NO AND path != NULL"]])
 	{
 		NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithDictionary:@{
 			@"uuid": [bundle.identifier UUIDString],

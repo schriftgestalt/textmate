@@ -30,7 +30,6 @@
 #import <bundles/src/query.h>
 #import <io/src/path.h>
 #import <regexp/src/glob.h>
-#import <network/src/tbz.h>
 #import <ns/src/ns.h>
 #import <settings/src/settings.h>
 #import <oak/debug.h>
@@ -466,46 +465,6 @@ BOOL HasDocumentWindow (NSArray* windows)
 
 	[TMPlugInController.sharedInstance loadAllPlugIns:nil];
 
-	std::string dest = path::join(path::home(), "Library/Application Support/TextMate/Managed");
-	if(!path::exists(dest))
-	{
-		if(NSString* archive = [[NSBundle mainBundle] pathForResource:@"DefaultBundles" ofType:@"tbz"])
-		{
-			path::make_dir(dest);
-
-			network::tbz_t tbz(dest);
-			if(tbz)
-			{
-				int fd = open([archive fileSystemRepresentation], O_RDONLY|O_CLOEXEC);
-				if(fd != -1)
-				{
-					char buf[4096];
-					ssize_t len;
-					while((len = read(fd, buf, sizeof(buf))) > 0)
-					{
-						if(write(tbz.input_fd(), buf, len) != len)
-						{
-							os_log_error(OS_LOG_DEFAULT, "Failed writing bytes to tar");
-							break;
-						}
-					}
-					close(fd);
-				}
-
-				std::string output, error;
-				if(!tbz.wait_for_tbz(&output, &error))
-					os_log_error(OS_LOG_DEFAULT, "tar: %{public}s%{public}s", output.c_str(), error.c_str());
-			}
-			else
-			{
-				os_log_error(OS_LOG_DEFAULT, "Unable to launch tar");
-			}
-		}
-		else
-		{
-			os_log_error(OS_LOG_DEFAULT, "No ‘DefaultBundles.tbz’ in TextMate.app");
-		}
-	}
 	[BundlesManager.sharedInstance loadBundlesIndex];
 
 	if(BOOL restoreSession = ![NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsDisableSessionRestoreKey])

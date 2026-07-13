@@ -399,7 +399,7 @@ static NSUserInterfaceItemIdentifier const kTableColumnIdentifierDescription = @
 	else if([aTableColumn.identifier isEqualToString:kTableColumnIdentifierInstalled])
 	{
 		Bundle* bundle = _arrayController.arrangedObjects[rowIndex];
-		[aCell setEnabled:!bundle.isMandatory || !bundle.isInstalled];
+		[aCell setEnabled:!bundle.isBundled && (!bundle.isMandatory || !bundle.isInstalled)];
 	}
 }
 
@@ -408,7 +408,7 @@ static NSUserInterfaceItemIdentifier const kTableColumnIdentifierDescription = @
 	if([aTableColumn.identifier isEqualToString:kTableColumnIdentifierInstalled])
 	{
 		Bundle* bundle = _arrayController.arrangedObjects[rowIndex];
-		return bundle.installedCellState != NSControlStateValueMixed;
+		return !bundle.isBundled && bundle.installedCellState != NSControlStateValueMixed;
 	}
 	return NO;
 }
