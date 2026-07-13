@@ -53,10 +53,22 @@ static NSPopUpButton* OakCreateFolderPopUpButton ()
 
 		OakAddAutoLayoutViewsToSuperview([views allValues], self);
 		OakSetupKeyViewLoop(@[ self, _folderPopUpButton, _goBackButton, _goForwardButton ]);
-
+		
+		CGFloat topPadding = 4;
+		CGFloat bottomPadding = 4;
+		if(@available(macOS 27, *)) {
+			topPadding = 6;
+			bottomPadding = 6;
+		}
+		else if(@available(macOS 26, *)) {}
+		else {
+			topPadding = 6;
+			bottomPadding = 5;
+		}
+		NSDictionary* metrics = @{ @"topPadding": @(topPadding), @"bottomPadding": @(bottomPadding) };
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(3)-[folder(>=75)]-(3)-[divider(==1)]-(2)-[back(==22)]-(2)-[forward(==back)]-(3)-|" options:NSLayoutFormatAlignAllCenterY metrics:nil views:views]];
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomDivider]|"                                                                     options:0 metrics:nil views:views]];
-		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(4)-[divider(==15)]-(4)-[bottomDivider(==1)]|"                                   options:0 metrics:nil views:views]];
+		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(topPadding)-[divider(==15)]-(bottomPadding)-[bottomDivider(==1)]|" options:0 metrics:metrics views:views]];
 	}
 	return self;
 }
