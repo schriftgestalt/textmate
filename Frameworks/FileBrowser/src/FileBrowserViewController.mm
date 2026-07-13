@@ -99,7 +99,6 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 	NSInteger _nestedCollapsingChildrenCounter;
 }
 @property (nonatomic) BOOL canExpandSymbolicLinks;
-@property (nonatomic) BOOL canExpandPackages;
 @property (nonatomic) BOOL sortDirectoriesBeforeFiles;
 
 @property (nonatomic) BOOL showExcludedItems;
@@ -147,7 +146,6 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 		_loadingURLs       = [NSMutableSet set];
 
 		_canExpandSymbolicLinks     = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsAllowExpandingLinksKey];
-		_canExpandPackages          = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsAllowExpandingPackagesKey];
 		_sortDirectoriesBeforeFiles = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsFoldersOnTopKey];
 
 		_expandedURLs = [NSMutableSet set];
@@ -182,7 +180,6 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 - (void)userDefaultsDidChange:(id)sender
 {
 	self.canExpandSymbolicLinks     = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsAllowExpandingLinksKey];
-	self.canExpandPackages          = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsAllowExpandingPackagesKey];
 	self.sortDirectoriesBeforeFiles = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsFoldersOnTopKey];
 }
 
@@ -405,16 +402,14 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 	NSEventModifierFlags eventFlags = NSApp.currentEvent.modifierFlags & (NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagShift|NSEventModifierFlagCommand);
 	BOOL isMouseEvent               = eventType == NSEventTypeLeftMouseUp || eventType == NSEventTypeOtherMouseUp || eventType == NSEventTypeOtherMouseUp;
 	BOOL commandKeyDown             = isMouseEvent && eventFlags == NSEventModifierFlagCommand;
-	BOOL optionKeyDown              = isMouseEvent && eventFlags == NSEventModifierFlagOption;
-	BOOL treatPackageAsDirectory    = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsAllowExpandingPackagesKey];
 
 	for(FileItem* item in items)
 	{
 		if(commandKeyDown)
 			[itemsToShowInFinder addObject:item];
-		else if((item.isDirectory && (treatPackageAsDirectory || !item.isPackage)) || (item.isLinkToDirectory && (treatPackageAsDirectory || !item.isLinkToPackage)) || (optionKeyDown && (item.isPackage || item.isLinkToDirectory)))
+		else if(item.isDirectory || item.isLinkToDirectory)
 			[itemsToShowInFileBrowser addObject:item];
-		else if(item.isPackage || item.isLinkToPackage || (item.URL.isFileURL && is_binary(item.URL.fileSystemRepresentation)))
+		else if(item.URL.isFileURL && is_binary(item.URL.fileSystemRepresentation))
 			[itemsToOpen addObject:item];
 		else
 			[itemsToOpenInTextMate addObject:item];
@@ -494,7 +489,6 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 		{ /* -------- */ },
 		{ @"Show Original",           @selector(showOriginal:)                },
 		{ @"Show Enclosing Folder",   @selector(showEnclosingFolder:)         },
-		{ @"Show Package Contents",   @selector(showPackageContents:)         },
 		{ @"Show in Finder",          @selector(showSelectedEntriesInFinder:) },
 		{ /* -------- */ },
 		{ @"New File",                @selector(newDocumentInDirectory:), @"n", NSEventModifierFlagCommand|NSEventModifierFlagControl },
@@ -636,11 +630,6 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 		[self goToURL:enclosingFolder];
 		[self expandURLs:nil selectURLs:@[ url ]];
 	}
-}
-
-- (void)showPackageContents:(id)sender
-{
-	[self goToURL:self.previewableItems.firstObject.resolvedURL];
 }
 
 - (void)showSelectedEntriesInFinder:(id)sender
@@ -1021,8 +1010,6 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 		hideAndDisable = selectedItems.count != 1 || [selectedItems.firstObject.URL isEqual:selectedItems.firstObject.resolvedURL];
 	else if(menuItem.action == @selector(showEnclosingFolder:))
 		hideAndDisable = selectedItems.count != 1 || [selectedItems.firstObject.parentURL isEqual:((FileItem*)[self.outlineView parentForItem:selectedItems.firstObject]).URL ?: selectedItems.firstObject.parentURL];
-	else if(menuItem.action == @selector(showPackageContents:))
-		hideAndDisable = previewableItems.count != 1 || previewableItems.firstObject.isPackage == NO;
 	else if(menuItem.action == @selector(editSelectedEntries:))
 		hideAndDisable = previewableItems.count != 1 || previewableItems.firstObject.canRename == NO;
 	else if(menuItem.action == @selector(addSelectedEntriesToFavorites:))
@@ -1364,27 +1351,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 	while(FileItem* item = stack.firstObject)
 	{
 		[stack removeObjectAtIndex:0];
-		if(item.isLinkToDirectory && (_canExpandPackages || !item.isLinkToPackage))
-			[self.outlineView reloadItem:item reloadChildren:YES];
-		if([self.outlineView isExpandable:item] && item.arrangedChildren)
-			[stack addObjectsFromArray:item.arrangedChildren];
-	}
-}
-
-- (void)setCanExpandPackages:(BOOL)flag
-{
-	if(_canExpandPackages == flag)
-		return;
-	_canExpandPackages = flag;
-
-	if(!self.fileItem)
-		return;
-
-	NSMutableArray<FileItem*>* stack = [self.fileItem.arrangedChildren mutableCopy];
-	while(FileItem* item = stack.firstObject)
-	{
-		[stack removeObjectAtIndex:0];
-		if(item.isDirectory && item.isPackage)
+		if(item.isLinkToDirectory)
 			[self.outlineView reloadItem:item reloadChildren:YES];
 		if([self.outlineView isExpandable:item] && item.arrangedChildren)
 			[stack addObjectsFromArray:item.arrangedChildren];
@@ -2053,7 +2020,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 
 - (BOOL)outlineView:(NSOutlineView*)outlineView isItemExpandable:(FileItem*)item
 {
-	return (item.isDirectory && (_canExpandPackages || !item.isPackage)) || (_canExpandSymbolicLinks && item.isLinkToDirectory && (_canExpandPackages || !item.isLinkToPackage));
+	return item.isDirectory || (_canExpandSymbolicLinks && item.isLinkToDirectory);
 }
 
 - (BOOL)outlineView:(NSOutlineView*)outlineView isGroupItem:(FileItem*)item

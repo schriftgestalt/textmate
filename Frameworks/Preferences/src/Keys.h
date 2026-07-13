@@ -27,7 +27,6 @@ extern NSString* const kUserDefaultsFileBrowserStyleKey;
 extern NSString* const kUserDefaultsHTMLOutputPlacementKey;
 extern NSString* const kUserDefaultsAutoRevealFileKey;
 extern NSString* const kUserDefaultsAllowExpandingLinksKey;
-extern NSString* const kUserDefaultsAllowExpandingPackagesKey;
 extern NSString* const kUserDefaultsDisableTabReorderingKey;
 extern NSString* const kUserDefaultsDisableTabAutoCloseKey;
 extern NSString* const kUserDefaultsDisableTabBarCollapsingKey;
