@@ -668,6 +668,7 @@ static NSString* const kFoldingsColumnIdentifier  = @"foldings";
 
 - (GVLineRecord)lineRecordForPosition:(CGFloat)yPos                              { return [_textView lineRecordForPosition:yPos];               }
 - (GVLineRecord)lineFragmentForLine:(NSUInteger)aLine column:(NSUInteger)aColumn { return [_textView lineFragmentForLine:aLine column:aColumn]; }
+- (NSColor*)backgroundColorForLineRecord:(GVLineRecord)lineRecord                { return [_textView backgroundColorForLine:lineRecord.lineNumber]; }
 
 // =========================
 // = GutterView DataSource =

@@ -54,6 +54,7 @@ enum OTVFontSmoothing : NSUInteger
 
 - (GVLineRecord)lineRecordForPosition:(CGFloat)yPos;
 - (GVLineRecord)lineFragmentForLine:(NSUInteger)aLine column:(NSUInteger)aColumn;
+- (NSColor*)backgroundColorForLine:(NSUInteger)lineNumber;
 
 - (BOOL)filterDocumentThroughCommand:(NSString*)commandString input:(input::type)inputUnit output:(output::type)outputUnit;
 

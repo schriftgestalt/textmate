@@ -2871,6 +2871,17 @@ static void update_menu_key_equivalents (NSMenu* menu, std::multimap<std::string
 	};
 
 	NSMenu* menu = [self checkSpellingMenuForRanges:someRanges];
+	std::vector<bundles::item_ptr> const& bundleItems = bundles::query(bundles::kFieldSemanticClass, "callback.context-menu", [self scopeContext], bundles::kItemTypeCommand, oak::uuid_t(), false);
+	if(!bundleItems.empty())
+	{
+		for(auto const& item : bundleItems)
+		{
+			NSMenuItem* menuItem = [menu addItemWithTitle:[NSString stringWithCxxString:item->name()] action:@selector(performBundleItemWithUUIDStringFrom:) keyEquivalent:@""];
+			[menuItem setRepresentedObject:[NSString stringWithCxxString:item->uuid()]];
+		}
+		[menu addItem:[NSMenuItem separatorItem]];
+	}
+
 	for(auto const& item : items)
 	{
 		if(item.title)
@@ -2887,7 +2898,12 @@ static void update_menu_key_equivalents (NSMenu* menu, std::multimap<std::string
 	bool clickInSelection = false;
 	for(auto const& range : documentView->ranges())
 		clickInSelection = clickInSelection || (range.min() <= index && index <= range.max());
-	return [self contextMenuForRanges:(clickInSelection ? documentView->ranges() : index)];
+	if(!clickInSelection)
+	{
+		AUTO_REFRESH;
+		documentView->set_ranges(ng::range_t(index.index));
+	}
+	return [self contextMenuForRanges:documentView->ranges()];
 }
 
 - (void)showMenu:(NSMenu*)aMenu
@@ -3978,6 +3994,16 @@ static char const* kOakMenuItemTitle = "OakMenuItemTitle";
 		return GVLineRecord();
 	auto record = documentView->line_record_for(text::pos_t(aLine, aColumn));
 	return GVLineRecord(record.line, record.softline, record.top, record.bottom, record.baseline);
+}
+
+- (NSColor*)backgroundColorForLine:(NSUInteger)lineNumber
+{
+	if(!documentView || !self.theme || lineNumber == NSNotFound || lineNumber >= documentView->lines())
+		return nil;
+
+	CGColorRef editorBackground = self.theme->background(documentView->file_type());
+	CGColorRef lineBackground   = self.theme->styles_for_scope(documentView->scope(documentView->begin(lineNumber)).right).background();
+	return lineBackground && !CFEqual(editorBackground, lineBackground) ? [NSColor colorWithCGColor:lineBackground] : nil;
 }
 
 - (BOOL)filterDocumentThroughCommand:(NSString*)commandString input:(input::type)inputUnit output:(output::type)outputUnit

@@ -728,6 +728,10 @@ namespace ng
 		{
 			CGFloat x = lines[i].x;
 			size_t offset = lines[i].offset;
+			styles_t const styles = theme->styles_for_scope(buffer.scope(bufferOffset + offset).right);
+			if(!CFEqual(backgroundColor, styles.background()))
+				render::fill_rect(context, styles.background(), CGRectMake(CGRectGetMinX(visibleRect), anchor.y + lines[i].y, CGRectGetWidth(visibleRect), lines[i].height));
+
 			foreach(node, _nodes.begin() + lines[i].first, _nodes.begin() + lines[i].last)
 			{
 				node->draw_background(theme, context, isFlipped, visibleRect, backgroundColor, buffer, bufferOffset + offset, CGPointMake(anchor.x + x, anchor.y + lines[i].y), lines[i].height);

@@ -340,6 +340,23 @@ static void DrawText (std::string const& text, CGRect const& rect, CGFloat basel
 
 	[self setupSelectionRects];
 
+	std::pair<NSUInteger, NSUInteger> prevBackgroundLine(NSNotFound, 0);
+	for(CGFloat y = NSMinY(aRect); y < NSMaxY(aRect); )
+	{
+		GVLineRecord record = [self.delegate lineRecordForPosition:y];
+		if(record.lastY <= y || prevBackgroundLine == std::make_pair(record.lineNumber, record.softlineOffset))
+			break;
+		prevBackgroundLine = std::make_pair(record.lineNumber, record.softlineOffset);
+
+		if(NSColor* backgroundColor = [self.delegate backgroundColorForLineRecord:record])
+		{
+			[backgroundColor set];
+			NSRectFill(NSIntersectionRect(aRect, NSMakeRect(0, record.firstY, NSWidth(self.frame), record.lastY - record.firstY)));
+		}
+
+		y = record.lastY;
+	}
+
 	[self.selectionBackgroundColor set];
 	for(auto const& rect : backgroundRects)
 	{

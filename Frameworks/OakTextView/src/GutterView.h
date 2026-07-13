@@ -15,6 +15,7 @@ struct GVLineRecord
 @protocol GutterViewDelegate
 - (GVLineRecord)lineRecordForPosition:(CGFloat)yPos;
 - (GVLineRecord)lineFragmentForLine:(NSUInteger)aLine column:(NSUInteger)aColumn;
+- (NSColor*)backgroundColorForLineRecord:(GVLineRecord)lineRecord;
 @end
 
 typedef NS_ENUM(NSUInteger, GutterViewRowState) {
