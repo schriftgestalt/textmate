@@ -22,11 +22,19 @@ TextMate builds with **Xcode**. The Xcode project is self-contained — it compi
 
 ## Setup
 
-Install the build dependencies with [Homebrew][]:
+Build the static third-party dependencies into the checkout:
 
 ```sh
-brew install boost capnp google-sparsehash
+bin/build_universal_dependencies
 ```
+
+This downloads Boost, Cap’n Proto, and google-sparsehash, builds those plus
+Onigmo for `arm64` and `x86_64`, and writes universal libraries plus headers to
+`vendor/prebuilt`. The Xcode project links against that repo-local prefix, so
+Homebrew libraries are not used for normal app builds.
+
+Set `MACOSX_DEPLOYMENT_TARGET`, `BOOST_VERSION`, `CAPNP_VERSION`, or
+`SPARSEHASH_VERSION` in the environment to override the script defaults.
 
 `ragel` and `multimarkdown` are only needed if you regenerate the checked-in generated sources (see below); they are not required for a normal build.
 

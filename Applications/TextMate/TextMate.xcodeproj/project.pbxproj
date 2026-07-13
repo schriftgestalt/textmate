@@ -3804,6 +3804,7 @@
 				56A4D5C02B5958BF0049910C /* Resources */,
 				5656C9032DF0AAAA00DCE20D /* Copy Bundles */,
 				C9FAFD4D5367EFC8F8364268 /* Copy mate to MacOS */,
+				5656C9042DF0BEEF00DCE20D /* Sign CocoaDialog */,
 			);
 			buildRules = (
 			);
@@ -4047,6 +4048,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		5656C9042DF0BEEF00DCE20D /* Sign CocoaDialog */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Sign CocoaDialog";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\n\nCOCOA_DIALOG_APP=\"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/SharedSupport/Bundles/bundle-support.tmbundle/Support/shared/bin/CocoaDialog.app\"\n\nif [[ \"${CODE_SIGNING_ALLOWED:-YES}\" == \"NO\" || ! -d \"$COCOA_DIALOG_APP\" ]]; then\n\texit 0\nfi\n\nIDENTITY=\"${EXPANDED_CODE_SIGN_IDENTITY:-}\"\nif [[ -z \"$IDENTITY\" ]]; then\n\tIDENTITY=\"${CODE_SIGN_IDENTITY:-}\"\nfi\nif [[ -z \"$IDENTITY\" ]]; then\n\techo \"warning: skipping CocoaDialog signing because no code signing identity is set\"\n\texit 0\nfi\n\nTIMESTAMP_FLAG=\"--timestamp=none\"\nif [[ \"${CODE_SIGN_IDENTITY:-}\" == Developer\\ ID* ]]; then\n\tTIMESTAMP_FLAG=\"--timestamp\"\nfi\n\n/usr/bin/codesign --force --sign \"$IDENTITY\" --options runtime $TIMESTAMP_FLAG \"$COCOA_DIALOG_APP\"\n";
+		};
 		ABCDEF00000000000000008E /* Create bl Include Links */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -4590,14 +4606,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
 			buildSettings = {
-				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Entitlements.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
 				ENABLE_HARDENED_RUNTIME = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.4;
-				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Release;
 		};
@@ -4617,12 +4631,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
 			buildSettings = {
-				ARCHS = arm64;
 				CODE_SIGN_ENTITLEMENTS = Entitlements.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "";
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-liconv";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -4647,13 +4659,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
 			buildSettings = {
-				ARCHS = arm64;
 				CODE_SIGN_ENTITLEMENTS = Entitlements.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = "$(inherited) $(DERIVED_FILE_DIR)/bl-includes";
 				INFOPLIST_FILE = "";
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lcurl -liconv";
 				PRODUCT_NAME = bl;
 				SDKROOT = macosx;
