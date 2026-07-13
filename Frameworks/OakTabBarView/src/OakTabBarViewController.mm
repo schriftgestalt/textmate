@@ -39,8 +39,9 @@
 	// intrinsicContentSize.width is NSViewNoIntrinsicMetric (-1) — only the
 	// height matters; a negative frame width trips AppKit’s geometry check.
 	NSSize const tabBarSize = self.tabBarView.intrinsicContentSize;
-	self.tabBarView.frameSize = NSMakeSize(std::max<CGFloat>(tabBarSize.width, 0), tabBarSize.height);
-	self.fullScreenMinHeight = tabBarSize.height;
+	CGFloat const tabBarHeight = OakTabBarView.preferredHeight;
+	self.tabBarView.frameSize = NSMakeSize(std::max<CGFloat>(tabBarSize.width, 0), tabBarHeight);
+	self.fullScreenMinHeight = tabBarHeight;
 	self.view = self.tabBarView;
 }
 

@@ -169,6 +169,38 @@ namespace
 
 static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.path", @"arrayController.arrangedObjects.displayName", @"arrayController.arrangedObjects.documentEdited", @"selectedDocument.path", @"selectedDocument.displayName", @"selectedDocument.icon", @"selectedDocument.onDisk" , @"selectedDocument.documentEdited" ];
 
+@interface OakTabBarAccessoryView : NSView
++ (instancetype)accessoryViewWithTabBarView:(OakTabBarView*)tabBarView;
+@end
+
+@implementation OakTabBarAccessoryView
++ (instancetype)accessoryViewWithTabBarView:(OakTabBarView*)tabBarView
+{
+	CGFloat const tabBarHeight = OakTabBarView.preferredHeight;
+	OakTabBarAccessoryView* res = [[self alloc] initWithFrame:NSMakeRect(0, 0, 0, tabBarHeight)];
+	res.translatesAutoresizingMaskIntoConstraints = NO;
+
+	tabBarView.translatesAutoresizingMaskIntoConstraints = NO;
+	tabBarView.frameSize = NSMakeSize(0, tabBarHeight);
+	[res addSubview:tabBarView];
+
+	[res addConstraint:[res.heightAnchor constraintEqualToConstant:tabBarHeight]];
+	[tabBarView.heightAnchor constraintEqualToConstant:tabBarHeight].active = YES;
+	[tabBarView.leadingAnchor constraintEqualToAnchor:res.leadingAnchor].active = YES;
+	[tabBarView.trailingAnchor constraintEqualToAnchor:res.trailingAnchor].active = YES;
+	[tabBarView.bottomAnchor constraintEqualToAnchor:res.bottomAnchor].active = YES;
+
+	[res setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationVertical];
+	[res setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationVertical];
+	return res;
+}
+
+- (NSSize)intrinsicContentSize
+{
+	return NSMakeSize(NSViewNoIntrinsicMetric, OakTabBarView.preferredHeight);
+}
+@end
+
 @implementation DocumentWindowController
 + (KVDB*)sharedProjectStateDB
 {
@@ -183,7 +215,6 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		self.identifier = [NSUUID UUID];
 
 		self.tabBarView = [[OakTabBarView alloc] initWithFrame:NSZeroRect];
-		self.tabBarView.translatesAutoresizingMaskIntoConstraints = NO;
 		self.tabBarView.dataSource = self;
 		self.tabBarView.delegate   = self;
 
@@ -204,17 +235,10 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		self.window.releasedWhenClosed = NO;
 
 		_titlebarViewController = [[NSTitlebarAccessoryViewController alloc] init];
-		// intrinsicContentSize.width is NSViewNoIntrinsicMetric (-1) — only the
-		// height matters here (fullScreenMinHeight below); a negative frame
-		// width trips AppKit’s geometry check on recent SDKs.
-		NSSize const tabBarSize = self.tabBarView.intrinsicContentSize;
-		self.tabBarView.frameSize = NSMakeSize(MAX(tabBarSize.width, 0), tabBarSize.height);
-		NSView* tabBarAccessoryView = [[NSView alloc] initWithFrame:self.tabBarView.frame];
-		[tabBarAccessoryView addSubview:self.tabBarView];
-		[tabBarAccessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tabBarView]|" options:0 metrics:nil views:@{ @"tabBarView": self.tabBarView }]];
-		[tabBarAccessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[tabBarView(height)]|" options:0 metrics:@{ @"height": @(tabBarSize.height) } views:@{ @"tabBarView": self.tabBarView }]];
-		_titlebarViewController.view = tabBarAccessoryView;
-		_titlebarViewController.fullScreenMinHeight = tabBarSize.height;
+		CGFloat const tabBarHeight = OakTabBarView.preferredHeight;
+		_titlebarViewController.view = [OakTabBarAccessoryView accessoryViewWithTabBarView:self.tabBarView];
+		[_titlebarViewController.view setFrameSize:_titlebarViewController.view.fittingSize];
+		_titlebarViewController.fullScreenMinHeight = tabBarHeight;
 		[self.window addTitlebarAccessoryViewController:_titlebarViewController];
 
 		OakAddAutoLayoutViewsToSuperview(@[ self.layoutView.view ], self.window.contentView);

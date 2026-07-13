@@ -801,6 +801,11 @@ static void* kOakTabViewSelectedContext  = &kOakTabViewSelectedContext;
 // =================
 
 @implementation OakTabBarView
++ (CGFloat)preferredHeight
+{
+	return OakTabBarHeight();
+}
+
 + (id)defaultAnimationForKey:(NSString*)key
 {
 	if([key isEqualToString:@"tabLayoutAnimationProgress"])
@@ -856,7 +861,7 @@ static void* kOakTabViewSelectedContext  = &kOakTabViewSelectedContext;
 
 - (NSSize)intrinsicContentSize
 {
-	return NSMakeSize(NSViewNoIntrinsicMetric, OakTabBarHeight());
+	return NSMakeSize(NSViewNoIntrinsicMetric, self.class.preferredHeight);
 }
 
 - (BOOL)mouseDownCanMoveWindow
