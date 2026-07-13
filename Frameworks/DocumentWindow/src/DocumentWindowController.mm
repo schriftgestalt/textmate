@@ -1697,7 +1697,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	}
 
 	BOOL showInProjectFolder = NO;
-	if(tabIndex != -1 && self.fileBrowserVisible && self.projectPath)
+	if(tabIndex != -1 && tabIndex < total && self.fileBrowserVisible && self.projectPath)
 	{
 		OakDocument* doc = _documents[tabIndex];
 		showInProjectFolder = doc.path && path::is_child(to_s(doc.path), to_s(self.projectPath));
@@ -2295,7 +2295,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	else if([menuItem action] == @selector(performBundleItemWithUUIDStringFrom:))
 		active = [_textView validateMenuItem:menuItem];
 
-	SEL tabBarActions[] = { @selector(performCloseTab:), @selector(takeNewTabIndexFrom::), @selector(takeTabsToCloseFrom:), @selector(takeTabsToTearOffFrom:), @selector(toggleSticky:) };
+	SEL tabBarActions[] = { @selector(performCloseTab:), @selector(takeNewTabIndexFrom::), @selector(takeTabsToCloseFrom:), @selector(takeTabsToTearOffFrom:), @selector(toggleSticky:), @selector(showTabInProjectFolder:) };
 	if(oak::contains(std::begin(tabBarActions), std::end(tabBarActions), [menuItem action]))
 	{
 		if(NSIndexSet* indexSet = [self tryObtainIndexSetFrom:menuItem])
