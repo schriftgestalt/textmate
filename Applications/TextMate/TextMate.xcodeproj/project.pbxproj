@@ -36,7 +36,6 @@
 		5656C45D2DF088C900DCE20D /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C45C2DF088C900DCE20D /* UserNotifications.framework */; };
 		5656C45F2DF089FA00DCE20D /* ascii.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C45E2DF089FA00DCE20D /* ascii.cc */; };
 		5656C9022DF0AAAA00DCE20D /* Python Diagnostics.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = 5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */; };
-		5656C9042DF0AAAA00DCE20D /* SyntaxMate.tmBundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = 5656C9052DF0AAAA00DCE20D /* SyntaxMate.tmBundle */; };
 		ABCDEF000000000000000100 /* Mail.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000120 /* Mail.tmbundle */; };
 		ABCDEF000000000000000101 /* SCM.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000121 /* SCM.tmbundle */; };
 		ABCDEF000000000000000102 /* TODO.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000122 /* TODO.tmbundle */; };
@@ -48,7 +47,6 @@
 		ABCDEF000000000000000108 /* Diff.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000128 /* Diff.tmbundle */; };
 		ABCDEF000000000000000109 /* CSS.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000129 /* CSS.tmbundle */; };
 		ABCDEF00000000000000010A /* Bundle Development.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012A /* Bundle Development.tmbundle */; };
-		ABCDEF00000000000000010B /* Mercurial.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012B /* Mercurial.tmbundle */; };
 		ABCDEF00000000000000010C /* Hyperlink Helper.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */; };
 		ABCDEF00000000000000010D /* XML.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012D /* XML.tmbundle */; };
 		ABCDEF00000000000000010E /* Math.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012E /* Math.tmbundle */; };
@@ -597,7 +595,6 @@
 			dstSubfolderSpec = 1;
 			files = (
 				5656C9022DF0AAAA00DCE20D /* Python Diagnostics.tmbundle in Copy Bundles */,
-				5656C9042DF0AAAA00DCE20D /* SyntaxMate.tmBundle in Copy Bundles */,
 				ABCDEF000000000000000104 /* Apache.tmbundle in Copy Bundles */,
 				ABCDEF00000000000000010A /* Bundle Development.tmbundle in Copy Bundles */,
 				ABCDEF00000000000000011D /* Bundle Support.tmbundle in Copy Bundles */,
@@ -613,7 +610,6 @@
 				ABCDEF000000000000000115 /* Make.tmbundle in Copy Bundles */,
 				ABCDEF000000000000000119 /* Markdown.tmbundle in Copy Bundles */,
 				ABCDEF00000000000000010E /* Math.tmbundle in Copy Bundles */,
-				ABCDEF00000000000000010B /* Mercurial.tmbundle in Copy Bundles */,
 				ABCDEF000000000000000118 /* Objective-C.tmbundle in Copy Bundles */,
 				ABCDEF00000000000000010F /* PHP.tmbundle in Copy Bundles */,
 				ABCDEF00000000000000011A /* Property List.tmbundle in Copy Bundles */,
@@ -704,7 +700,6 @@
 		5656C46E2DF0AD0800DCE20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TabSizeSetting.xib; sourceTree = "<group>"; };
 		5656C46F2DF0AD0F00DCE20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TerminalPreferences.xib; sourceTree = "<group>"; };
 		5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Python Diagnostics.tmbundle"; path = "../../Bundles/Python Diagnostics.tmbundle"; sourceTree = "<group>"; };
-		5656C9052DF0AAAA00DCE20D /* SyntaxMate.tmBundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SyntaxMate.tmBundle; path = ../SyntaxMate/resources/SyntaxMate.tmBundle; sourceTree = "<group>"; };
 		ABCDEF000000000000000120 /* Mail.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Mail.tmbundle; path = ../../Bundles/Core/mail.tmbundle; sourceTree = "<group>"; };
 		ABCDEF000000000000000121 /* SCM.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SCM.tmbundle; path = ../../Bundles/Core/scm.tmbundle; sourceTree = "<group>"; };
 		ABCDEF000000000000000122 /* TODO.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TODO.tmbundle; path = ../../Bundles/Core/todo.tmbundle; sourceTree = "<group>"; };
@@ -716,7 +711,6 @@
 		ABCDEF000000000000000128 /* Diff.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Diff.tmbundle; path = ../../Bundles/Core/diff.tmbundle; sourceTree = "<group>"; };
 		ABCDEF000000000000000129 /* CSS.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CSS.tmbundle; path = ../../Bundles/Core/css.tmbundle; sourceTree = "<group>"; };
 		ABCDEF00000000000000012A /* Bundle Development.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Bundle Development.tmbundle"; path = ../../Bundles/Core/bundle-development.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000012B /* Mercurial.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Mercurial.tmbundle; path = ../../Bundles/Core/mercurial.tmbundle; sourceTree = "<group>"; };
 		ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Hyperlink Helper.tmbundle"; path = ../../Bundles/Core/hyperlink-helper.tmbundle; sourceTree = "<group>"; };
 		ABCDEF00000000000000012D /* XML.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = XML.tmbundle; path = ../../Bundles/Core/xml.tmbundle; sourceTree = "<group>"; };
 		ABCDEF00000000000000012E /* Math.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Math.tmbundle; path = ../../Bundles/Core/math.tmbundle; sourceTree = "<group>"; };
@@ -1603,7 +1597,6 @@
 				56A4DC912B596F820049910C /* Vendor */,
 				ABCDEF000000000000000140 /* Core Bundles */,
 				5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */,
-				5656C9052DF0AAAA00DCE20D /* SyntaxMate.tmBundle */,
 				56A4D5C32B5958BF0049910C /* Products */,
 				917909068AEAC9FFA1C58943 /* mate */,
 				ABCDEF000000000000000052 /* bl */,
@@ -1628,7 +1621,6 @@
 				ABCDEF000000000000000135 /* Make.tmbundle */,
 				ABCDEF000000000000000139 /* Markdown.tmbundle */,
 				ABCDEF00000000000000012E /* Math.tmbundle */,
-				ABCDEF00000000000000012B /* Mercurial.tmbundle */,
 				ABCDEF000000000000000138 /* Objective-C.tmbundle */,
 				ABCDEF00000000000000012F /* PHP.tmbundle */,
 				ABCDEF00000000000000013A /* Property List.tmbundle */,
