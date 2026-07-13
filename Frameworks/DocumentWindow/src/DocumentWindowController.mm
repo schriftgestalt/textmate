@@ -1651,6 +1651,23 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	}
 }
 
+- (void)showTabInProjectFolder:(id)sender
+{
+	if(!self.fileBrowserVisible || !self.projectPath)
+		return;
+
+	if(NSIndexSet* indexSet = [self tryObtainIndexSetFrom:sender])
+	{
+		NSUInteger index = indexSet.firstIndex;
+		if(index < _documents.count)
+		{
+			OakDocument* doc = _documents[index];
+			if(doc.path && path::is_child(to_s(doc.path), to_s(self.projectPath)))
+				[self.fileBrowser selectURL:[NSURL fileURLWithPath:doc.path] withParentURL:[NSURL fileURLWithPath:self.projectPath]];
+		}
+	}
+}
+
 - (NSMenu*)menuForTabBarView:(OakTabBarView*)aTabBarView
 {
 	NSInteger tabIndex = aTabBarView.tag;
@@ -1679,6 +1696,13 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		}
 	}
 
+	BOOL showInProjectFolder = NO;
+	if(tabIndex != -1 && self.fileBrowserVisible && self.projectPath)
+	{
+		OakDocument* doc = _documents[tabIndex];
+		showInProjectFolder = doc.path && path::is_child(to_s(doc.path), to_s(self.projectPath));
+	}
+
 	SEL closeSingleTabSelector = tabIndex == _selectedTabIndex ? @selector(performCloseTab:) : @selector(takeTabsToCloseFrom:);
 	MBMenu const items = {
 		{ @"New Tab",                  @selector(takeNewTabIndexFrom:),    .representedObject = newTabAtTab   },
@@ -1693,6 +1717,14 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	};
 
 	NSMenu* menu = MBCreateMenu(items);
+	if(showInProjectFolder)
+	{
+		NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:@"Show in Project Folder" action:@selector(showTabInProjectFolder:) keyEquivalent:@""];
+		item.representedObject = clickedTab;
+		item.target = self;
+		[menu insertItem:item atIndex:2];
+	}
+
 	for(NSMenuItem* item in menu.itemArray)
 	{
 		// In fullscreen mode the window’s delegate is ignored as a target for menu actions, therefore we have to manually set the target for these menu items (as a workaround for what I can only assume is an OS bug)
@@ -1803,7 +1835,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 			self.fileBrowser = [[FileBrowserViewController alloc] init];
 			self.fileBrowser.delegate = self;
 			[self.fileBrowser setupViewWithState:_fileBrowserHistory];
-			if(!_fileBrowserHistory)
+			if(!self.fileBrowser.URL)
 			{
 				if(NSString* path = self.projectPath ?: self.defaultProjectPath)
 					[self.fileBrowser goToURL:[NSURL fileURLWithPath:path]];
@@ -2837,7 +2869,7 @@ static NSUInteger DisableSessionSavingCount = 0;
 	}
 	else
 	{
-		controller.defaultProjectPath = folder;
+		controller.projectPath = controller.defaultProjectPath = folder;
 		controller.fileBrowserVisible = YES;
 		controller.documents          = @[ [OakDocumentController.sharedInstance untitledDocument] ];
 
