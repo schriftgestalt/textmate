@@ -24,7 +24,10 @@
 #import <Preferences/src/Keys.h>
 #import <Preferences/src/Preferences.h>
 #import <Preferences/src/TerminalPreferences.h>
+#if 0
+// App updates are disabled for this fork until we decide on a new update mechanism.
 #import <SoftwareUpdate/src/SoftwareUpdate.h>
+#endif
 #import <document/src/OakDocument.h>
 #import <document/src/OakDocumentController.h>
 #import <bundles/src/query.h>
@@ -99,8 +102,11 @@ BOOL HasDocumentWindow (NSArray* windows)
 				{ @"About TextMate",        @selector(orderFrontAboutPanel:)               },
 				{ /* -------- */ },
 				{ @"Preferences…",          @selector(showPreferences:),            @","   },
+#if 0
+				// App updates are disabled for this fork until we decide on a new update mechanism.
 				{ @"Check for Update",      @selector(performSoftwareUpdateCheck:)         },
 				MBMenuItem{ @"Check for Test Build", @selector(performSoftwareUpdateCheck:) }.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption).withAlternate(YES),
+#endif
 				{ /* -------- */ },
 				MBMenuItem{ @"Services" }.withSystemMenu(MBMenuTypeServices),
 				{ /* -------- */ },
@@ -445,6 +451,8 @@ BOOL HasDocumentWindow (NSArray* windows)
 	if(NSMenu* menu = [self mainMenu])
 		NSApp.mainMenu = menu;
 
+#if 0
+	// App updates are disabled for this fork until we decide on a new update mechanism.
 	NSOperatingSystemVersion osVersion = NSProcessInfo.processInfo.operatingSystemVersion;
 	NSString* parms = [NSString stringWithFormat:@"v=%@&os=%ld.%ld.%ld", [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet], osVersion.majorVersion, osVersion.minorVersion, osVersion.patchVersion];
 
@@ -453,6 +461,7 @@ BOOL HasDocumentWindow (NSArray* windows)
 		kSoftwareUpdateChannelPrerelease: [NSURL URLWithString:[NSString stringWithFormat:@"" REST_API "/releases/beta?%@", parms]],
 		kSoftwareUpdateChannelCanary:     [NSURL URLWithString:[NSString stringWithFormat:@"" REST_API "/releases/nightly?%@", parms]],
 	};
+#endif
 
 	settings_t::set_default_settings_path([[[NSBundle mainBundle] pathForResource:@"Default" ofType:@"tmProperties"] fileSystemRepresentation]);
 	settings_t::set_global_settings_path(path::join(path::home(), "Library/Application Support/TextMate/Global.tmProperties"));
@@ -628,10 +637,13 @@ BOOL HasDocumentWindow (NSArray* windows)
 	[NSApp sendAction:@selector(selectAndCenter:) to:nil from:[goToLineTextField stringValue]];
 }
 
+#if 0
+// App updates are disabled for this fork until we decide on a new update mechanism.
 - (IBAction)performSoftwareUpdateCheck:(id)sender
 {
 	[SoftwareUpdate.sharedInstance checkForUpdate:self];
 }
+#endif
 
 - (IBAction)showPreferences:(id)sender
 {

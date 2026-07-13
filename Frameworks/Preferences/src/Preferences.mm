@@ -3,7 +3,10 @@
 #import "ProjectsPreferences.h"
 #import "BundlesPreferences.h"
 #import "VariablesPreferences.h"
+#if 0
+// App updates are disabled for this fork until we decide on a new update mechanism.
 #import "SoftwareUpdatePreferences.h"
+#endif
 #import "TerminalPreferences.h"
 #import "Keys.h"
 #import <OakAppKit/src/OakTransitionViewController.h>
@@ -97,7 +100,10 @@ static NSString* const kMASPreferencesSelectedViewKey = @"MASPreferences Selecte
 			[[ProjectsPreferences alloc] init],
 			[[BundlesPreferences alloc] init],
 			[[VariablesPreferences alloc] init],
+#if 0
+			// App updates are disabled for this fork until we decide on a new update mechanism.
 			[[SoftwareUpdatePreferences alloc] init],
+#endif
 			[[TerminalPreferences alloc] init]
 		];
 
