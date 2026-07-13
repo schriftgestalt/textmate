@@ -45,6 +45,7 @@ struct data_source_t
 - (CGFloat)widthForColumnWithIdentifier:(std::string const&)identifier;
 - (data_source_t*)columnWithIdentifier:(std::string const&)identifier;
 
+- (void)commonInit;
 - (void)clearTrackingRects;
 - (void)setupTrackingRects;
 @end
@@ -58,25 +59,39 @@ struct data_source_t
 {
 	if(self = [super initWithFrame:frame])
 	{
-		id fontName = [NSUserDefaults.standardUserDefaults objectForKey:@"NSFixedPitchFont"];
-		id fontSize = [NSUserDefaults.standardUserDefaults objectForKey:@"NSFixedPitchFontSize"];
-		crash_reporter_info_t info("User has font name override %s, size %s", BSTR(fontName), BSTR(fontSize));
-		if(fontName) info << "font name: " << [[fontName description] UTF8String];
-		if(fontSize) info << "font size: " << [[fontSize description] UTF8String];
-
-		hiddenColumns       = [NSMutableSet new];
-		self.lineNumberFont = [NSFont userFixedPitchFontOfSize:12];
-		[self insertColumnWithIdentifier:GVLineNumbersColumnIdentifier atPosition:0 dataSource:nil delegate:nil];
-
-		mouseDownAtPoint     = NSMakePoint(-1, -1);
-		mouseHoveringAtPoint = NSMakePoint(-1, -1);
-
-		[self userDefaultsDidChange:nil];
-
-		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(cursorDidHide:) name:OakCursorDidHideNotification object:nil];
-		OakObserveUserDefaults(self);
+		[self commonInit];
 	}
 	return self;
+}
+
+- (id)initWithScrollView:(NSScrollView*)scrollView orientation:(NSRulerOrientation)orientation
+{
+	if(self = [super initWithScrollView:scrollView orientation:orientation])
+	{
+		[self commonInit];
+	}
+	return self;
+}
+
+- (void)commonInit
+{
+	id fontName = [NSUserDefaults.standardUserDefaults objectForKey:@"NSFixedPitchFont"];
+	id fontSize = [NSUserDefaults.standardUserDefaults objectForKey:@"NSFixedPitchFontSize"];
+	crash_reporter_info_t info("User has font name override %s, size %s", BSTR(fontName), BSTR(fontSize));
+	if(fontName) info << "font name: " << [[fontName description] UTF8String];
+	if(fontSize) info << "font size: " << [[fontSize description] UTF8String];
+
+	hiddenColumns       = [NSMutableSet new];
+	self.lineNumberFont = [NSFont userFixedPitchFontOfSize:12];
+	[self insertColumnWithIdentifier:GVLineNumbersColumnIdentifier atPosition:0 dataSource:nil delegate:nil];
+
+	mouseDownAtPoint     = NSMakePoint(-1, -1);
+	mouseHoveringAtPoint = NSMakePoint(-1, -1);
+
+	[self userDefaultsDidChange:nil];
+
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(cursorDidHide:) name:OakCursorDidHideNotification object:nil];
+	OakObserveUserDefaults(self);
 }
 
 - (void)userDefaultsDidChange:(id)sender
@@ -254,7 +269,14 @@ struct data_source_t
 - (void)boundsDidChange:(NSNotification*)aNotification
 {
 	[self updateSize];
-	[self.enclosingScrollView.contentView scrollToPoint:NSMakePoint(0, NSMinY(_partnerView.enclosingScrollView.contentView.bounds))];
+
+	NSClipView* clipView = _partnerView.enclosingScrollView.contentView;
+	NSRect bounds = self.bounds;
+	bounds.origin.y    = NSMinY(clipView.bounds);
+	bounds.size.width  = self.size.width;
+	bounds.size.height = NSHeight(clipView.bounds);
+	self.bounds = bounds;
+	[self setNeedsDisplay:YES];
 }
 
 - (void)setSize:(NSSize)newSize
@@ -469,8 +491,16 @@ static void DrawText (std::string const& text, CGRect const& rect, CGFloat basel
 	}
 
 	NSPoint origin = NSMakePoint(0, NSMinY(_partnerView.enclosingScrollView.contentView.bounds));
-	CGFloat height = std::max(NSHeight(_partnerView.frame), origin.y + NSHeight([self visibleRect]));
+	CGFloat height = std::max(NSHeight(_partnerView.frame), origin.y + NSHeight(_partnerView.enclosingScrollView.contentView.bounds));
 	[self setSize:NSMakeSize(totalWidth, height)];
+
+	self.ruleThickness = totalWidth;
+	[self.scrollView tile];
+}
+
+- (CGFloat)requiredThickness
+{
+	return self.size.width;
 }
 
 - (NSSize)intrinsicContentSize

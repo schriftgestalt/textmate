@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, GutterViewRowState) {
 - (void)userDidClickColumnWithIdentifier:(id)columnIdentifier atLine:(NSUInteger)lineNumber;
 @end
 
-@interface GutterView : NSView
+@interface GutterView : NSRulerView
 @property (nonatomic, weak) IBOutlet NSView* partnerView;
 @property (nonatomic) NSFont* lineNumberFont;
 @property (nonatomic, weak) id <GutterViewDelegate> delegate;

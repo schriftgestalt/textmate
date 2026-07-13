@@ -603,6 +603,21 @@ static ng::ranges_t merge (ng::ranges_t lhs, ng::ranges_t const& rhs)
 	return lhs;
 }
 
+static NSRect TextViewportRect (OakTextView* textView)
+{
+	if(NSScrollView* scrollView = [textView enclosingScrollView])
+	{
+		NSRect res = scrollView.contentView.bounds;
+		res.size = scrollView.contentView.frame.size;
+		// With a vertical ruler, AppKit reports a content-view frame that still
+		// includes the ruler. Soft wrapping must use the remaining text width.
+		if(scrollView.rulersVisible && scrollView.hasVerticalRuler)
+			res.size.width = std::max<CGFloat>(0, NSWidth(res) - scrollView.verticalRulerView.requiredThickness);
+		return res;
+	}
+	return textView.visibleRect;
+}
+
 struct refresh_helper_t
 {
 	refresh_helper_t (OakTextView* self, std::shared_ptr<document_view_t> const& documentView) : _self(self), _document_view(documentView)
@@ -639,9 +654,10 @@ struct refresh_helper_t
 					[_self updateSymbol];
 				}
 
+				NSRect r = TextViewportRect(_self);
+				documentView->set_viewport(r);
 				auto damagedRects = documentView->end_refresh_cycle(merge(documentView->ranges(), [_self markedRanges]), [_self visibleRect], [_self liveSearchRanges]);
 
-				NSRect r = [[_self enclosingScrollView] documentVisibleRect];
 				NSSize newSize = NSMakeSize(std::max(NSWidth(r), documentView->width()), std::max(NSHeight(r), documentView->height()));
 				if(!NSEqualSizes([_self frame].size, newSize))
 					[_self setFrameSize:newSize];
@@ -1105,7 +1121,7 @@ static std::string shell_quote (std::vector<std::string> paths)
 {
 	if(documentView && [self enclosingScrollView])
 	{
-		NSRect r = [[self enclosingScrollView] documentVisibleRect];
+		NSRect r = TextViewportRect(self);
 		documentView->set_viewport(r);
 		NSSize newSize = NSMakeSize(std::max(NSWidth(r), documentView->width()), std::max(NSHeight(r), documentView->height()));
 		if(!NSEqualSizes([self frame].size, newSize))

@@ -29,11 +29,8 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 
 @interface OakDocumentView () <NSAccessibilityGroup, GutterViewDelegate, GutterViewColumnDataSource, GutterViewColumnDelegate, OTVStatusBarDelegate>
 {
-	NSScrollView* gutterScrollView;
 	GutterView* gutterView;
 	NSMutableDictionary* gutterImages;
-
-	OakBackgroundFillView* gutterDividerView;
 
 	NSScrollView* textScrollView;
 
@@ -67,39 +64,24 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 		textScrollView.borderType               = NSNoBorder;
 		textScrollView.documentView             = _textView;
 
-		gutterView = [[GutterView alloc] initWithFrame:NSZeroRect];
+		gutterView = [[GutterView alloc] initWithScrollView:textScrollView orientation:NSVerticalRuler];
 		gutterView.partnerView = _textView;
 		gutterView.delegate    = self;
+		gutterView.clientView  = _textView;
 		[gutterView insertColumnWithIdentifier:kBookmarksColumnIdentifier atPosition:0 dataSource:self delegate:self];
 		[gutterView insertColumnWithIdentifier:kFoldingsColumnIdentifier atPosition:2 dataSource:self delegate:self];
 		if([NSUserDefaults.standardUserDefaults boolForKey:@"DocumentView Disable Line Numbers"])
 			[gutterView setVisibility:NO forColumnWithIdentifier:GVLineNumbersColumnIdentifier];
-		[gutterView setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-		gutterScrollView = [[NSScrollView alloc] initWithFrame:NSZeroRect];
-		gutterScrollView.accessibilityElement = NO;
-		gutterScrollView.borderType   = NSNoBorder;
-		gutterScrollView.documentView = gutterView;
-
-		[gutterScrollView.contentView addConstraint:[NSLayoutConstraint constraintWithItem:gutterView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:gutterScrollView.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0]];
-		[gutterScrollView.contentView addConstraint:[NSLayoutConstraint constraintWithItem:gutterView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:gutterScrollView.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0]];
-		[gutterScrollView.contentView addConstraint:[NSLayoutConstraint constraintWithItem:gutterView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:gutterScrollView.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0]];
-
-#if 0
-		// Disabled: keep the old gutter/code divider line creation here in
-		// case we want to restore the separator later.
-		gutterDividerView = OakCreateVerticalLine(OakBackgroundFillViewStyleNone);
-#else
-		gutterDividerView = [[OakBackgroundFillView alloc] initWithFrame:NSZeroRect];
-		[gutterDividerView addConstraint:[NSLayoutConstraint constraintWithItem:gutterDividerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0]];
-		gutterDividerView.translatesAutoresizingMaskIntoConstraints = NO;
-#endif
+		textScrollView.hasVerticalRuler = YES;
+		textScrollView.rulersVisible    = YES;
+		textScrollView.verticalRulerView = gutterView;
 
 		_statusBar = [[OTVStatusBar alloc] initWithFrame:NSZeroRect];
 		_statusBar.delegate = self;
 		_statusBar.target = self;
 
-		OakAddAutoLayoutViewsToSuperview(@[ gutterScrollView, gutterDividerView, textScrollView, _statusBar ], self);
+		OakAddAutoLayoutViewsToSuperview(@[ textScrollView, _statusBar ], self);
 		OakSetupKeyViewLoop(@[ self, _textView, _statusBar ]);
 
 		self.document = [OakDocument documentWithString:@"" fileType:@"text.plain" customName:@"placeholder"];
@@ -118,7 +100,7 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 
 	NSMutableArray* stackedViews = [NSMutableArray array];
 	[stackedViews addObjectsFromArray:topAuxiliaryViews];
-	[stackedViews addObject:gutterScrollView];
+	[stackedViews addObject:textScrollView];
 	[stackedViews addObjectsFromArray:bottomAuxiliaryViews];
 
 	if(_statusBar)
@@ -127,7 +109,7 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_statusBar]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_statusBar)]];
 	}
 
-	[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[gutterScrollView(==gutterView)][gutterDividerView][textScrollView(>=100)]|" options:NSLayoutFormatAlignAllTop|NSLayoutFormatAlignAllBottom metrics:nil views:NSDictionaryOfVariableBindings(gutterScrollView, gutterView, gutterDividerView, textScrollView)]];
+	[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[textScrollView(>=100)]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(textScrollView)]];
 	[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[topView]" options:0 metrics:nil views:@{ @"topView": stackedViews[0] }]];
 	[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[bottomView]|" options:0 metrics:nil views:@{ @"bottomView": [stackedViews lastObject] }]];
 
@@ -376,13 +358,6 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 		gutterView.selectionIconHoverColor   = [NSColor colorWithCGColor:styles.selectionIconsHover];
 		gutterView.selectionIconPressedColor = [NSColor colorWithCGColor:styles.selectionIconsPressed];
 		gutterView.selectionBorderColor      = [NSColor colorWithCGColor:styles.selectionBorder];
-		gutterScrollView.backgroundColor     = editorBackgroundColor;
-#if 0
-		// Disabled: the gutter/code divider is intentionally hidden, but
-		// preserve the themed divider color assignment for later.
-		gutterDividerView.activeBackgroundColor = [NSColor colorWithCGColor:styles.divider];
-#endif
-
 		[gutterView setNeedsDisplay:YES];
 	}
 }
