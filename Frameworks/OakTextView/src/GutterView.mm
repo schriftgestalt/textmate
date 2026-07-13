@@ -117,7 +117,11 @@ struct data_source_t
 	backgroundRects.clear();
 	borderRects.clear();
 
-	for(auto const& range : text::selection_t(highlightedRange))
+	text::selection_t selection(highlightedRange);
+	if(selection.size() != 1 || !selection.last().empty() || selection.last().columnar)
+		return;
+
+	for(auto const& range : selection)
 	{
 		auto from = range.min(), to = range.max();
 		CGFloat firstY = [self.delegate lineFragmentForLine:from.line column:from.column].firstY;

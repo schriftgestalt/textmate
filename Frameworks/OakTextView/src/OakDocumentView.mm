@@ -25,6 +25,7 @@ static NSString* const kUserDefaultsLineNumberFontNameKey    = @"lineNumberFontN
 
 static NSString* const kBookmarksColumnIdentifier = @"bookmarks";
 static NSString* const kFoldingsColumnIdentifier  = @"foldings";
+static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 
 @interface OakDocumentView () <NSAccessibilityGroup, GutterViewDelegate, GutterViewColumnDataSource, GutterViewColumnDelegate, OTVStatusBarDelegate>
 {
@@ -369,7 +370,8 @@ static NSString* const kFoldingsColumnIdentifier  = @"foldings";
 		gutterView.iconHoverColor            = [NSColor colorWithCGColor:styles.iconsHover];
 		gutterView.iconPressedColor          = [NSColor colorWithCGColor:styles.iconsPressed];
 		gutterView.selectionForegroundColor  = [NSColor colorWithCGColor:styles.selectionForeground];
-		gutterView.selectionBackgroundColor  = [NSColor colorWithCalibratedWhite:theme->is_dark() ? 1.0 : 0.0 alpha:theme->is_dark() ? 0.08 : 0.06];
+		NSColor* selectionColor              = [NSColor colorWithCGColor:theme->styles_for_scope(to_s(self.document.fileType)).selection()];
+		gutterView.selectionBackgroundColor  = [selectionColor colorWithAlphaComponent:kCurrentLineHighlightAlphaMultiplier * selectionColor.alphaComponent];
 		gutterView.selectionIconColor        = [NSColor colorWithCGColor:styles.selectionIcons];
 		gutterView.selectionIconHoverColor   = [NSColor colorWithCGColor:styles.selectionIconsHover];
 		gutterView.selectionIconPressedColor = [NSColor colorWithCGColor:styles.selectionIconsPressed];

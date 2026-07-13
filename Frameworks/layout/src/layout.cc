@@ -21,6 +21,7 @@ static CGRect OakRectMake (CGFloat x, CGFloat y, CGFloat w, CGFloat h)
 }
 
 static CGFloat const kCurrentLineHighlightHorizontalInset = 6;
+static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 
 static void OakFillRightRoundedRect (CGContextRef context, CGColorRef color, CGRect rect)
 {
@@ -42,6 +43,12 @@ static void OakFillRightRoundedRect (CGContextRef context, CGColorRef color, CGR
 	CGContextAddLineToPoint(context, minX, maxY);
 	CGContextClosePath(context);
 	CGContextFillPath(context);
+}
+
+static CGColorRef OakCreateCurrentLineHighlightColor (theme_ptr const& theme, ng::buffer_t const& buffer, ng::ranges_t const& selection)
+{
+	CGColorRef selectionColor = theme->styles_for_scope(buffer.scope(selection.last().last.index).right).selection();
+	return CGColorCreateCopyWithAlpha(selectionColor, kCurrentLineHighlightAlphaMultiplier * CGColorGetAlpha(selectionColor));
 }
 
 static size_t count_columns (ng::buffer_t const& buf, size_t from, size_t to)
@@ -818,7 +825,6 @@ namespace ng
 			CGColorRef margin_indicator       = nil;
 			CGColorRef drop_marker            = nil;
 			CGColorRef indent_guides          = nil;
-			CGColorRef current_line           = nil;
 		};
 
 		base_colors_t const& get_base_colors (bool darkTheme)
@@ -834,7 +840,6 @@ namespace ng
 				dark.drop_marker              = CGColorCreateGenericGray(0.50, 0.50);
 				// works for most darks, including very black backgrounds
 				dark.indent_guides            = CGColorCreateGenericGray(1.0, 0.06);
-				dark.current_line             = CGColorCreateGenericGray(1.0, 0.08);
 
 				bright.marked_text_foreground = CGColorRetain(CGColorGetConstantColor(kCGColorBlack));
 				bright.marked_text_background = CGColorRetain(CGColorGetConstantColor(kCGColorWhite));
@@ -843,7 +848,6 @@ namespace ng
 				bright.drop_marker            = CGColorCreateGenericGray(0.25, 0.50);
 				// works for most light schemes, including very white backgrounds
 				bright.indent_guides          = CGColorCreateGenericGray(0.0, 0.04);
-				bright.current_line           = CGColorCreateGenericGray(0.0, 0.06);
 			});
 
 			return darkTheme ? dark : bright;
@@ -893,10 +897,13 @@ namespace ng
 			}
 		}
 
-		if(baseColors.current_line)
+		std::vector<CGRect> currentLineRects = current_line_rects_for_ranges(selection);
+		if(!currentLineRects.empty())
 		{
-			for(auto const& rect : current_line_rects_for_ranges(selection))
-				OakFillRightRoundedRect(context, baseColors.current_line, rect);
+			CGColorRef currentLineColor = OakCreateCurrentLineHighlightColor(_theme, _buffer, selection);
+			for(auto const& rect : currentLineRects)
+				OakFillRightRoundedRect(context, currentLineColor, rect);
+			CGColorRelease(currentLineColor);
 		}
 
 		for(auto const& range : selection)
