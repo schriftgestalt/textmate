@@ -7,14 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00EC54269E4817F966359B8D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4222DF04F8E00DCE20D /* Cocoa.framework */; };
+		041C83364694A63EA32C8264 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4222DF04F8E00DCE20D /* Cocoa.framework */; };
+		042C8BADD1D286DA22058A43 /* parser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D99F2B595A000049910C /* parser.cc */; };
+		09587D3CAF42604772FB1B0F /* entries.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8022B5959FF0049910C /* entries.cc */; };
+		09E345C1B84CEE0A4B77AFFB /* TextMateQuickLookThumbnail.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 904896976C01AF944B13718E /* TextMateQuickLookThumbnail.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0FA75D81DD8B2CA331E17B09 /* settings.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9A02B595A000049910C /* settings.cc */; };
+		1242E45DCF0AAFBE00D5278B /* environment.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8092B5959FF0049910C /* environment.cc */; };
+		12F0FA85626F02D31EBF4AAF /* format.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43E2DF0879500DCE20D /* format.cc */; };
+		179B8A60D17F9402D85052AF /* intermediate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D80E2B5959FF0049910C /* intermediate.mm */; };
+		18B8E848FDCDF0419C464FD7 /* QuickLookRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC3966BCB37E30893C0717CF /* QuickLookRenderer.mm */; };
+		1A2182269F9DB82759205878 /* libTextMateQuickLookEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C47D5A3EBAA5F65B20433519 /* libTextMateQuickLookEngine.a */; };
+		1B018EC86F322227B4EAD485 /* parsing.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9212B5959FF0049910C /* parsing.cc */; };
+		1CEF94DA3B7E84D71070A9B7 /* events.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D80B2B5959FF0049910C /* events.cc */; };
+		1D8C2107210352AA1A21DD72 /* path.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8052B5959FF0049910C /* path.cc */; };
 		2132F191276AF4C4B224AF61 /* path.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8052B5959FF0049910C /* path.cc */; };
+		234A392B722D6AA6195F15ED /* case.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4412DF0879600DCE20D /* case.cc */; };
 		23E8FCA2DE0740920771D7FC /* parser_base.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7332B5959FE0049910C /* parser_base.cc */; };
 		2A0FA50962852DA7C6F2910A /* intermediate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D80E2B5959FF0049910C /* intermediate.mm */; };
+		2CE2A3AEF27FD9FDA2EAB735 /* date.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8EA2B5959FF0049910C /* date.cc */; };
 		3227B98D00DDCB7AC9BCBCBB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E8FCE980B264A9257252FF2 /* Security.framework */; };
 		32B6B458DA2FFBF3E01F578D /* OakFoundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D71E2B5959FE0049910C /* OakFoundation.mm */; };
+		334BF4D6DED31795FDF39A6F /* open.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA302B595A000049910C /* open.cc */; };
+		3835438CBFADAA604E52868B /* symbols.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9172B5959FF0049910C /* symbols.cc */; };
+		39E6B8B79ED554BD78BD9314 /* locations.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D85E2B5959FF0049910C /* locations.cc */; };
 		3E6B2A128D6A47B58B016A64 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */; };
+		3F46BE8827B3EEAE02840A45 /* parse.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7A92B5959FE0049910C /* parse.cc */; };
+		3FEC95CEBC15A844CCB40EAE /* pairs.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D91D2B5959FF0049910C /* pairs.cc */; };
+		40B3AEB6109AD30230624CF7 /* indent.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4362DF0879500DCE20D /* indent.cc */; };
+		41A39C716A9667915B148B12 /* OakTheme.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7C62B5959FF0049910C /* OakTheme.mm */; };
 		41EFEED9782F66A1295CD8A6 /* types.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43D2DF0879500DCE20D /* types.cc */; };
 		44549BCD8ECF6BBFD4BC12CF /* ns.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA4A2B595A000049910C /* ns.mm */; };
+		466A57F3A2A33304EBF02EBF /* reader.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA2B2B595A000049910C /* reader.cc */; };
+		4C2B1F9CA2FEE2FDF037A702 /* ranker.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C44A2DF0879600DCE20D /* ranker.cc */; };
 		4EABAF28A3B48231B4159B43 /* format.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43E2DF0879500DCE20D /* format.cc */; };
 		54BC8F15B35C400423510AFC /* glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7382B5959FE0049910C /* glob.cc */; };
 		561C468A2DF0F9C300D6568C /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 561C46892DF0F9C300D6568C /* Icons.xcassets */; };
@@ -36,37 +61,6 @@
 		5656C45D2DF088C900DCE20D /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C45C2DF088C900DCE20D /* UserNotifications.framework */; };
 		5656C45F2DF089FA00DCE20D /* ascii.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C45E2DF089FA00DCE20D /* ascii.cc */; };
 		5656C9022DF0AAAA00DCE20D /* Python Diagnostics.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = 5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */; };
-		ABCDEF000000000000000100 /* Mail.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000120 /* Mail.tmbundle */; };
-		ABCDEF000000000000000101 /* SCM.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000121 /* SCM.tmbundle */; };
-		ABCDEF000000000000000102 /* TODO.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000122 /* TODO.tmbundle */; };
-		ABCDEF000000000000000103 /* SQL.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000123 /* SQL.tmbundle */; };
-		ABCDEF000000000000000104 /* Apache.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000124 /* Apache.tmbundle */; };
-		ABCDEF000000000000000105 /* JSON.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000125 /* JSON.tmbundle */; };
-		ABCDEF000000000000000106 /* Subversion.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000126 /* Subversion.tmbundle */; };
-		ABCDEF000000000000000107 /* TextMate.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000127 /* TextMate.tmbundle */; };
-		ABCDEF000000000000000108 /* Diff.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000128 /* Diff.tmbundle */; };
-		ABCDEF000000000000000109 /* CSS.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000129 /* CSS.tmbundle */; };
-		ABCDEF00000000000000010A /* Bundle Development.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012A /* Bundle Development.tmbundle */; };
-		ABCDEF00000000000000010C /* Hyperlink Helper.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */; };
-		ABCDEF00000000000000010D /* XML.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012D /* XML.tmbundle */; };
-		ABCDEF00000000000000010E /* Math.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012E /* Math.tmbundle */; };
-		ABCDEF00000000000000010F /* PHP.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012F /* PHP.tmbundle */; };
-		ABCDEF000000000000000110 /* SCM Diff Gutter.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000130 /* SCM Diff Gutter.tmbundle */; };
-		ABCDEF000000000000000111 /* Themes.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000131 /* Themes.tmbundle */; };
-		ABCDEF000000000000000112 /* Git.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000132 /* Git.tmbundle */; };
-		ABCDEF000000000000000113 /* HTML.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000133 /* HTML.tmbundle */; };
-		ABCDEF000000000000000114 /* Source.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000134 /* Source.tmbundle */; };
-		ABCDEF000000000000000115 /* Make.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000135 /* Make.tmbundle */; };
-		ABCDEF000000000000000116 /* Ruby.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000136 /* Ruby.tmbundle */; };
-		ABCDEF000000000000000117 /* Text.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000137 /* Text.tmbundle */; };
-		ABCDEF000000000000000118 /* Objective-C.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000138 /* Objective-C.tmbundle */; };
-		ABCDEF000000000000000119 /* Markdown.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000139 /* Markdown.tmbundle */; };
-		ABCDEF00000000000000011A /* Property List.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013A /* Property List.tmbundle */; };
-		ABCDEF00000000000000011B /* C.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013B /* C.tmbundle */; };
-		ABCDEF00000000000000011C /* Python.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013C /* Python.tmbundle */; };
-		ABCDEF00000000000000011D /* Bundle Support.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013D /* Bundle Support.tmbundle */; };
-		ABCDEF00000000000000011E /* Shell Script.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013E /* Shell Script.tmbundle */; };
-		ABCDEF00000000000000011F /* JavaScript.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013F /* JavaScript.tmbundle */; };
 		5697238730017190005DC1DD /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5697238630017190005DC1DD /* AppIcon.icon */; };
 		569723893002423E005DC1DD /* OakAssert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7152B5959FE0049910C /* OakAssert.mm */; };
 		56A4D5F12B5959340049910C /* AboutWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D5DE2B5959340049910C /* AboutWindowController.mm */; };
@@ -502,18 +496,54 @@
 		56A4DC8D2B595A010049910C /* InstallBundleItems.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA782B595A000049910C /* InstallBundleItems.mm */; };
 		56A4DD5F2B596F9A0049910C /* KVDBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DCB22B596F990049910C /* KVDBFunctions.m */; };
 		56A4DD602B596F9A0049910C /* kvdb.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DCB32B596F990049910C /* kvdb.m */; };
+		5AB1DAEFC0FA5C0BC2338DF6 /* match.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7AA2B5959FE0049910C /* match.cc */; };
+		5ABB72083C8516CF329F606A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 459247091B895CB06FFDCC1F /* Cocoa.framework */; };
 		5D9C63D7251F06F030FEFBAF /* indent.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4362DF0879500DCE20D /* indent.cc */; };
 		5DDED5B691D0A3E5F71846C8 /* parse.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43C2DF0879500DCE20D /* parse.cc */; };
 		5DF2CE465F70F833451A9B39 /* move_path.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8012B5959FF0049910C /* move_path.cc */; };
+		60BD7B4E0967024C72A1BFB8 /* to_dictionary.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA482B595A000049910C /* to_dictionary.mm */; };
+		61C3C110AAF83C35877448AE /* pipe.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8032B5959FF0049910C /* pipe.cc */; };
 		623DA31B8159EBAE7FCA18FE /* case.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4412DF0879600DCE20D /* case.cc */; };
+		62DC16B09F65071EF66B041D /* run_loop.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D96F2B595A000049910C /* run_loop.cc */; };
+		63ABE1034F36E39E9F24D032 /* buffer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D91B2B5959FF0049910C /* buffer.cc */; };
 		6592FD263B0AC321E67DB34D /* private.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7322B5959FE0049910C /* private.cc */; };
+		67A6CE6389794E79EA9F7DC0 /* libTextMateQuickLookEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C47D5A3EBAA5F65B20433519 /* libTextMateQuickLookEngine.a */; };
+		6A3A145AB7570AE0799F81FE /* regexp.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7352B5959FE0049910C /* regexp.cc */; };
 		6AD7A1DB822E0A9FE115B04A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4222DF04F8E00DCE20D /* Cocoa.framework */; };
+		6CF06314833C51FD5C317E2C /* parse.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43C2DF0879500DCE20D /* parse.cc */; };
+		6D5C3AC2385E2140308D95BE /* parser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7392B5959FE0049910C /* parser.cc */; };
+		705B8ECFFCD3B230BFF8FE73 /* exec.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D80C2B5959FF0049910C /* exec.cc */; };
 		728C350B5B54C19D352B4128 /* snippet.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D73F2B5959FE0049910C /* snippet.cc */; };
+		749353529EBFB15074B679E0 /* parser_base.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7332B5959FE0049910C /* parser_base.cc */; };
+		75DB57C36583D65EECD5A735 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 459247091B895CB06FFDCC1F /* Cocoa.framework */; };
 		765B5DEE7B86D96D61CC8E22 /* format_string.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7402B5959FE0049910C /* format_string.cc */; };
+		76637DE283B1B40E0CF63FB1 /* filter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA2E2B595A000049910C /* filter.cc */; };
 		779475879F3A3B46244AD058 /* parser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7392B5959FE0049910C /* parser.cc */; };
+		7A727EF6CA67F10AE85CFD92 /* PreviewProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DBEEAC1104A8C93B73F9CE8 /* PreviewProvider.mm */; };
+		7CC67E20E70CF40E9F25033B /* encode.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4352DF0879500DCE20D /* encode.cc */; };
+		7CDC02BB64786045B9EF2587 /* item.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D85C2B5959FF0049910C /* item.cc */; };
+		7E179C2329871202F569AE91 /* scope.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7AB2B5959FE0049910C /* scope.cc */; };
 		7F4BF7278165667362F2B809 /* mate in Copy mate to MacOS */ = {isa = PBXBuildFile; fileRef = F3E6451A3442DB0B2374D340 /* mate */; };
+		84034CA8DEBE647A141B5E7F /* save.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA352B595A000049910C /* save.cc */; };
 		849B09B32BCB9EEA4F318AA5 /* regexp.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7352B5959FE0049910C /* regexp.cc */; };
+		86B7AF06546A2BEE11D84EEA /* parse.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D81D2B5959FF0049910C /* parse.cc */; };
+		8BCDCC03CEB25C369C481D05 /* delta.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8EF2B5959FF0049910C /* delta.cc */; };
 		8C4A7768141ECAAE3928FFFE /* mate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B859C963D4FF719720173012 /* mate.mm */; };
+		8C5794E7E78F2E0FF9180B04 /* types.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7AE2B5959FE0049910C /* types.cc */; };
+		8DA8467FB004937C4525326F /* libonig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4262DF05D2E00DCE20D /* libonig.a */; };
+		915D331263DC1D1361956A90 /* constants.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA322B595A000049910C /* constants.cc */; };
+		92B2785FFECDCEDA74F275E4 /* move_path.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8012B5959FF0049910C /* move_path.cc */; };
+		930230070C18C0555AA8D8C1 /* grammar.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8212B5959FF0049910C /* grammar.cc */; };
+		93E6A59E1193C41E73A75F23 /* indent.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D73A2B5959FE0049910C /* indent.cc */; };
+		988648EE517B9065A427B240 /* path_info.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA2F2B595A000049910C /* path_info.cc */; };
+		98CE088536E6EF7B2A143EA1 /* parse_glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7342B5959FE0049910C /* parse_glob.cc */; };
+		9ACCDCE7799E6E5541016348 /* encoding.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA382B595A000049910C /* encoding.cc */; };
+		9DB195F29D200D41BC78B0D8 /* OakFoundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D71E2B5959FE0049910C /* OakFoundation.mm */; };
+		A0C394AA2117675EF01BBADD /* ascii.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C45E2DF089FA00DCE20D /* ascii.cc */; };
+		A0E0C40C385404D2B7E4ED6A /* fs_cache.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8F32B5959FF0049910C /* fs_cache.cc */; };
+		A1ECDD32E694B8E8ADF6B67F /* cf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9722B595A000049910C /* cf.cc */; };
+		A4A9703C8BA26D7C31A8B93F /* private.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7322B5959FE0049910C /* private.cc */; };
+		A4E41B6CFF02B533DBE6A24E /* trim.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43A2DF0879500DCE20D /* trim.cc */; };
 		ABCDEF000000000000000059 /* bl.cc in Sources */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000051 /* bl.cc */; };
 		ABCDEF000000000000000060 /* updater.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7B62B5959FE0049910C /* updater.cc */; };
 		ABCDEF000000000000000061 /* download.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7B32B5959FE0049910C /* download.cc */; };
@@ -568,23 +598,129 @@
 		ABCDEF000000000000000097 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */; };
 		ABCDEF000000000000000098 /* ns.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA4A2B595A000049910C /* ns.mm */; };
 		ABCDEF000000000000000099 /* indent.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4362DF0879500DCE20D /* indent.cc */; };
+		ABCDEF000000000000000100 /* Mail.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000120 /* Mail.tmbundle */; };
+		ABCDEF000000000000000101 /* SCM.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000121 /* SCM.tmbundle */; };
+		ABCDEF000000000000000102 /* TODO.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000122 /* TODO.tmbundle */; };
+		ABCDEF000000000000000103 /* SQL.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000123 /* SQL.tmbundle */; };
+		ABCDEF000000000000000104 /* Apache.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000124 /* Apache.tmbundle */; };
+		ABCDEF000000000000000105 /* JSON.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000125 /* JSON.tmbundle */; };
+		ABCDEF000000000000000106 /* Subversion.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000126 /* Subversion.tmbundle */; };
+		ABCDEF000000000000000107 /* TextMate.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000127 /* TextMate.tmbundle */; };
+		ABCDEF000000000000000108 /* Diff.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000128 /* Diff.tmbundle */; };
+		ABCDEF000000000000000109 /* CSS.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000129 /* CSS.tmbundle */; };
+		ABCDEF00000000000000010A /* Bundle Development.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012A /* Bundle Development.tmbundle */; };
+		ABCDEF00000000000000010C /* Hyperlink Helper.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */; };
+		ABCDEF00000000000000010D /* XML.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012D /* XML.tmbundle */; };
+		ABCDEF00000000000000010E /* Math.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012E /* Math.tmbundle */; };
+		ABCDEF00000000000000010F /* PHP.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000012F /* PHP.tmbundle */; };
+		ABCDEF000000000000000110 /* SCM Diff Gutter.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000130 /* SCM Diff Gutter.tmbundle */; };
+		ABCDEF000000000000000111 /* Themes.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000131 /* Themes.tmbundle */; };
+		ABCDEF000000000000000112 /* Git.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000132 /* Git.tmbundle */; };
+		ABCDEF000000000000000113 /* HTML.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000133 /* HTML.tmbundle */; };
+		ABCDEF000000000000000114 /* Source.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000134 /* Source.tmbundle */; };
+		ABCDEF000000000000000115 /* Make.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000135 /* Make.tmbundle */; };
+		ABCDEF000000000000000116 /* Ruby.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000136 /* Ruby.tmbundle */; };
+		ABCDEF000000000000000117 /* Text.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000137 /* Text.tmbundle */; };
+		ABCDEF000000000000000118 /* Objective-C.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000138 /* Objective-C.tmbundle */; };
+		ABCDEF000000000000000119 /* Markdown.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF000000000000000139 /* Markdown.tmbundle */; };
+		ABCDEF00000000000000011A /* Property List.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013A /* Property List.tmbundle */; };
+		ABCDEF00000000000000011B /* C.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013B /* C.tmbundle */; };
+		ABCDEF00000000000000011C /* Python.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013C /* Python.tmbundle */; };
+		ABCDEF00000000000000011D /* Bundle Support.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013D /* Bundle Support.tmbundle */; };
+		ABCDEF00000000000000011E /* Shell Script.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013E /* Shell Script.tmbundle */; };
+		ABCDEF00000000000000011F /* JavaScript.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013F /* JavaScript.tmbundle */; };
+		AE6FCAC6CDC0EEB91DB70BA6 /* query.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8652B5959FF0049910C /* query.cc */; };
+		B0B774CEFE3A5F1CBB1D2BE3 /* spellcheck.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA4B2B595A000049910C /* spellcheck.mm */; };
+		B5701974A58DC8A44929DB90 /* snippet.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D73F2B5959FE0049910C /* snippet.cc */; };
+		B6C98EE5EDACBF29819FF4F9 /* ns.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA4A2B595A000049910C /* ns.mm */; };
+		B737D5AEFCA2A8D924C77544 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD5FD2D9C2AE0AE3966727A /* UniformTypeIdentifiers.framework */; };
+		B75A231E8EEC5E2B6B46AEAD /* spelling.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9202B5959FF0049910C /* spelling.cc */; };
 		B7B41E16960401DC1F79A4FC /* libonig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4262DF05D2E00DCE20D /* libonig.a */; };
+		BA0961EBC50FBDB5CA54046A /* NSString Additions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D71D2B5959FE0049910C /* NSString Additions.mm */; };
+		BA3D0A3BF31AB9F5DE195C38 /* uuid.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8EB2B5959FF0049910C /* uuid.cc */; };
+		BD61E79BE8A335E220660AE9 /* newlines.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C44D2DF0879600DCE20D /* newlines.cc */; };
+		BE67B36226FEB521C772500F /* to_s.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8F52B5959FF0049910C /* to_s.cc */; };
+		BF241410A33DF172CA1F6BB1 /* bytes.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA252B595A000049910C /* bytes.cc */; };
+		C33D3617556637BB18705B7F /* wrappers.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8612B5959FF0049910C /* wrappers.cc */; };
+		C35F779C342834E1F0385ABF /* resource.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8112B5959FF0049910C /* resource.cc */; };
 		C9516AEEEF53DE9A4E8D0207 /* cf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9722B595A000049910C /* cf.cc */; };
+		CD00C6F537FC83B591AE5CCA /* types.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43D2DF0879500DCE20D /* types.cc */; };
+		CED7CFC8121D8FAD730CD427 /* plist.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8F62B5959FF0049910C /* plist.cc */; };
+		D31BD8018A8AF6BDA8AE6281 /* marks.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9192B5959FF0049910C /* marks.cc */; };
 		D6A780C336BF807DC8F6D4E6 /* uuid.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8EB2B5959FF0049910C /* uuid.cc */; };
+		D78F940D9651962A21DA6B53 /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95857C9CF0768909EDD0D4BD /* OSAKit.framework */; };
+		DBF50BE25818088690E9918E /* ThumbnailProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9B3FED8EF850B7D575EF04 /* ThumbnailProvider.mm */; };
+		DC8304F63617D51D9CE3EB2E /* storage.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D91A2B5959FF0049910C /* storage.cc */; };
+		DCA57C35298CF03C8A9A97DA /* classification.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C44F2DF0879600DCE20D /* classification.cc */; };
+		DE74A69876C8D224172A1D90 /* my_ctype.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4442DF0879600DCE20D /* my_ctype.cc */; };
+		DFF992EF90E17446482E8224 /* find.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D73C2B5959FE0049910C /* find.cc */; };
+		E1A2E677C769BBD6FDEDCC72 /* libonig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4262DF05D2E00DCE20D /* libonig.a */; };
 		E2D2AE5B0572364D63197A34 /* entries.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8022B5959FF0049910C /* entries.cc */; };
+		E30506035917267DC203B31C /* status.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA282B595A000049910C /* status.cc */; };
+		E7E2A5CB0D15973F28A39F40 /* keys.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9A22B595A000049910C /* keys.cc */; };
 		E7F4B461316B6E4E8DF9173B /* my_ctype.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4442DF0879600DCE20D /* my_ctype.cc */; };
+		E8ACD1529A4399CEB8107873 /* OakStringListTransformer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7242B5959FE0049910C /* OakStringListTransformer.mm */; };
+		EE60638D9A909A5414F9D1AB /* type.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA332B595A000049910C /* type.cc */; };
+		F10000000000000000000001 /* OakDebugLog.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7162B5959FE0049910C /* OakDebugLog.cc */; };
+		F10000000000000000000002 /* OakAssert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7152B5959FE0049910C /* OakAssert.mm */; };
+		F10000000000000000000003 /* process.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9CE2B595A000049910C /* process.cc */; };
+		F10000000000000000000004 /* application.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9CD2B595A000049910C /* application.cc */; };
+		F10000000000000000000005 /* frequencies.capnp.c++ in Sources */ = {isa = PBXBuildFile; fileRef = 5656C42F2DF07D8B00DCE20D /* frequencies.capnp.c++ */; };
+		F10000000000000000000006 /* encoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA6F2B595A000049910C /* encoding.mm */; };
+		F10000000000000000000007 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */; };
+		F10000000000000000000008 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */; };
 		F3356496E3484D275F513784 /* parse_glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7342B5959FE0049910C /* parse_glob.cc */; };
+		F51DC069FD466A0B605C2C73 /* TextMateQuickLookPreview.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = EC0EF4FA304F44AACF097A8E /* TextMateQuickLookPreview.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F54B90802B4DCBC983F91714 /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95857C9CF0768909EDD0D4BD /* OSAKit.framework */; };
+		F790948B877EB9BBF44F7C30 /* glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7382B5959FE0049910C /* glob.cc */; };
+		F7DC4562C646586C8DA4CEC6 /* OakHistoryList.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7222B5959FE0049910C /* OakHistoryList.mm */; };
 		F9591B7BB797AE44B5CFC561 /* encode.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4352DF0879500DCE20D /* encode.cc */; };
+		FA5B26D5B6DBC5E1593E04EC /* theme.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7C72B5959FF0049910C /* theme.cc */; };
+		FBCF1FC09B8A51621DBE5695 /* load.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D85B2B5959FF0049910C /* load.cc */; };
+		FC5BF491C0A688CFF11AD830 /* QuickLookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378D2D67D4D92A8FCEB06514 /* QuickLookUI.framework */; };
+		FC8114D6313B7094D6EDB8CB /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD5FD2D9C2AE0AE3966727A /* UniformTypeIdentifiers.framework */; };
+		FCEA2A6B0C8F660E44ABE709 /* format_string.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7402B5959FE0049910C /* format_string.cc */; };
+		FD35A90B7565CE76A1ADB83D /* event.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA492B595A000049910C /* event.mm */; };
+		FD7175980380C315EB670281 /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D5F1157C94525CDB08D59E /* QuickLookThumbnailing.framework */; };
+		FFC80D23C16B290BC6EC591B /* decode.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C4332DF0879500DCE20D /* decode.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-			C7205C198503DF2CAC386488 /* PBXContainerItemProxy */ = {
-				isa = PBXContainerItemProxy;
-				containerPortal = 56A4D5BA2B5958BF0049910C /* Project object */;
-				proxyType = 1;
-				remoteGlobalIDString = 1BFF9C8CC91314FFC8AFAFB1;
-				remoteInfo = mate;
-			};
+		1176ED8D25F62FB9E390A2D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A4D5BA2B5958BF0049910C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C5EB2C9ED9688BCDD16EC7A5;
+			remoteInfo = TextMateQuickLookEngine;
+		};
+		42122E372EA1266681D3431E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A4D5BA2B5958BF0049910C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BA1595EB1C46F766912B2DA0;
+			remoteInfo = TextMateQuickLookThumbnail;
+		};
+		4D5F93294BF00AC42E5571A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A4D5BA2B5958BF0049910C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C5EB2C9ED9688BCDD16EC7A5;
+			remoteInfo = TextMateQuickLookEngine;
+		};
+		C7205C198503DF2CAC386488 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A4D5BA2B5958BF0049910C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BFF9C8CC91314FFC8AFAFB1;
+			remoteInfo = mate;
+		};
+		FDEBD5021C787C9FC5ADA7A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A4D5BA2B5958BF0049910C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ABBF5D46E6414215AEADE254;
+			remoteInfo = TextMateQuickLookPreview;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -641,10 +777,27 @@
 			name = "Copy mate to MacOS";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D93C6DFA07A89EE9ED4951D7 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F51DC069FD466A0B605C2C73 /* TextMateQuickLookPreview.appex in Embed App Extensions */,
+				09E345C1B84CEE0A4B77AFFB /* TextMateQuickLookThumbnail.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0AD5FD2D9C2AE0AE3966727A /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
+		0F9B3FED8EF850B7D575EF04 /* ThumbnailProvider.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = ThumbnailProvider.mm; sourceTree = "<group>"; };
+		1B0D09459656F8B981266435 /* ThumbnailProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ThumbnailProvider.h; sourceTree = "<group>"; };
 		1E8FCE980B264A9257252FF2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		2AC0083D226B1DF7B6FE3593 /* QuickLook.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = QuickLook.entitlements; sourceTree = "<group>"; };
+		378D2D67D4D92A8FCEB06514 /* QuickLookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookUI.framework; path = System/Library/Frameworks/QuickLookUI.framework; sourceTree = SDKROOT; };
 		3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = System/Library/Frameworks/ExceptionHandling.framework; sourceTree = SDKROOT; };
 		459247091B895CB06FFDCC1F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		561C46892DF0F9C300D6568C /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
@@ -700,37 +853,6 @@
 		5656C46E2DF0AD0800DCE20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TabSizeSetting.xib; sourceTree = "<group>"; };
 		5656C46F2DF0AD0F00DCE20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TerminalPreferences.xib; sourceTree = "<group>"; };
 		5656C9012DF0AAAA00DCE20D /* Python Diagnostics.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Python Diagnostics.tmbundle"; path = "../../Bundles/Python Diagnostics.tmbundle"; sourceTree = "<group>"; };
-		ABCDEF000000000000000120 /* Mail.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Mail.tmbundle; path = ../../Bundles/Core/mail.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000121 /* SCM.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SCM.tmbundle; path = ../../Bundles/Core/scm.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000122 /* TODO.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TODO.tmbundle; path = ../../Bundles/Core/todo.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000123 /* SQL.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SQL.tmbundle; path = ../../Bundles/Core/sql.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000124 /* Apache.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Apache.tmbundle; path = ../../Bundles/Core/apache.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000125 /* JSON.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JSON.tmbundle; path = ../../Bundles/Core/json.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000126 /* Subversion.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Subversion.tmbundle; path = ../../Bundles/Core/subversion.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000127 /* TextMate.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TextMate.tmbundle; path = ../../Bundles/Core/textmate.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000128 /* Diff.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Diff.tmbundle; path = ../../Bundles/Core/diff.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000129 /* CSS.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CSS.tmbundle; path = ../../Bundles/Core/css.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000012A /* Bundle Development.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Bundle Development.tmbundle"; path = ../../Bundles/Core/bundle-development.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Hyperlink Helper.tmbundle"; path = ../../Bundles/Core/hyperlink-helper.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000012D /* XML.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = XML.tmbundle; path = ../../Bundles/Core/xml.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000012E /* Math.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Math.tmbundle; path = ../../Bundles/Core/math.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000012F /* PHP.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PHP.tmbundle; path = ../../Bundles/Core/php.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000130 /* SCM Diff Gutter.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "SCM Diff Gutter.tmbundle"; path = ../../Bundles/Core/scm-diff-gutter.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000131 /* Themes.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Themes.tmbundle; path = ../../Bundles/Core/themes.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000132 /* Git.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Git.tmbundle; path = ../../Bundles/Core/git.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000133 /* HTML.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = HTML.tmbundle; path = ../../Bundles/Core/html.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000134 /* Source.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Source.tmbundle; path = ../../Bundles/Core/source.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000135 /* Make.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Make.tmbundle; path = ../../Bundles/Core/make.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000136 /* Ruby.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Ruby.tmbundle; path = ../../Bundles/Core/ruby.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000137 /* Text.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Text.tmbundle; path = ../../Bundles/Core/text.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000138 /* Objective-C.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Objective-C.tmbundle"; path = ../../Bundles/Core/objective-c.tmbundle; sourceTree = "<group>"; };
-		ABCDEF000000000000000139 /* Markdown.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Markdown.tmbundle; path = ../../Bundles/Core/markdown.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000013A /* Property List.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Property List.tmbundle"; path = ../../Bundles/Core/property-list.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000013B /* C.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = C.tmbundle; path = ../../Bundles/Core/c.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000013C /* Python.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Python.tmbundle; path = ../../Bundles/Core/python.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000013D /* Bundle Support.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Bundle Support.tmbundle"; path = ../../Bundles/Core/bundle-support.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000013E /* Shell Script.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Shell Script.tmbundle"; path = ../../Bundles/Core/shellscript.tmbundle; sourceTree = "<group>"; };
-		ABCDEF00000000000000013F /* JavaScript.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JavaScript.tmbundle; path = ../../Bundles/Core/javascript.tmbundle; sourceTree = "<group>"; };
 		5697238630017190005DC1DD /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		56A4D5C22B5958BF0049910C /* TextMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A4D5DE2B5959340049910C /* AboutWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AboutWindowController.mm; sourceTree = "<group>"; };
@@ -1499,12 +1621,54 @@
 		56A4DCB82B596F990049910C /* SerializationTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerializationTestCase.m; sourceTree = "<group>"; };
 		56A4DCB92B596F990049910C /* FilesTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesTestCase.m; sourceTree = "<group>"; };
 		56A4DCBA2B596F990049910C /* DatabaseTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTestCase.m; sourceTree = "<group>"; };
-			56A4DCBB2B596F990049910C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-			B859C963D4FF719720173012 /* mate.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = mate.mm; sourceTree = "<group>"; };
-			ABCDEF000000000000000050 /* bl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bl; sourceTree = BUILT_PRODUCTS_DIR; };
-			ABCDEF000000000000000051 /* bl.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; path = bl.cc; sourceTree = "<group>"; };
-			ABCDEF000000000000000095 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-			F3E6451A3442DB0B2374D340 /* mate */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mate; sourceTree = BUILT_PRODUCTS_DIR; };
+		56A4DCBB2B596F990049910C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6DBEEAC1104A8C93B73F9CE8 /* PreviewProvider.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewProvider.mm; sourceTree = "<group>"; };
+		79EAD2B3F35B75AD95CACE1E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		888E0561DAB64554EB1FEFDD /* PreviewProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PreviewProvider.h; sourceTree = "<group>"; };
+		904896976C01AF944B13718E /* TextMateQuickLookThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TextMateQuickLookThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		95857C9CF0768909EDD0D4BD /* OSAKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSAKit.framework; path = System/Library/Frameworks/OSAKit.framework; sourceTree = SDKROOT; };
+		ABCDEF000000000000000050 /* bl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bl; sourceTree = BUILT_PRODUCTS_DIR; };
+		ABCDEF000000000000000051 /* bl.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; path = bl.cc; sourceTree = "<group>"; };
+		ABCDEF000000000000000095 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		ABCDEF000000000000000120 /* Mail.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Mail.tmbundle; path = ../../Bundles/Core/mail.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000121 /* SCM.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SCM.tmbundle; path = ../../Bundles/Core/scm.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000122 /* TODO.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TODO.tmbundle; path = ../../Bundles/Core/todo.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000123 /* SQL.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SQL.tmbundle; path = ../../Bundles/Core/sql.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000124 /* Apache.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Apache.tmbundle; path = ../../Bundles/Core/apache.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000125 /* JSON.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JSON.tmbundle; path = ../../Bundles/Core/json.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000126 /* Subversion.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Subversion.tmbundle; path = ../../Bundles/Core/subversion.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000127 /* TextMate.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TextMate.tmbundle; path = ../../Bundles/Core/textmate.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000128 /* Diff.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Diff.tmbundle; path = ../../Bundles/Core/diff.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000129 /* CSS.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CSS.tmbundle; path = ../../Bundles/Core/css.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000012A /* Bundle Development.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Bundle Development.tmbundle"; path = "../../Bundles/Core/bundle-development.tmbundle"; sourceTree = "<group>"; };
+		ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Hyperlink Helper.tmbundle"; path = "../../Bundles/Core/hyperlink-helper.tmbundle"; sourceTree = "<group>"; };
+		ABCDEF00000000000000012D /* XML.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = XML.tmbundle; path = ../../Bundles/Core/xml.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000012E /* Math.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Math.tmbundle; path = ../../Bundles/Core/math.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000012F /* PHP.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PHP.tmbundle; path = ../../Bundles/Core/php.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000130 /* SCM Diff Gutter.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "SCM Diff Gutter.tmbundle"; path = "../../Bundles/Core/scm-diff-gutter.tmbundle"; sourceTree = "<group>"; };
+		ABCDEF000000000000000131 /* Themes.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Themes.tmbundle; path = ../../Bundles/Core/themes.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000132 /* Git.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Git.tmbundle; path = ../../Bundles/Core/git.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000133 /* HTML.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = HTML.tmbundle; path = ../../Bundles/Core/html.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000134 /* Source.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Source.tmbundle; path = ../../Bundles/Core/source.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000135 /* Make.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Make.tmbundle; path = ../../Bundles/Core/make.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000136 /* Ruby.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Ruby.tmbundle; path = ../../Bundles/Core/ruby.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000137 /* Text.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Text.tmbundle; path = ../../Bundles/Core/text.tmbundle; sourceTree = "<group>"; };
+		ABCDEF000000000000000138 /* Objective-C.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Objective-C.tmbundle"; path = "../../Bundles/Core/objective-c.tmbundle"; sourceTree = "<group>"; };
+		ABCDEF000000000000000139 /* Markdown.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Markdown.tmbundle; path = ../../Bundles/Core/markdown.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013A /* Property List.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Property List.tmbundle"; path = "../../Bundles/Core/property-list.tmbundle"; sourceTree = "<group>"; };
+		ABCDEF00000000000000013B /* C.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = C.tmbundle; path = ../../Bundles/Core/c.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013C /* Python.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Python.tmbundle; path = ../../Bundles/Core/python.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013D /* Bundle Support.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Bundle Support.tmbundle"; path = "../../Bundles/Core/bundle-support.tmbundle"; sourceTree = "<group>"; };
+		ABCDEF00000000000000013E /* Shell Script.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Shell Script.tmbundle"; path = ../../Bundles/Core/shellscript.tmbundle; sourceTree = "<group>"; };
+		ABCDEF00000000000000013F /* JavaScript.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JavaScript.tmbundle; path = ../../Bundles/Core/javascript.tmbundle; sourceTree = "<group>"; };
+		B859C963D4FF719720173012 /* mate.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = mate.mm; sourceTree = "<group>"; };
+		C47D5A3EBAA5F65B20433519 /* libTextMateQuickLookEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTextMateQuickLookEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC3966BCB37E30893C0717CF /* QuickLookRenderer.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = QuickLookRenderer.mm; sourceTree = "<group>"; };
+		CC6D2FA4BC9513BFBBBC2695 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4D5F1157C94525CDB08D59E /* QuickLookThumbnailing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookThumbnailing.framework; path = System/Library/Frameworks/QuickLookThumbnailing.framework; sourceTree = SDKROOT; };
+		EC0EF4FA304F44AACF097A8E /* TextMateQuickLookPreview.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TextMateQuickLookPreview.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0D5F393BE63F10D4C2CC328 /* QuickLookRenderer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = QuickLookRenderer.h; sourceTree = "<group>"; };
+		F3E6451A3442DB0B2374D340 /* mate */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mate; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1518,32 +1682,88 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-			B2E08E950D5E7C579669CFD2 /* Frameworks */ = {
-				isa = PBXFrameworksBuildPhase;
-				buildActionMask = 2147483647;
+		673AA261F072A53FF7280AF3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F10000000000000000000008 /* ExceptionHandling.framework in Frameworks */,
+				75DB57C36583D65EECD5A735 /* Cocoa.framework in Frameworks */,
+				1A2182269F9DB82759205878 /* libTextMateQuickLookEngine.a in Frameworks */,
+				041C83364694A63EA32C8264 /* Cocoa.framework in Frameworks */,
+				F54B90802B4DCBC983F91714 /* OSAKit.framework in Frameworks */,
+				B737D5AEFCA2A8D924C77544 /* UniformTypeIdentifiers.framework in Frameworks */,
+				E1A2E677C769BBD6FDEDCC72 /* libonig.a in Frameworks */,
+				FD7175980380C315EB670281 /* QuickLookThumbnailing.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA066693E737695D591ADC95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ABCDEF000000000000000053 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABCDEF000000000000000088 /* Cocoa.framework in Frameworks */,
+				ABCDEF000000000000000089 /* Security.framework in Frameworks */,
+				ABCDEF000000000000000096 /* SystemConfiguration.framework in Frameworks */,
+				ABCDEF000000000000000097 /* ExceptionHandling.framework in Frameworks */,
+				ABCDEF00000000000000008A /* libonig.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF481A602542DD3C83BDE10C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F10000000000000000000007 /* ExceptionHandling.framework in Frameworks */,
+				5ABB72083C8516CF329F606A /* Cocoa.framework in Frameworks */,
+				67A6CE6389794E79EA9F7DC0 /* libTextMateQuickLookEngine.a in Frameworks */,
+				00EC54269E4817F966359B8D /* Cocoa.framework in Frameworks */,
+				D78F940D9651962A21DA6B53 /* OSAKit.framework in Frameworks */,
+				FC8114D6313B7094D6EDB8CB /* UniformTypeIdentifiers.framework in Frameworks */,
+				8DA8467FB004937C4525326F /* libonig.a in Frameworks */,
+				FC5BF491C0A688CFF11AD830 /* QuickLookUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2E08E950D5E7C579669CFD2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 				3E6B2A128D6A47B58B016A64 /* ExceptionHandling.framework in Frameworks */,
 				6AD7A1DB822E0A9FE115B04A /* Cocoa.framework in Frameworks */,
 				B7B41E16960401DC1F79A4FC /* libonig.a in Frameworks */,
 				3227B98D00DDCB7AC9BCBCBB /* Security.framework in Frameworks */,
-				);
-				runOnlyForDeploymentPostprocessing = 0;
-			};
-			ABCDEF000000000000000053 /* Frameworks */ = {
-				isa = PBXFrameworksBuildPhase;
-				buildActionMask = 2147483647;
-				files = (
-					ABCDEF000000000000000088 /* Cocoa.framework in Frameworks */,
-					ABCDEF000000000000000089 /* Security.framework in Frameworks */,
-					ABCDEF000000000000000096 /* SystemConfiguration.framework in Frameworks */,
-					ABCDEF000000000000000097 /* ExceptionHandling.framework in Frameworks */,
-					ABCDEF00000000000000008A /* libonig.a in Frameworks */,
-				);
-				runOnlyForDeploymentPostprocessing = 0;
-			};
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		03965F6C915DCCBF1D2DF7B0 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				F0D5F393BE63F10D4C2CC328 /* QuickLookRenderer.h */,
+				CC3966BCB37E30893C0717CF /* QuickLookRenderer.mm */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		520CB27A01B2503F3D7B584A /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				888E0561DAB64554EB1FEFDD /* PreviewProvider.h */,
+				6DBEEAC1104A8C93B73F9CE8 /* PreviewProvider.mm */,
+				CC6D2FA4BC9513BFBBBC2695 /* Info.plist */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
 		5656C4252DF05D2500DCE20D /* Onigmo */ = {
 			isa = PBXGroup;
 			children = (
@@ -1600,45 +1820,8 @@
 				56A4D5C32B5958BF0049910C /* Products */,
 				917909068AEAC9FFA1C58943 /* mate */,
 				ABCDEF000000000000000052 /* bl */,
+				F491B4ED607DA2DC39EC1153 /* Quick Look Extensions */,
 			);
-			sourceTree = "<group>";
-		};
-		ABCDEF000000000000000140 /* Core Bundles */ = {
-			isa = PBXGroup;
-			children = (
-				ABCDEF000000000000000124 /* Apache.tmbundle */,
-				ABCDEF00000000000000012A /* Bundle Development.tmbundle */,
-				ABCDEF00000000000000013D /* Bundle Support.tmbundle */,
-				ABCDEF00000000000000013B /* C.tmbundle */,
-				ABCDEF000000000000000129 /* CSS.tmbundle */,
-				ABCDEF000000000000000128 /* Diff.tmbundle */,
-				ABCDEF000000000000000132 /* Git.tmbundle */,
-				ABCDEF000000000000000133 /* HTML.tmbundle */,
-				ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */,
-				ABCDEF00000000000000013F /* JavaScript.tmbundle */,
-				ABCDEF000000000000000125 /* JSON.tmbundle */,
-				ABCDEF000000000000000120 /* Mail.tmbundle */,
-				ABCDEF000000000000000135 /* Make.tmbundle */,
-				ABCDEF000000000000000139 /* Markdown.tmbundle */,
-				ABCDEF00000000000000012E /* Math.tmbundle */,
-				ABCDEF000000000000000138 /* Objective-C.tmbundle */,
-				ABCDEF00000000000000012F /* PHP.tmbundle */,
-				ABCDEF00000000000000013A /* Property List.tmbundle */,
-				ABCDEF00000000000000013C /* Python.tmbundle */,
-				ABCDEF000000000000000136 /* Ruby.tmbundle */,
-				ABCDEF000000000000000130 /* SCM Diff Gutter.tmbundle */,
-				ABCDEF000000000000000121 /* SCM.tmbundle */,
-				ABCDEF00000000000000013E /* Shell Script.tmbundle */,
-				ABCDEF000000000000000134 /* Source.tmbundle */,
-				ABCDEF000000000000000123 /* SQL.tmbundle */,
-				ABCDEF000000000000000126 /* Subversion.tmbundle */,
-				ABCDEF000000000000000137 /* Text.tmbundle */,
-				ABCDEF000000000000000127 /* TextMate.tmbundle */,
-				ABCDEF000000000000000131 /* Themes.tmbundle */,
-				ABCDEF000000000000000122 /* TODO.tmbundle */,
-				ABCDEF00000000000000012D /* XML.tmbundle */,
-			);
-			name = "Core Bundles";
 			sourceTree = "<group>";
 		};
 		56A4D5C32B5958BF0049910C /* Products */ = {
@@ -1647,6 +1830,9 @@
 				56A4D5C22B5958BF0049910C /* TextMate.app */,
 				F3E6451A3442DB0B2374D340 /* mate */,
 				ABCDEF000000000000000050 /* bl */,
+				C47D5A3EBAA5F65B20433519 /* libTextMateQuickLookEngine.a */,
+				EC0EF4FA304F44AACF097A8E /* TextMateQuickLookPreview.appex */,
+				904896976C01AF944B13718E /* TextMateQuickLookThumbnail.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1865,6 +2051,10 @@
 				56A4D7B02B5959FE0049910C /* updater */,
 				7DE5A761CBD2D3ABDE001B70 /* OS X */,
 				1E8FCE980B264A9257252FF2 /* Security.framework */,
+				95857C9CF0768909EDD0D4BD /* OSAKit.framework */,
+				0AD5FD2D9C2AE0AE3966727A /* UniformTypeIdentifiers.framework */,
+				378D2D67D4D92A8FCEB06514 /* QuickLookUI.framework */,
+				E4D5F1157C94525CDB08D59E /* QuickLookThumbnailing.framework */,
 			);
 			name = Frameworks;
 			path = ../../Frameworks;
@@ -3725,6 +3915,16 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
+		57B2E64328B149EB0761CB83 /* Thumbnail */ = {
+			isa = PBXGroup;
+			children = (
+				1B0D09459656F8B981266435 /* ThumbnailProvider.h */,
+				0F9B3FED8EF850B7D575EF04 /* ThumbnailProvider.mm */,
+				79EAD2B3F35B75AD95CACE1E /* Info.plist */,
+			);
+			path = Thumbnail;
+			sourceTree = "<group>";
+		};
 		7DE5A761CBD2D3ABDE001B70 /* OS X */ = {
 			isa = PBXGroup;
 			children = (
@@ -3751,7 +3951,67 @@
 			path = ../bl/src;
 			sourceTree = "<group>";
 		};
+		ABCDEF000000000000000140 /* Core Bundles */ = {
+			isa = PBXGroup;
+			children = (
+				ABCDEF000000000000000124 /* Apache.tmbundle */,
+				ABCDEF00000000000000012A /* Bundle Development.tmbundle */,
+				ABCDEF00000000000000013D /* Bundle Support.tmbundle */,
+				ABCDEF00000000000000013B /* C.tmbundle */,
+				ABCDEF000000000000000129 /* CSS.tmbundle */,
+				ABCDEF000000000000000128 /* Diff.tmbundle */,
+				ABCDEF000000000000000132 /* Git.tmbundle */,
+				ABCDEF000000000000000133 /* HTML.tmbundle */,
+				ABCDEF00000000000000012C /* Hyperlink Helper.tmbundle */,
+				ABCDEF00000000000000013F /* JavaScript.tmbundle */,
+				ABCDEF000000000000000125 /* JSON.tmbundle */,
+				ABCDEF000000000000000120 /* Mail.tmbundle */,
+				ABCDEF000000000000000135 /* Make.tmbundle */,
+				ABCDEF000000000000000139 /* Markdown.tmbundle */,
+				ABCDEF00000000000000012E /* Math.tmbundle */,
+				ABCDEF000000000000000138 /* Objective-C.tmbundle */,
+				ABCDEF00000000000000012F /* PHP.tmbundle */,
+				ABCDEF00000000000000013A /* Property List.tmbundle */,
+				ABCDEF00000000000000013C /* Python.tmbundle */,
+				ABCDEF000000000000000136 /* Ruby.tmbundle */,
+				ABCDEF000000000000000130 /* SCM Diff Gutter.tmbundle */,
+				ABCDEF000000000000000121 /* SCM.tmbundle */,
+				ABCDEF00000000000000013E /* Shell Script.tmbundle */,
+				ABCDEF000000000000000134 /* Source.tmbundle */,
+				ABCDEF000000000000000123 /* SQL.tmbundle */,
+				ABCDEF000000000000000126 /* Subversion.tmbundle */,
+				ABCDEF000000000000000137 /* Text.tmbundle */,
+				ABCDEF000000000000000127 /* TextMate.tmbundle */,
+				ABCDEF000000000000000131 /* Themes.tmbundle */,
+				ABCDEF000000000000000122 /* TODO.tmbundle */,
+				ABCDEF00000000000000012D /* XML.tmbundle */,
+			);
+			name = "Core Bundles";
+			sourceTree = "<group>";
+		};
+		F491B4ED607DA2DC39EC1153 /* Quick Look Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				03965F6C915DCCBF1D2DF7B0 /* Shared */,
+				520CB27A01B2503F3D7B584A /* Preview */,
+				57B2E64328B149EB0761CB83 /* Thumbnail */,
+				2AC0083D226B1DF7B6FE3593 /* QuickLook.entitlements */,
+			);
+			name = "Quick Look Extensions";
+			path = ../QuickLookExtensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BDE980E37AC06B7991065231 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		1BFF9C8CC91314FFC8AFAFB1 /* mate */ = {
@@ -3770,6 +4030,48 @@
 			productReference = F3E6451A3442DB0B2374D340 /* mate */;
 			productType = "com.apple.product-type.tool";
 		};
+		56A4D5C12B5958BF0049910C /* TextMate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56A4D5D92B5958C10049910C /* Build configuration list for PBXNativeTarget "TextMate" */;
+			buildPhases = (
+				56A4D5BE2B5958BF0049910C /* Sources */,
+				56A4D5BF2B5958BF0049910C /* Frameworks */,
+				56A4D5C02B5958BF0049910C /* Resources */,
+				5656C9032DF0AAAA00DCE20D /* Copy Bundles */,
+				C9FAFD4D5367EFC8F8364268 /* Copy mate to MacOS */,
+				5656C9042DF0BEEF00DCE20D /* Sign CocoaDialog */,
+				D93C6DFA07A89EE9ED4951D7 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				337CB4D5AE4AA7C9AE025D83 /* PBXTargetDependency */,
+				748D9A129C6D260CB747DE4D /* PBXTargetDependency */,
+				7CD7DDE74EF3E0A7CC07720D /* PBXTargetDependency */,
+			);
+			name = TextMate;
+			productName = TextMate;
+			productReference = 56A4D5C22B5958BF0049910C /* TextMate.app */;
+			productType = "com.apple.product-type.application";
+		};
+		ABBF5D46E6414215AEADE254 /* TextMateQuickLookPreview */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C225FEC62E49A35171DB72CD /* Build configuration list for PBXNativeTarget "TextMateQuickLookPreview" */;
+			buildPhases = (
+				810EDDE62CF026D4D0AF7B1B /* Sources */,
+				AF481A602542DD3C83BDE10C /* Frameworks */,
+				27B888B6F1555DC37D735C03 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A729614BB3F11D1964FC0B72 /* PBXTargetDependency */,
+			);
+			name = TextMateQuickLookPreview;
+			productName = TextMateQuickLookPreview;
+			productReference = EC0EF4FA304F44AACF097A8E /* TextMateQuickLookPreview.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		ABCDEF000000000000000055 /* bl */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = ABCDEF000000000000000056 /* Build configuration list for PBXNativeTarget "bl" */;
@@ -3787,26 +4089,40 @@
 			productReference = ABCDEF000000000000000050 /* bl */;
 			productType = "com.apple.product-type.tool";
 		};
-		56A4D5C12B5958BF0049910C /* TextMate */ = {
+		BA1595EB1C46F766912B2DA0 /* TextMateQuickLookThumbnail */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 56A4D5D92B5958C10049910C /* Build configuration list for PBXNativeTarget "TextMate" */;
+			buildConfigurationList = 248042FB6732B77237111CCA /* Build configuration list for PBXNativeTarget "TextMateQuickLookThumbnail" */;
 			buildPhases = (
-				56A4D5BE2B5958BF0049910C /* Sources */,
-				56A4D5BF2B5958BF0049910C /* Frameworks */,
-				56A4D5C02B5958BF0049910C /* Resources */,
-				5656C9032DF0AAAA00DCE20D /* Copy Bundles */,
-				C9FAFD4D5367EFC8F8364268 /* Copy mate to MacOS */,
-				5656C9042DF0BEEF00DCE20D /* Sign CocoaDialog */,
+				A5CBCDB0F00707DD4124D2FB /* Sources */,
+				673AA261F072A53FF7280AF3 /* Frameworks */,
+				A25CA047F13EF975F2948723 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				337CB4D5AE4AA7C9AE025D83 /* PBXTargetDependency */,
+				EAFDF38F829849982BDB835D /* PBXTargetDependency */,
 			);
-			name = TextMate;
-			productName = TextMate;
-			productReference = 56A4D5C22B5958BF0049910C /* TextMate.app */;
-			productType = "com.apple.product-type.application";
+			name = TextMateQuickLookThumbnail;
+			productName = TextMateQuickLookThumbnail;
+			productReference = 904896976C01AF944B13718E /* TextMateQuickLookThumbnail.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		C5EB2C9ED9688BCDD16EC7A5 /* TextMateQuickLookEngine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69EC9A284777901F58351385 /* Build configuration list for PBXNativeTarget "TextMateQuickLookEngine" */;
+			buildPhases = (
+				BDE980E37AC06B7991065231 /* Headers */,
+				12BF6BF624EFB5BDF8B79C01 /* Sources */,
+				AA066693E737695D591ADC95 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TextMateQuickLookEngine;
+			productName = TextMateQuickLookEngine;
+			productReference = C47D5A3EBAA5F65B20433519 /* libTextMateQuickLookEngine.a */;
+			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
 
@@ -3819,6 +4135,15 @@
 				TargetAttributes = {
 					56A4D5C12B5958BF0049910C = {
 						CreatedOnToolsVersion = 14.0.1;
+					};
+					ABBF5D46E6414215AEADE254 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					BA1595EB1C46F766912B2DA0 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					C5EB2C9ED9688BCDD16EC7A5 = {
+						CreatedOnToolsVersion = 26.0;
 					};
 				};
 			};
@@ -3838,11 +4163,21 @@
 				56A4D5C12B5958BF0049910C /* TextMate */,
 				1BFF9C8CC91314FFC8AFAFB1 /* mate */,
 				ABCDEF000000000000000055 /* bl */,
+				C5EB2C9ED9688BCDD16EC7A5 /* TextMateQuickLookEngine */,
+				ABBF5D46E6414215AEADE254 /* TextMateQuickLookPreview */,
+				BA1595EB1C46F766912B2DA0 /* TextMateQuickLookThumbnail */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		27B888B6F1555DC37D735C03 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		56A4D5C02B5958BF0049910C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4037,6 +4372,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A25CA047F13EF975F2948723 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -4073,6 +4415,101 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		12BF6BF624EFB5BDF8B79C01 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F10000000000000000000001 /* OakDebugLog.cc in Sources */,
+				F10000000000000000000002 /* OakAssert.mm in Sources */,
+				F10000000000000000000003 /* process.cc in Sources */,
+				F10000000000000000000004 /* application.cc in Sources */,
+				F10000000000000000000005 /* frequencies.capnp.c++ in Sources */,
+				F10000000000000000000006 /* encoding.mm in Sources */,
+				BE67B36226FEB521C772500F /* to_s.cc in Sources */,
+				12F0FA85626F02D31EBF4AAF /* format.cc in Sources */,
+				09587D3CAF42604772FB1B0F /* entries.cc in Sources */,
+				1242E45DCF0AAFBE00D5278B /* environment.cc in Sources */,
+				DE74A69876C8D224172A1D90 /* my_ctype.cc in Sources */,
+				B5701974A58DC8A44929DB90 /* snippet.cc in Sources */,
+				A4A9703C8BA26D7C31A8B93F /* private.cc in Sources */,
+				62DC16B09F65071EF66B041D /* run_loop.cc in Sources */,
+				1CEF94DA3B7E84D71070A9B7 /* events.cc in Sources */,
+				EE60638D9A909A5414F9D1AB /* type.cc in Sources */,
+				DCA57C35298CF03C8A9A97DA /* classification.cc in Sources */,
+				CED7CFC8121D8FAD730CD427 /* plist.cc in Sources */,
+				3F46BE8827B3EEAE02840A45 /* parse.cc in Sources */,
+				7CDC02BB64786045B9EF2587 /* item.cc in Sources */,
+				1B018EC86F322227B4EAD485 /* parsing.cc in Sources */,
+				AE6FCAC6CDC0EEB91DB70BA6 /* query.cc in Sources */,
+				E30506035917267DC203B31C /* status.cc in Sources */,
+				FCEA2A6B0C8F660E44ABE709 /* format_string.cc in Sources */,
+				179B8A60D17F9402D85052AF /* intermediate.mm in Sources */,
+				0FA75D81DD8B2CA331E17B09 /* settings.cc in Sources */,
+				9ACCDCE7799E6E5541016348 /* encoding.cc in Sources */,
+				334BF4D6DED31795FDF39A6F /* open.cc in Sources */,
+				6CF06314833C51FD5C317E2C /* parse.cc in Sources */,
+				CD00C6F537FC83B591AE5CCA /* types.cc in Sources */,
+				E8ACD1529A4399CEB8107873 /* OakStringListTransformer.mm in Sources */,
+				B0B774CEFE3A5F1CBB1D2BE3 /* spellcheck.mm in Sources */,
+				40B3AEB6109AD30230624CF7 /* indent.cc in Sources */,
+				98CE088536E6EF7B2A143EA1 /* parse_glob.cc in Sources */,
+				DC8304F63617D51D9CE3EB2E /* storage.cc in Sources */,
+				8C5794E7E78F2E0FF9180B04 /* types.cc in Sources */,
+				86B7AF06546A2BEE11D84EEA /* parse.cc in Sources */,
+				3835438CBFADAA604E52868B /* symbols.cc in Sources */,
+				92B2785FFECDCEDA74F275E4 /* move_path.cc in Sources */,
+				BA3D0A3BF31AB9F5DE195C38 /* uuid.cc in Sources */,
+				84034CA8DEBE647A141B5E7F /* save.cc in Sources */,
+				61C3C110AAF83C35877448AE /* pipe.cc in Sources */,
+				E7E2A5CB0D15973F28A39F40 /* keys.cc in Sources */,
+				FA5B26D5B6DBC5E1593E04EC /* theme.cc in Sources */,
+				915D331263DC1D1361956A90 /* constants.cc in Sources */,
+				FFC80D23C16B290BC6EC591B /* decode.cc in Sources */,
+				A0C394AA2117675EF01BBADD /* ascii.cc in Sources */,
+				5AB1DAEFC0FA5C0BC2338DF6 /* match.cc in Sources */,
+				C35F779C342834E1F0385ABF /* resource.cc in Sources */,
+				BA0961EBC50FBDB5CA54046A /* NSString Additions.mm in Sources */,
+				B6C98EE5EDACBF29819FF4F9 /* ns.mm in Sources */,
+				60BD7B4E0967024C72A1BFB8 /* to_dictionary.mm in Sources */,
+				BD61E79BE8A335E220660AE9 /* newlines.cc in Sources */,
+				988648EE517B9065A427B240 /* path_info.cc in Sources */,
+				1D8C2107210352AA1A21DD72 /* path.cc in Sources */,
+				7CC67E20E70CF40E9F25033B /* encode.cc in Sources */,
+				7E179C2329871202F569AE91 /* scope.cc in Sources */,
+				042C8BADD1D286DA22058A43 /* parser.cc in Sources */,
+				9DB195F29D200D41BC78B0D8 /* OakFoundation.mm in Sources */,
+				39E6B8B79ED554BD78BD9314 /* locations.cc in Sources */,
+				93E6A59E1193C41E73A75F23 /* indent.cc in Sources */,
+				A1ECDD32E694B8E8ADF6B67F /* cf.cc in Sources */,
+				3FEC95CEBC15A844CCB40EAE /* pairs.cc in Sources */,
+				BF241410A33DF172CA1F6BB1 /* bytes.cc in Sources */,
+				41A39C716A9667915B148B12 /* OakTheme.mm in Sources */,
+				F7DC4562C646586C8DA4CEC6 /* OakHistoryList.mm in Sources */,
+				8BCDCC03CEB25C369C481D05 /* delta.cc in Sources */,
+				466A57F3A2A33304EBF02EBF /* reader.cc in Sources */,
+				D31BD8018A8AF6BDA8AE6281 /* marks.cc in Sources */,
+				705B8ECFFCD3B230BFF8FE73 /* exec.cc in Sources */,
+				76637DE283B1B40E0CF63FB1 /* filter.cc in Sources */,
+				A4E41B6CFF02B533DBE6A24E /* trim.cc in Sources */,
+				2CE2A3AEF27FD9FDA2EAB735 /* date.cc in Sources */,
+				FBCF1FC09B8A51621DBE5695 /* load.cc in Sources */,
+				6A3A145AB7570AE0799F81FE /* regexp.cc in Sources */,
+				F790948B877EB9BBF44F7C30 /* glob.cc in Sources */,
+				A0E0C40C385404D2B7E4ED6A /* fs_cache.cc in Sources */,
+				FD35A90B7565CE76A1ADB83D /* event.mm in Sources */,
+				63ABE1034F36E39E9F24D032 /* buffer.cc in Sources */,
+				749353529EBFB15074B679E0 /* parser_base.cc in Sources */,
+				B75A231E8EEC5E2B6B46AEAD /* spelling.cc in Sources */,
+				4C2B1F9CA2FEE2FDF037A702 /* ranker.cc in Sources */,
+				234A392B722D6AA6195F15ED /* case.cc in Sources */,
+				C33D3617556637BB18705B7F /* wrappers.cc in Sources */,
+				930230070C18C0555AA8D8C1 /* grammar.cc in Sources */,
+				6D5C3AC2385E2140308D95BE /* parser.cc in Sources */,
+				DFF992EF90E17446482E8224 /* find.cc in Sources */,
+				18B8E848FDCDF0419C464FD7 /* QuickLookRenderer.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		56A4D5BE2B5958BF0049910C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4342,35 +4779,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F54C87AA47E289093B0DCDFE /* Sources */ = {
+		810EDDE62CF026D4D0AF7B1B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C4A7768141ECAAE3928FFFE /* mate.mm in Sources */,
-				4EABAF28A3B48231B4159B43 /* format.cc in Sources */,
-				5DDED5B691D0A3E5F71846C8 /* parse.cc in Sources */,
-				E7F4B461316B6E4E8DF9173B /* my_ctype.cc in Sources */,
-				41EFEED9782F66A1295CD8A6 /* types.cc in Sources */,
-				623DA31B8159EBAE7FCA18FE /* case.cc in Sources */,
-				F9591B7BB797AE44B5CFC561 /* encode.cc in Sources */,
-				5D9C63D7251F06F030FEFBAF /* indent.cc in Sources */,
-				2132F191276AF4C4B224AF61 /* path.cc in Sources */,
-				5DF2CE465F70F833451A9B39 /* move_path.cc in Sources */,
-				2A0FA50962852DA7C6F2910A /* intermediate.mm in Sources */,
-				E2D2AE5B0572364D63197A34 /* entries.cc in Sources */,
-				D6A780C336BF807DC8F6D4E6 /* uuid.cc in Sources */,
-				849B09B32BCB9EEA4F318AA5 /* regexp.cc in Sources */,
-				765B5DEE7B86D96D61CC8E22 /* format_string.cc in Sources */,
-				569723893002423E005DC1DD /* OakAssert.mm in Sources */,
-				6592FD263B0AC321E67DB34D /* private.cc in Sources */,
-				779475879F3A3B46244AD058 /* parser.cc in Sources */,
-				23E8FCA2DE0740920771D7FC /* parser_base.cc in Sources */,
-				728C350B5B54C19D352B4128 /* snippet.cc in Sources */,
-				54BC8F15B35C400423510AFC /* glob.cc in Sources */,
-				F3356496E3484D275F513784 /* parse_glob.cc in Sources */,
-				C9516AEEEF53DE9A4E8D0207 /* cf.cc in Sources */,
-				32B6B458DA2FFBF3E01F578D /* OakFoundation.mm in Sources */,
-				44549BCD8ECF6BBFD4BC12CF /* ns.mm in Sources */,
+				7A727EF6CA67F10AE85CFD92 /* PreviewProvider.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5CBCDB0F00707DD4124D2FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBF50BE25818088690E9918E /* ThumbnailProvider.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4430,6 +4851,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F54C87AA47E289093B0DCDFE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C4A7768141ECAAE3928FFFE /* mate.mm in Sources */,
+				4EABAF28A3B48231B4159B43 /* format.cc in Sources */,
+				5DDED5B691D0A3E5F71846C8 /* parse.cc in Sources */,
+				E7F4B461316B6E4E8DF9173B /* my_ctype.cc in Sources */,
+				41EFEED9782F66A1295CD8A6 /* types.cc in Sources */,
+				623DA31B8159EBAE7FCA18FE /* case.cc in Sources */,
+				F9591B7BB797AE44B5CFC561 /* encode.cc in Sources */,
+				5D9C63D7251F06F030FEFBAF /* indent.cc in Sources */,
+				2132F191276AF4C4B224AF61 /* path.cc in Sources */,
+				5DF2CE465F70F833451A9B39 /* move_path.cc in Sources */,
+				2A0FA50962852DA7C6F2910A /* intermediate.mm in Sources */,
+				E2D2AE5B0572364D63197A34 /* entries.cc in Sources */,
+				D6A780C336BF807DC8F6D4E6 /* uuid.cc in Sources */,
+				849B09B32BCB9EEA4F318AA5 /* regexp.cc in Sources */,
+				765B5DEE7B86D96D61CC8E22 /* format_string.cc in Sources */,
+				569723893002423E005DC1DD /* OakAssert.mm in Sources */,
+				6592FD263B0AC321E67DB34D /* private.cc in Sources */,
+				779475879F3A3B46244AD058 /* parser.cc in Sources */,
+				23E8FCA2DE0740920771D7FC /* parser_base.cc in Sources */,
+				728C350B5B54C19D352B4128 /* snippet.cc in Sources */,
+				54BC8F15B35C400423510AFC /* glob.cc in Sources */,
+				F3356496E3484D275F513784 /* parse_glob.cc in Sources */,
+				C9516AEEEF53DE9A4E8D0207 /* cf.cc in Sources */,
+				32B6B458DA2FFBF3E01F578D /* OakFoundation.mm in Sources */,
+				44549BCD8ECF6BBFD4BC12CF /* ns.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -4438,6 +4891,30 @@
 			name = mate;
 			target = 1BFF9C8CC91314FFC8AFAFB1 /* mate */;
 			targetProxy = C7205C198503DF2CAC386488 /* PBXContainerItemProxy */;
+		};
+		748D9A129C6D260CB747DE4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TextMateQuickLookPreview;
+			target = ABBF5D46E6414215AEADE254 /* TextMateQuickLookPreview */;
+			targetProxy = FDEBD5021C787C9FC5ADA7A5 /* PBXContainerItemProxy */;
+		};
+		7CD7DDE74EF3E0A7CC07720D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TextMateQuickLookThumbnail;
+			target = BA1595EB1C46F766912B2DA0 /* TextMateQuickLookThumbnail */;
+			targetProxy = 42122E372EA1266681D3431E /* PBXContainerItemProxy */;
+		};
+		A729614BB3F11D1964FC0B72 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TextMateQuickLookEngine;
+			target = C5EB2C9ED9688BCDD16EC7A5 /* TextMateQuickLookEngine */;
+			targetProxy = 1176ED8D25F62FB9E390A2D2 /* PBXContainerItemProxy */;
+		};
+		EAFDF38F829849982BDB835D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TextMateQuickLookEngine;
+			target = C5EB2C9ED9688BCDD16EC7A5 /* TextMateQuickLookEngine */;
+			targetProxy = 4D5F93294BF00AC42E5571A1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4557,6 +5034,82 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0F7C093DE9E23CD5CBAE698C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/../QuickLookExtensions/QuickLook.entitlements";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TextMate.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/../QuickLookExtensions/Thumbnail/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.macromates.TextMate.QuickLookThumbnail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		2678BE4ACDE63C7FFF54252F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4602DF0AC6500DCE20D /* debug.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/../QuickLookExtensions/QuickLook.entitlements";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TextMate.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/../QuickLookExtensions/Thumbnail/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.macromates.TextMate.QuickLookThumbnail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		318829A23FAEA28B2AF00546 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TextMate.pch";
+				INFOPLIST_FILE = "";
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		56A4D5D72B5958C10049910C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4602DF0AC6500DCE20D /* debug.xcconfig */;
@@ -4619,6 +5172,20 @@
 			};
 			name = Debug;
 		};
+		68DEC3355028CF5FA39C5679 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4602DF0AC6500DCE20D /* debug.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TextMate.pch";
+				INFOPLIST_FILE = "";
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
 		6C5CDF079973A4F78A0A6A37 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
@@ -4633,14 +5200,51 @@
 			};
 			name = Release;
 		};
+		7C0FCA301C404A05E9E1C87E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/../QuickLookExtensions/QuickLook.entitlements";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TextMate.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/../QuickLookExtensions/Preview/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.macromates.TextMate.QuickLookPreview;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		ABCDEF000000000000000057 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4602DF0AC6500DCE20D /* debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
-				HEADER_SEARCH_PATHS = "$(inherited) $(DERIVED_FILE_DIR)/bl-includes";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DERIVED_FILE_DIR)/bl-includes",
+				);
 				INFOPLIST_FILE = "";
-				OTHER_LDFLAGS = "-lcurl -liconv";
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-liconv",
+				);
 				PRODUCT_NAME = bl;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -4654,14 +5258,51 @@
 				CODE_SIGN_ENTITLEMENTS = Entitlements.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
 				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = "$(inherited) $(DERIVED_FILE_DIR)/bl-includes";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DERIVED_FILE_DIR)/bl-includes",
+				);
 				INFOPLIST_FILE = "";
-				OTHER_LDFLAGS = "-lcurl -liconv";
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-liconv",
+				);
 				PRODUCT_NAME = bl;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
+		};
+		B956D2D35BF2AD6DF0DF9CB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5656C4602DF0AC6500DCE20D /* debug.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/../QuickLookExtensions/QuickLook.entitlements";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Georg Seifert (X2L8375ZQ7)";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TextMate.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/../QuickLookExtensions/Preview/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.macromates.TextMate.QuickLookPreview;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -4675,11 +5316,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		ABCDEF000000000000000056 /* Build configuration list for PBXNativeTarget "bl" */ = {
+		248042FB6732B77237111CCA /* Build configuration list for PBXNativeTarget "TextMateQuickLookThumbnail" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				ABCDEF000000000000000058 /* Release */,
-				ABCDEF000000000000000057 /* Debug */,
+				0F7C093DE9E23CD5CBAE698C /* Release */,
+				2678BE4ACDE63C7FFF54252F /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4698,6 +5339,33 @@
 			buildConfigurations = (
 				56A4D5DA2B5958C10049910C /* Debug */,
 				56A4D5DB2B5958C10049910C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		69EC9A284777901F58351385 /* Build configuration list for PBXNativeTarget "TextMateQuickLookEngine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				318829A23FAEA28B2AF00546 /* Release */,
+				68DEC3355028CF5FA39C5679 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ABCDEF000000000000000056 /* Build configuration list for PBXNativeTarget "bl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABCDEF000000000000000058 /* Release */,
+				ABCDEF000000000000000057 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C225FEC62E49A35171DB72CD /* Build configuration list for PBXNativeTarget "TextMateQuickLookPreview" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C0FCA301C404A05E9E1C87E /* Release */,
+				B956D2D35BF2AD6DF0DF9CB2 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
