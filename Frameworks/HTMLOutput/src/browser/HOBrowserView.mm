@@ -15,6 +15,15 @@ static void ShowLoadErrorForURL (WebFrame* frame, NSURL* url, NSError* error)
 	[frame loadHTMLString:errorMsg baseURL:[NSURL fileURLWithPath:NSTemporaryDirectory()]];
 }
 
+static void SetWebPreferenceIfSupported (WebPreferences* preferences, NSString* key, id value)
+{
+	@try {
+		[preferences setValue:value forKey:key];
+	}
+	@catch(NSException* exception) {
+	}
+}
+
 @interface HOBrowserView () <WebPolicyDelegate, WebUIDelegate, WebResourceLoadDelegate>
 @property (nonatomic, readwrite) WebView* webView;
 @property (nonatomic, readwrite) HOStatusBar* statusBar;
@@ -29,9 +38,13 @@ static void ShowLoadErrorForURL (WebFrame* frame, NSURL* url, NSError* error)
 		_webView = [[WebView alloc] initWithFrame:NSZeroRect];
 
 		NSString* const kHTMLOutputPreferencesIdentifier = @"HTML Output Preferences Identifier";
-		WebPreferences* webViewPrefs = [[WebPreferences alloc] initWithIdentifier:kHTMLOutputPreferencesIdentifier];
-		webViewPrefs.plugInsEnabled = NO;
 		self.webView.preferencesIdentifier = kHTMLOutputPreferencesIdentifier;
+		WebPreferences* webViewPrefs = self.webView.preferences ?: [[WebPreferences alloc] initWithIdentifier:kHTMLOutputPreferencesIdentifier];
+		webViewPrefs.plugInsEnabled = NO;
+		SetWebPreferenceIfSupported(webViewPrefs, @"allowFileAccessFromFileURLs", @YES);
+		SetWebPreferenceIfSupported(webViewPrefs, @"allowUniversalAccessFromFileURLs", @YES);
+		SetWebPreferenceIfSupported(webViewPrefs, @"webSecurityEnabled", @NO);
+		self.webView.preferences = webViewPrefs;
 
 		_statusBar = [[HOStatusBar alloc] initWithFrame:NSZeroRect];
 		_statusBar.delegate = _webView;
