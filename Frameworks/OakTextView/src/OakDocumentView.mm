@@ -28,6 +28,56 @@ static NSString* const kFoldingsColumnIdentifier  = @"foldings";
 static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 static CGFloat const kScopeBarHeight = 21;
 
+static NSUInteger OTVSymbolTextIndent (NSString* symbol)
+{
+	NSUInteger indent = 0;
+	while(indent < symbol.length)
+	{
+		unichar ch = [symbol characterAtIndex:indent];
+		if(ch != ' ' && ch != '\t' && ch != 0x2003) // Em-space
+			break;
+		++indent;
+	}
+	return indent;
+}
+
+static NSUInteger OTVLineIndent (NSString* content, NSUInteger lineNumber, NSUInteger tabSize)
+{
+	NSUInteger currentLine = 0;
+	NSUInteger index       = 0;
+	NSUInteger length      = content.length;
+	NSCharacterSet* newlineCharacters = NSCharacterSet.newlineCharacterSet;
+
+	while(currentLine < lineNumber && index < length)
+	{
+		NSRange range = [content rangeOfCharacterFromSet:newlineCharacters options:0 range:NSMakeRange(index, length - index)];
+		if(range.location == NSNotFound)
+			return 0;
+
+		index = NSMaxRange(range);
+		if([content characterAtIndex:range.location] == '\r' && index < length && [content characterAtIndex:index] == '\n')
+			++index;
+		++currentLine;
+	}
+
+	NSUInteger indent = 0;
+	tabSize = tabSize ?: 4;
+	while(index < length)
+	{
+		unichar ch = [content characterAtIndex:index];
+		if(ch == ' ')
+			++indent;
+		else if(ch == '\t')
+			indent += tabSize;
+		else if(ch == 0x2003) // Em-space
+			++indent;
+		else
+			break;
+		++index;
+	}
+	return indent;
+}
+
 @interface OTVScopeBar : OakBackgroundFillView
 @property (nonatomic) NSString* scopePath;
 @property (nonatomic) CGFloat gutterWidth;
@@ -398,22 +448,18 @@ static CGFloat const kScopeBarHeight = 21;
 {
 	text::selection_t sel(to_s(_textView.selectionString));
 	text::pos_t caret = sel.last().max();
+	NSString* content = self.document.content ?: @"";
 
 	NSMutableArray* scopeStack = [NSMutableArray array];
 	[self.document enumerateSymbolsUsingBlock:^(text::pos_t const& pos, NSString* symbol){
 		if(caret < pos || [symbol isEqualToString:@"-"])
 			return;
 
-		NSUInteger indent = 0;
-		while(indent < symbol.length)
-		{
-			unichar ch = [symbol characterAtIndex:indent];
-			if(ch != ' ' && ch != '\t' && ch != 0x2003) // Em-space
-				break;
-			++indent;
-		}
+		NSUInteger symbolIndent = OTVSymbolTextIndent(symbol);
+		NSUInteger lineIndent   = OTVLineIndent(content, pos.line, self.document.tabSize);
+		NSUInteger indent       = std::max(symbolIndent, lineIndent);
 
-		NSString* title = [[symbol substringFromIndex:indent] stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+		NSString* title = [[symbol substringFromIndex:symbolIndent] stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
 		if(title.length == 0)
 			return;
 
