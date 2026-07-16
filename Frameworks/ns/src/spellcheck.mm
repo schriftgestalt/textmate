@@ -47,7 +47,7 @@ namespace ns
 	{
 		NSSpellChecker* spellChecker = NSSpellChecker.sharedSpellChecker;
 		NSString* lang               = language.length() ? [NSString stringWithCxxString:language] : nil;
-		NSString* str                = [NSString stringWithUTF8String:first length:last - first];
+		NSString* str                = [NSString stringWithUTF8String:first length:(NSUInteger)(last - first)];
 		NSRange range                = [spellChecker checkSpellingOfString:str startingAt:0 language:lang wrap:NO inSpellDocumentWithTag:tag wordCount:NULL];
 
 		while(range.location != NSNotFound && range.length)

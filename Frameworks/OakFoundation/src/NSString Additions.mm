@@ -3,7 +3,7 @@
 #import <oak/oak.h>
 
 @implementation NSString (Additions)
-+ (NSString*)stringWithUTF8String:(char const*)aString length:(unsigned)aLength
++ (NSString*)stringWithUTF8String:(char const*)aString length:(NSUInteger)aLength
 {
 	ASSERT(utf8::is_valid(aString, aString + aLength));
 
@@ -21,6 +21,6 @@
 
 + (NSString*)stringWithCxxString:(std::string const&)aString
 {
-	return aString == NULL_STR ? nil : [self stringWithUTF8String:aString.data() length:aString.size()];
+	return aString == NULL_STR ? nil : [self stringWithUTF8String:aString.data() length:(NSUInteger)aString.size()];
 }
 @end
