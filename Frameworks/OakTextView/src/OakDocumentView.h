@@ -7,6 +7,8 @@
 @property (nonatomic, readonly) OakTextView* textView;
 @property (nonatomic) OakDocument* document;
 @property (nonatomic) BOOL hideStatusBar;
+@property (nonatomic, readonly) NSView* scopeBarView;
+@property (nonatomic) BOOL showsScopeBar;
 - (IBAction)toggleLineNumbers:(id)sender;
 - (IBAction)takeTabSizeFrom:(id)sender;
 - (IBAction)showTabSizeSelectorPanel:(id)sender;

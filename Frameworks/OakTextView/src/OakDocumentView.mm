@@ -26,6 +26,79 @@ static NSString* const kUserDefaultsLineNumberFontNameKey    = @"lineNumberFontN
 static NSString* const kBookmarksColumnIdentifier = @"bookmarks";
 static NSString* const kFoldingsColumnIdentifier  = @"foldings";
 static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
+static CGFloat const kScopeBarHeight = 21;
+
+@interface OTVScopeBar : OakBackgroundFillView
+@property (nonatomic) NSString* scopePath;
+@property (nonatomic) CGFloat gutterWidth;
+@end
+
+@implementation OTVScopeBar
+{
+	NSLayoutConstraint* _gutterWidthConstraint;
+	NSTextField* _scopeField;
+	NSView* _divider;
+}
+
+- (id)initWithFrame:(NSRect)aRect
+{
+	if(self = [super initWithFrame:aRect])
+	{
+		self.style = OakBackgroundFillViewStyleHeader;
+		self.accessibilityLabel = @"Scope Bar";
+
+		_divider = OakCreateNSBoxSeparator();
+
+		NSView* gutterSpacer = [[NSView alloc] initWithFrame:NSZeroRect];
+
+		_scopeField = OakCreateLabel(@"", OakStatusBarFont(), NSTextAlignmentLeft, NSLineBreakByTruncatingTail);
+		_scopeField.accessibilityLabel = @"Current Scope";
+		[_scopeField setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
+
+		if(@available(macOS 10.14, *))
+			_scopeField.textColor = NSColor.secondaryLabelColor;
+
+		NSDictionary* views = @{
+			@"divider": _divider,
+			@"gutter":  gutterSpacer,
+			@"scope":   _scopeField,
+		};
+
+		OakAddAutoLayoutViewsToSuperview([views allValues], self);
+		_gutterWidthConstraint = [gutterSpacer.widthAnchor constraintEqualToConstant:0];
+		_gutterWidthConstraint.active = YES;
+		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[divider]|" options:0 metrics:nil views:views]];
+		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[gutter]-(8)-[scope]-(8)-|" options:0 metrics:nil views:views]];
+		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[gutter]|" options:0 metrics:nil views:views]];
+		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scope(>=16)]-(4)-[divider(==1)]|" options:0 metrics:nil views:views]];
+	}
+	return self;
+}
+
+- (void)setScopePath:(NSString*)scopePath
+{
+	if(_scopePath == scopePath || [_scopePath isEqualToString:scopePath])
+		return;
+
+	_scopePath = [scopePath copy];
+	_scopeField.stringValue = _scopePath.length ? _scopePath : @"No Symbol";
+	_scopeField.toolTip = _scopePath;
+}
+
+- (void)setGutterWidth:(CGFloat)gutterWidth
+{
+	if(_gutterWidth == gutterWidth)
+		return;
+
+	_gutterWidth = gutterWidth;
+	_gutterWidthConstraint.constant = gutterWidth;
+}
+
+- (NSSize)intrinsicContentSize
+{
+	return NSMakeSize(NSViewNoIntrinsicMetric, kScopeBarHeight);
+}
+@end
 
 @interface OakDocumentView () <NSAccessibilityGroup, GutterViewDelegate, GutterViewColumnDataSource, GutterViewColumnDelegate, OTVStatusBarDelegate>
 {
@@ -40,8 +113,11 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 	IBOutlet NSPanel* tabSizeSelectorPanel;
 }
 @property (nonatomic, readonly) OTVStatusBar* statusBar;
+@property (nonatomic) OTVScopeBar* scopeBar;
 @property (nonatomic) SymbolChooser* symbolChooser;
 @property (nonatomic) NSArray* observedKeys;
+- (void)updateScopeBarGutterWidth;
+- (void)updateScopeBar;
 - (void)updateStyle;
 @end
 
@@ -81,8 +157,13 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 		_statusBar.delegate = self;
 		_statusBar.target = self;
 
+		self.scopeBar = [[OTVScopeBar alloc] initWithFrame:NSZeroRect];
+		topAuxiliaryViews = [NSMutableArray new];
+		bottomAuxiliaryViews = [NSMutableArray new];
+
 		OakAddAutoLayoutViewsToSuperview(@[ textScrollView, _statusBar ], self);
-		OakSetupKeyViewLoop(@[ self, _textView, _statusBar ]);
+		self.showsScopeBar = YES;
+		OakSetupKeyViewLoop(@[ self, _textView, self.scopeBar, _statusBar ]);
 
 		self.document = [OakDocument documentWithString:@"" fileType:@"text.plain" customName:@"placeholder"];
 
@@ -93,10 +174,39 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 	return self;
 }
 
+- (NSView*)scopeBarView
+{
+	return self.scopeBar;
+}
+
+- (BOOL)showsScopeBar
+{
+	return [topAuxiliaryViews containsObject:self.scopeBar];
+}
+
+- (void)setShowsScopeBar:(BOOL)showsScopeBar
+{
+	if(self.showsScopeBar == showsScopeBar)
+		return;
+
+	if(showsScopeBar)
+	{
+		[topAuxiliaryViews insertObject:self.scopeBar atIndex:0];
+		OakAddAutoLayoutViewsToSuperview(@[ self.scopeBar ], self);
+	}
+	else
+	{
+		[topAuxiliaryViews removeObject:self.scopeBar];
+		[self.scopeBar removeFromSuperview];
+	}
+	[self setNeedsUpdateConstraints:YES];
+}
+
 - (void)updateConstraints
 {
 	[self removeConstraints:[self constraints]];
 	[super updateConstraints];
+	[self updateScopeBarGutterWidth];
 
 	NSMutableArray* stackedViews = [NSMutableArray array];
 	[stackedViews addObjectsFromArray:topAuxiliaryViews];
@@ -200,6 +310,7 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 	gutterImages = nil; // force image sizes to be recalculated
 	gutterView.lineNumberFont = [NSFont fontWithName:lineNumberFontName size:round(scaleFactor * [_textView.font pointSize] * _textView.fontScaleFactor)];
 	[gutterView reloadData:self];
+	[self updateScopeBarGutterWidth];
 }
 
 - (IBAction)makeTextLarger:(id)sender
@@ -244,10 +355,12 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 		[gutterView setHighlightedRange:to_s(str ?: @"1")];
 		[_statusBar setSelectionString:str];
 		_symbolChooser.selectionString = str;
+		[self updateScopeBar];
 	}
 	else if([aKeyPath isEqualToString:@"symbol"])
 	{
 		_statusBar.symbolName = _textView.symbol;
+		[self updateScopeBar];
 	}
 	else if([aKeyPath isEqualToString:@"recordingMacro"])
 	{
@@ -267,7 +380,7 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 	}
 	else if([aKeyPath isEqualToString:@"themeUUID"])
 	{
-		[self updateStyle];
+		//[self updateStyle];
 	}
 }
 
@@ -279,6 +392,52 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 
 	self.document = nil;
 	self.symbolChooser = nil;
+}
+
+- (void)updateScopeBar
+{
+	text::selection_t sel(to_s(_textView.selectionString));
+	text::pos_t caret = sel.last().max();
+
+	NSMutableArray* scopeStack = [NSMutableArray array];
+	[self.document enumerateSymbolsUsingBlock:^(text::pos_t const& pos, NSString* symbol){
+		if(caret < pos || [symbol isEqualToString:@"-"])
+			return;
+
+		NSUInteger indent = 0;
+		while(indent < symbol.length)
+		{
+			unichar ch = [symbol characterAtIndex:indent];
+			if(ch != ' ' && ch != '\t' && ch != 0x2003) // Em-space
+				break;
+			++indent;
+		}
+
+		NSString* title = [[symbol substringFromIndex:indent] stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+		if(title.length == 0)
+			return;
+
+		while(scopeStack.count)
+		{
+			NSNumber* lastIndent = [scopeStack.lastObject objectForKey:@"indent"];
+			if(lastIndent.unsignedIntegerValue < indent)
+				break;
+			[scopeStack removeLastObject];
+		}
+
+		[scopeStack addObject:@{ @"indent": @(indent), @"title": title }];
+	}];
+
+	NSMutableArray* titles = [NSMutableArray arrayWithCapacity:scopeStack.count];
+	for(NSDictionary* item in scopeStack)
+		[titles addObject:item[@"title"]];
+
+	self.scopeBar.scopePath = [titles componentsJoinedByString:@" > "];
+}
+
+- (void)updateScopeBarGutterWidth
+{
+	self.scopeBar.gutterWidth = (textScrollView.rulersVisible && textScrollView.hasVerticalRuler) ? gutterView.requiredThickness : 0;
 }
 
 - (void)setDocument:(OakDocument*)aDocument
@@ -305,6 +464,7 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 
 	[_textView setDocument:self.document];
 	[gutterView reloadData:self];
+	[self updateScopeBarGutterWidth];
 	[self updateStyle];
 
 	if(_symbolChooser)
@@ -369,6 +529,7 @@ static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
 	if(isVisibleFlag)
 			[NSUserDefaults.standardUserDefaults removeObjectForKey:@"DocumentView Disable Line Numbers"];
 	else	[NSUserDefaults.standardUserDefaults setObject:@YES forKey:@"DocumentView Disable Line Numbers"];
+	[self updateScopeBarGutterWidth];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem*)aMenuItem

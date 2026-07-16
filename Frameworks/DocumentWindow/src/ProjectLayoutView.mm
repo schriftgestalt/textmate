@@ -28,6 +28,7 @@ static NSColor* DividerColor ()
 @property (nonatomic) NSSplitViewItem* documentViewItem;
 @property (nonatomic) NSSplitViewItem* fileBrowserViewItem;
 @property (nonatomic) NSSplitViewItem* htmlOutputViewItem;
+@property (nonatomic) NSSplitViewItemAccessoryViewController* documentTopAccessoryViewController API_AVAILABLE(macos(26.0));
 @property (nonatomic) BOOL needsFileBrowserResize;
 @property (nonatomic) BOOL needsHTMLOutputResize;
 @end
@@ -98,7 +99,10 @@ static NSColor* DividerColor ()
 	{
 		OakAddAutoLayoutViewsToSuperview(@[ view ], viewController.view);
 		[viewController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{ @"view": view }]];
-		[viewController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{ @"view": view }]];
+
+		NSLayoutYAxisAnchor* topAnchor = viewController == _documentViewController && _documentTopAccessoryView ? viewController.view.safeAreaLayoutGuide.topAnchor : viewController.view.topAnchor;
+		[view.topAnchor constraintEqualToAnchor:topAnchor].active = YES;
+		[view.bottomAnchor constraintEqualToAnchor:viewController.view.bottomAnchor].active = YES;
 	}
 }
 
@@ -122,6 +126,44 @@ static NSColor* DividerColor ()
 	_documentView = aDocumentView;
 	[self replaceViewController:_documentViewController view:_documentView];
 	[self updateKeyViewLoop];
+}
+
+- (void)setDocumentTopAccessoryView:(NSView*)aDocumentTopAccessoryView
+{
+	if(_documentTopAccessoryView == aDocumentTopAccessoryView)
+		return;
+
+	_documentTopAccessoryView = aDocumentTopAccessoryView;
+
+	if(@available(macOS 26.0, *))
+	{
+		if(_documentTopAccessoryViewController)
+		{
+			NSUInteger index = [_documentViewItem.topAlignedAccessoryViewControllers indexOfObject:_documentTopAccessoryViewController];
+			if(index != NSNotFound)
+				[_documentViewItem removeTopAlignedAccessoryViewControllerAtIndex:index];
+			else
+				[_documentTopAccessoryViewController removeFromParentViewController];
+			_documentTopAccessoryViewController = nil;
+		}
+
+		if(_documentTopAccessoryView)
+		{
+			_documentViewItem.automaticallyAdjustsSafeAreaInsets = YES;
+			_documentTopAccessoryViewController = [[NSSplitViewItemAccessoryViewController alloc] initWithNibName:nil bundle:nil];
+			_documentTopAccessoryViewController.automaticallyAppliesContentInsets = NO;
+			_documentTopAccessoryViewController.view = _documentTopAccessoryView;
+			[_documentTopAccessoryViewController.view setFrameSize:_documentTopAccessoryViewController.view.fittingSize];
+			[_documentViewItem addTopAlignedAccessoryViewController:_documentTopAccessoryViewController];
+		}
+		else
+		{
+			_documentViewItem.automaticallyAdjustsSafeAreaInsets = NO;
+		}
+	}
+
+	if(_documentView)
+		[self replaceViewController:_documentViewController view:_documentView];
 }
 
 - (void)setFileBrowserView:(NSView*)aFileBrowserView

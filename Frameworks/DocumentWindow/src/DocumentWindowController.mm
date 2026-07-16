@@ -224,6 +224,11 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 
 		self.layoutView = [[ProjectLayoutView alloc] init];
 		self.layoutView.documentView = self.documentView;
+		if(@available(macOS 26.0, *))
+		{
+			self.documentView.showsScopeBar = NO;
+			self.layoutView.documentTopAccessoryView = self.documentView.scopeBarView;
+		}
 
 		NSUInteger windowStyle = (NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskResizable|NSWindowStyleMaskMiniaturizable);
 		windowStyle |= NSWindowStyleMaskFullSizeContentView;
