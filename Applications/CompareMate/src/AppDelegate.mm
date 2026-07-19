@@ -116,6 +116,27 @@
 				},
 			}
 		},
+		{ @"Changes",
+			.submenu = {
+				MBMenuItem{ @"Previous Change", @selector(previousChange:) }
+					.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption)
+					.withKey(NSUpArrowFunctionKey)
+					.withTarget(self),
+				MBMenuItem{ @"Next Change", @selector(nextChange:) }
+					.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption)
+					.withKey(NSDownArrowFunctionKey)
+					.withTarget(self),
+				{ /* -------- */ },
+				MBMenuItem{ @"Copy Change to Left", @selector(copyChangeToLeft:) }
+					.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption)
+					.withKey(NSLeftArrowFunctionKey)
+					.withTarget(self),
+				MBMenuItem{ @"Copy Change to Right", @selector(copyChangeToRight:) }
+					.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption)
+					.withKey(NSRightArrowFunctionKey)
+					.withTarget(self),
+			}
+		},
 		{ @"Format",
 			.submenu = {
 				{ @"Font",
@@ -257,6 +278,32 @@
 		[windowController showWindow:weakSelf];
 	}];
 	[self.comparisonChooserController showWindow:sender];
+}
+
+- (WindowController*)activeComparisonWindowController
+{
+	NSWindowController* windowController = NSApp.keyWindow.windowController;
+	return [windowController isKindOfClass:WindowController.class] ? (WindowController*)windowController : nil;
+}
+
+- (IBAction)nextChange:(id)sender
+{
+	[[self activeComparisonWindowController] nextChange:sender];
+}
+
+- (IBAction)previousChange:(id)sender
+{
+	[[self activeComparisonWindowController] previousChange:sender];
+}
+
+- (IBAction)copyChangeToLeft:(id)sender
+{
+	[[self activeComparisonWindowController] copyChangeToLeft:sender];
+}
+
+- (IBAction)copyChangeToRight:(id)sender
+{
+	[[self activeComparisonWindowController] copyChangeToRight:sender];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)sender
