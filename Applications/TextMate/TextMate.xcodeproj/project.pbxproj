@@ -655,6 +655,7 @@
 		56A4DC8D2B595A010049910C /* InstallBundleItems.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DA782B595A000049910C /* InstallBundleItems.mm */; };
 		56A4DD5F2B596F9A0049910C /* KVDBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DCB22B596F990049910C /* KVDBFunctions.m */; };
 		56A4DD602B596F9A0049910C /* kvdb.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A4DCB32B596F990049910C /* kvdb.m */; };
+		56D2239E300D1FB7006F75AD /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 56D2239D300D1FB7006F75AD /* AppIcon.icon */; };
 		570DC0359D3F18878789E5BB /* OakSavePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D6FC2B5959FE0049910C /* OakSavePanel.mm */; };
 		57D28C2698E1FD311B2E1896 /* spelling.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9202B5959FF0049910C /* spelling.cc */; };
 		57DB660FAA6E7D49EC12CBF9 /* parser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7392B5959FE0049910C /* parser.cc */; };
@@ -2156,6 +2157,7 @@
 		56A4DCB92B596F990049910C /* FilesTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesTestCase.m; sourceTree = "<group>"; };
 		56A4DCBA2B596F990049910C /* DatabaseTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTestCase.m; sourceTree = "<group>"; };
 		56A4DCBB2B596F990049910C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		56D2239D300D1FB7006F75AD /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		5BD3F2824F7E55FB1AECC257 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		605111C79E5550B65B6529C1 /* AppDelegate.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = AppDelegate.mm; sourceTree = "<group>"; };
 		6DBEEAC1104A8C93B73F9CE8 /* PreviewProvider.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewProvider.mm; sourceTree = "<group>"; };
@@ -4558,10 +4560,10 @@
 		D8C937FC23F0DD4898A74CF7 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				56D2239D300D1FB7006F75AD /* AppIcon.icon */,
 				35DB48B68473F6CF26516974 /* MainMenu.xib */,
 				A79B3841EB3E761D12CC0E2A /* InfoPlist.strings */,
 			);
-			name = resources;
 			path = resources;
 			sourceTree = "<group>";
 		};
@@ -4590,7 +4592,6 @@
 				A8471214237C43B7462C105A /* NewComparisonWindowController.h */,
 				36CC25BF908200E4162E218A /* NewComparisonWindowController.mm */,
 			);
-			name = src;
 			path = src;
 			sourceTree = "<group>";
 		};
@@ -4973,6 +4974,7 @@
 				DA86AC1EB29E8C2C3CE736B3 /* Settings.png in Resources */,
 				21C9DE631B7EDC1DF62E894B /* Theme@2x.png in Resources */,
 				2306FB5025ACC2EC45837680 /* CommandProperties.xib in Resources */,
+				56D2239E300D1FB7006F75AD /* AppIcon.icon in Resources */,
 				60B69E4615AE69A215D52A6D /* SCMTemplate@2x.png in Resources */,
 				E42B5940CC181CE4EE31ABB7 /* TabCloseThin_Pressed_Template.png in Resources */,
 				F3A054B7ED602039E65F3F56 /* Charsets.plist in Resources */,
@@ -6241,6 +6243,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4602DF0AC6500DCE20D /* debug.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/../CompareMate/Info.plist";
@@ -6330,6 +6333,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5656C4612DF0AC6500DCE20D /* release.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/../CompareMate/Info.plist";
