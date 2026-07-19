@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import "NewComparisonWindowController.h"
 #import "WindowController.h"
 #import <MenuBuilder/src/MenuBuilder.h>
 #import <BundlesManager/src/BundlesManager.h>
@@ -7,6 +8,9 @@
 
 @interface AppDelegate () <NSApplicationDelegate, NSWindowDelegate>
 @property (nonatomic) NSWindow* window;
+@property (nonatomic) NewComparisonWindowController* comparisonChooserController;
+@property (nonatomic) BOOL applicationFinishedLaunching;
+@property (nonatomic) BOOL applicationFinishedRestoringWindows;
 @end
 
 @implementation AppDelegate
@@ -15,6 +19,7 @@
 	settings_t::set_default_settings_path([[[NSBundle mainBundle] pathForResource:@"Default" ofType:@"tmProperties"] fileSystemRepresentation]);
 	settings_t::set_global_settings_path(path::join(path::home(), "Library/Application Support/TextMate/Global.tmProperties"));
 	[BundlesManager.sharedInstance loadBundlesIndex];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationDidFinishRestoringWindows:) name:NSApplicationDidFinishRestoringWindowsNotification object:NSApp];
 
 	MBMenu const items = {
 		{ @"CompareMate",
@@ -34,7 +39,7 @@
 		},
 		{ @"File",
 			.submenu = {
-				{ @"New",             @selector(newDocument:),           @"n"   },
+				{ @"New Comparison…", @selector(newComparison:),         @"n", .target = self },
 				{ @"Open…",           @selector(openDocument:),          @"o"   },
 				{ @"Open Recent",
 					.systemMenu = MBMenuTypeOpenRecent, .submenu = {
@@ -214,7 +219,53 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification
 {
-	WindowController* windowController = [[WindowController alloc] init];
-	[windowController showWindow:self];
+	self.applicationFinishedLaunching = YES;
+	[self showInitialWindowIfReady];
+}
+
+- (void)applicationDidFinishRestoringWindows:(NSNotification*)notification
+{
+	self.applicationFinishedRestoringWindows = YES;
+	[self showInitialWindowIfReady];
+}
+
+- (void)showInitialWindowIfReady
+{
+	if(!self.applicationFinishedLaunching || !self.applicationFinishedRestoringWindows)
+		return;
+
+	for(NSWindow* window in NSApp.windows)
+	{
+		if([window.windowController isKindOfClass:WindowController.class])
+			return;
+	}
+
+	[self newComparison:self];
+}
+
+- (IBAction)newComparison:(id)sender
+{
+	if(self.comparisonChooserController.window.isVisible)
+	{
+		[self.comparisonChooserController.window makeKeyAndOrderFront:sender];
+		return;
+	}
+
+	__weak AppDelegate* weakSelf = self;
+	self.comparisonChooserController = [[NewComparisonWindowController alloc] initWithCompletionHandler:^(NSString* leftPath, NSString* rightPath) {
+		WindowController* windowController = [[WindowController alloc] initWithLeftPath:leftPath rightPath:rightPath];
+		[windowController showWindow:weakSelf];
+	}];
+	[self.comparisonChooserController showWindow:sender];
+}
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)sender
+{
+	return YES;
+}
+
+- (BOOL)applicationSupportsSecureRestorableState:(NSApplication*)app
+{
+	return YES;
 }
 @end

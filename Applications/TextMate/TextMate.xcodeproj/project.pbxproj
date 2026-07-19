@@ -45,6 +45,7 @@
 		12F0FA85626F02D31EBF4AAF /* format.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43E2DF0879500DCE20D /* format.cc */; };
 		136563E104F0D0511CFA9FBC /* libonig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4262DF05D2E00DCE20D /* libonig.a */; };
 		139AB3E8045EA54C14BC13EE /* parse_glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7342B5959FE0049910C /* parse_glob.cc */; };
+		13CE32A5AD42FC1D9C3094A7 /* NewComparisonWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 36CC25BF908200E4162E218A /* NewComparisonWindowController.mm */; };
 		13FF5B1DA39D3BA8D208C606 /* Shell Script.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013E /* Shell Script.tmbundle */; };
 		14D7AF6F17982EF9FFCBA91E /* marks.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9192B5959FF0049910C /* marks.cc */; };
 		14E6E0756E9D84C81E1DCD14 /* TabOverflowThinTemplate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D8AE2B5959FF0049910C /* TabOverflowThinTemplate@2x.png */; };
@@ -1329,6 +1330,7 @@
 		1EFDEBAA6741B3596F45FDA2 /* ViewController.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = ViewController.mm; sourceTree = "<group>"; };
 		2AC0083D226B1DF7B6FE3593 /* QuickLook.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = QuickLook.entitlements; sourceTree = "<group>"; };
 		35DB48B68473F6CF26516974 /* MainMenu.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = MainMenu.xib; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		36CC25BF908200E4162E218A /* NewComparisonWindowController.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = NewComparisonWindowController.mm; sourceTree = "<group>"; };
 		378D2D67D4D92A8FCEB06514 /* QuickLookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookUI.framework; path = System/Library/Frameworks/QuickLookUI.framework; sourceTree = SDKROOT; };
 		3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = System/Library/Frameworks/ExceptionHandling.framework; sourceTree = SDKROOT; };
 		459247091B895CB06FFDCC1F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
@@ -2163,6 +2165,7 @@
 		904896976C01AF944B13718E /* TextMateQuickLookThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TextMateQuickLookThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		95857C9CF0768909EDD0D4BD /* OSAKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSAKit.framework; path = System/Library/Frameworks/OSAKit.framework; sourceTree = SDKROOT; };
 		A79B3841EB3E761D12CC0E2A /* InfoPlist.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A8471214237C43B7462C105A /* NewComparisonWindowController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = NewComparisonWindowController.h; sourceTree = "<group>"; };
 		ABCDEF000000000000000050 /* bl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bl; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABCDEF000000000000000051 /* bl.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; path = bl.cc; sourceTree = "<group>"; };
 		ABCDEF000000000000000095 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -4584,6 +4587,8 @@
 				085773496819D5B552363928 /* WindowController.mm */,
 				76DAB02BFBB5384976DB690E /* ViewController.h */,
 				1EFDEBAA6741B3596F45FDA2 /* ViewController.mm */,
+				A8471214237C43B7462C105A /* NewComparisonWindowController.h */,
+				36CC25BF908200E4162E218A /* NewComparisonWindowController.mm */,
 			);
 			name = src;
 			path = src;
@@ -5919,6 +5924,7 @@
 				BF7CA6574680421F315035E9 /* AppDelegate.mm in Sources */,
 				B0F2A3011BAC90922B9D8199 /* WindowController.mm in Sources */,
 				CD3D17F6A2510CFF4C0A7044 /* ViewController.mm in Sources */,
+				13CE32A5AD42FC1D9C3094A7 /* NewComparisonWindowController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
