@@ -218,12 +218,12 @@ OakRolloverButton* OakCreateCloseButton (NSString* accessibilityLabel)
 		_visualEffectBackgroundView = nil;
 	}
 
-	if(self.style == OakBackgroundFillViewStyleHeader)
+	if(self.style == OakBackgroundFillViewStyleHeader || self.style == OakBackgroundFillViewStyleTitlebar)
 	{
 		if(@available(macOS 10.14, *))
 		{
 			NSVisualEffectView* effectView = [[NSVisualEffectView alloc] initWithFrame:[self bounds]];
-			effectView.material     = NSVisualEffectMaterialHeaderView; // MAC_OS_X_VERSION_10_14
+			effectView.material     = self.style == OakBackgroundFillViewStyleTitlebar ? NSVisualEffectMaterialTitlebar : NSVisualEffectMaterialHeaderView;
 			effectView.blendingMode = NSVisualEffectBlendingModeBehindWindow;
 			_visualEffectBackgroundView = effectView;
 			[_visualEffectBackgroundView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];

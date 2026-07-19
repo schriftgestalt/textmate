@@ -244,6 +244,8 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		_titlebarViewController.view = [OakTabBarAccessoryView accessoryViewWithTabBarView:self.tabBarView];
 		[_titlebarViewController.view setFrameSize:_titlebarViewController.view.fittingSize];
 		_titlebarViewController.fullScreenMinHeight = tabBarHeight;
+		if(@available(macOS 26.1, *))
+			_titlebarViewController.preferredScrollEdgeEffectStyle = NSScrollEdgeEffectStyle.softStyle;
 		[self.window addTitlebarAccessoryViewController:_titlebarViewController];
 
 		OakAddAutoLayoutViewsToSuperview(@[ self.layoutView.view ], self.window.contentView);
@@ -266,6 +268,8 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(fileBrowserWillDelete:) name:FileBrowserWillDeleteNotification object:nil];
 
 		[self userDefaultsDidChange:nil];
+
+		self.window.titlebarSeparatorStyle = NSTitlebarSeparatorStyleAutomatic;
 	}
 	return self;
 }

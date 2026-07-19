@@ -67,11 +67,15 @@ static NSColor* DividerColor ()
 		_documentViewItem = [NSSplitViewItem splitViewItemWithViewController:_documentViewController];
 		_documentViewItem.minimumThickness = 100;
 		_documentViewItem.holdingPriority  = NSLayoutPriorityDefaultLow - 1;
+		if(@available(macOS 11.0, *))
+			_documentViewItem.titlebarSeparatorStyle = NSTitlebarSeparatorStyleNone;
 		[_contentSplitViewController addSplitViewItem:_documentViewItem];
 
 		_contentSplitViewItem = [NSSplitViewItem contentListWithViewController:_contentSplitViewController];
 		_contentSplitViewItem.minimumThickness = 100;
 		_contentSplitViewItem.holdingPriority  = NSLayoutPriorityDefaultLow - 1;
+		if(@available(macOS 11.0, *))
+			_contentSplitViewItem.titlebarSeparatorStyle = NSTitlebarSeparatorStyleNone;
 		[self addSplitViewItem:_contentSplitViewItem];
 	}
 	return self;
@@ -152,6 +156,8 @@ static NSColor* DividerColor ()
 			_documentViewItem.automaticallyAdjustsSafeAreaInsets = YES;
 			_documentTopAccessoryViewController = [[NSSplitViewItemAccessoryViewController alloc] initWithNibName:nil bundle:nil];
 			_documentTopAccessoryViewController.automaticallyAppliesContentInsets = NO;
+			if(@available(macOS 26.1, *))
+				_documentTopAccessoryViewController.preferredScrollEdgeEffectStyle = NSScrollEdgeEffectStyle.softStyle;
 			_documentTopAccessoryViewController.view = _documentTopAccessoryView;
 			[_documentTopAccessoryViewController.view setFrameSize:_documentTopAccessoryViewController.view.fittingSize];
 			[_documentViewItem addTopAlignedAccessoryViewController:_documentTopAccessoryViewController];
