@@ -1,6 +1,8 @@
 extern NSString* GVColumnDataSourceDidChange;
 extern NSString* GVLineNumbersColumnIdentifier;
 
+@class GutterView;
+
 struct GVLineRecord
 {
 	GVLineRecord (NSUInteger lineNumber = NSNotFound, NSUInteger softlineOffset = 0, CGFloat firstY = 0, CGFloat lastY = 0, CGFloat baseline = 0) : lineNumber(lineNumber), softlineOffset(softlineOffset), firstY(firstY), lastY(lastY), baseline(baseline) { }
@@ -16,6 +18,8 @@ struct GVLineRecord
 - (GVLineRecord)lineRecordForPosition:(CGFloat)yPos;
 - (GVLineRecord)lineFragmentForLine:(NSUInteger)aLine column:(NSUInteger)aColumn;
 - (NSColor*)backgroundColorForLineRecord:(GVLineRecord)lineRecord;
+@optional
+- (void)gutterView:(GutterView*)gutterView drawBackgroundDecorationsInRect:(NSRect)dirtyRect;
 @end
 
 typedef NS_ENUM(NSUInteger, GutterViewRowState) {
@@ -48,6 +52,7 @@ typedef NS_ENUM(NSUInteger, GutterViewRowState) {
 @property (nonatomic) NSColor* selectionIconHoverColor;
 @property (nonatomic) NSColor* selectionIconPressedColor;
 @property (nonatomic) NSColor* selectionBorderColor;
+@property (nonatomic, copy) void (^backgroundDecorationDrawingBlock)(NSRect dirtyRect);
 - (void)setHighlightedRange:(std::string const&)str;
 - (void)reloadData:(id)sender;
 - (void)insertColumnWithIdentifier:(NSString*)columnIdentifier atPosition:(NSUInteger)index dataSource:(id <GutterViewColumnDataSource>)columnDataSource delegate:(id <GutterViewColumnDelegate>)columnDelegate;

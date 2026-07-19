@@ -22,6 +22,12 @@ enum OTVFontSmoothing : NSUInteger
 	OTVFontSmoothingDisabledForDarkHiDPI = 3,
 };
 
+typedef NS_ENUM(NSUInteger, OTVDecorationLayer)
+{
+	OTVDecorationLayerBackground,
+	OTVDecorationLayerForeground,
+};
+
 @protocol OakTextViewDelegate <NSObject>
 @optional
 - (NSString*)scopeAttributes;
@@ -44,6 +50,7 @@ enum OTVFontSmoothing : NSUInteger
 @property (nonatomic) BOOL                                  softWrap;
 @property (nonatomic) BOOL                                  scrollPastEnd;
 @property (nonatomic) BOOL                                  softTabs;
+@property (nonatomic, copy) void                            (^decorationDrawingBlock)(NSRect dirtyRect, OTVDecorationLayer layer);
 
 @property (nonatomic, readonly) BOOL                        hasMultiLineSelection;
 @property (nonatomic, readonly) BOOL                        hasSelection;
@@ -54,7 +61,10 @@ enum OTVFontSmoothing : NSUInteger
 
 - (GVLineRecord)lineRecordForPosition:(CGFloat)yPos;
 - (GVLineRecord)lineFragmentForLine:(NSUInteger)aLine column:(NSUInteger)aColumn;
+- (NSRect)rectForLine:(NSUInteger)lineNumber byteColumnRange:(NSRange)byteColumnRange;
+- (NSRect)caretRectForLine:(NSUInteger)lineNumber byteColumn:(NSUInteger)byteColumn;
 - (NSColor*)backgroundColorForLine:(NSUInteger)lineNumber;
+- (void)drawDiagnosticBackgroundInGutterRect:(NSRect)dirtyRect bounds:(NSRect)bounds;
 
 - (BOOL)filterDocumentThroughCommand:(NSString*)commandString input:(input::type)inputUnit output:(output::type)outputUnit;
 

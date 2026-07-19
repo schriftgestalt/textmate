@@ -383,6 +383,12 @@ static void DrawText (std::string const& text, CGRect const& rect, CGFloat basel
 		y = record.lastY;
 	}
 
+	if([(id)self.delegate respondsToSelector:@selector(gutterView:drawBackgroundDecorationsInRect:)])
+		[self.delegate gutterView:self drawBackgroundDecorationsInRect:aRect];
+
+	if(self.backgroundDecorationDrawingBlock)
+		self.backgroundDecorationDrawingBlock(aRect);
+
 	[self.selectionBackgroundColor set];
 	for(auto const& rect : backgroundRects)
 	{

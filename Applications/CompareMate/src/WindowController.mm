@@ -1,62 +1,58 @@
 #import "WindowController.h"
 #import <OakTextView/src/OakDocumentView.h>
+#import <OakTextView/src/GutterView.h>
 #import <document/src/OakDocument.h>
 
 static NSString* const LeftPathRestorationKey = @"CompareMate.leftPath";
 static NSString* const RightPathRestorationKey = @"CompareMate.rightPath";
 static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosition";
 
-@interface DiffHighlightView : NSView
+@interface DiffCharacterRange : NSObject
+@property (nonatomic) NSUInteger line;
+@property (nonatomic) NSRange byteColumns;
+@end
+
+@implementation DiffCharacterRange
+@end
+
+@interface DiffHighlightView : NSObject
 @property (nonatomic, weak) OakTextView* textView;
+@property (nonatomic, weak) GutterView* gutterView;
 @property (nonatomic, copy) NSIndexSet* highlightedLines;
 @property (nonatomic, copy) NSIndexSet* markerPositions;
 @property (nonatomic, copy) NSIndexSet* activeHighlightedLines;
 @property (nonatomic, copy) NSIndexSet* activeMarkerPositions;
+@property (nonatomic, copy) NSArray<DiffCharacterRange*>* characterRanges;
+@property (nonatomic, copy) NSArray<DiffCharacterRange*>* characterMarkers;
 @property (nonatomic) NSUInteger lineCount;
 @property (nonatomic) NSColor* highlightColor;
 @property (nonatomic) NSColor* markerColor;
 @property (nonatomic) NSColor* activeColor;
+@property (nonatomic) NSColor* characterColor;
 - (instancetype)initWithTextView:(OakTextView*)textView color:(NSColor*)color;
+- (void)drawBackgroundInRect:(NSRect)dirtyRect;
+- (void)drawForegroundInRect:(NSRect)dirtyRect;
+- (void)drawGutterBackgroundInRect:(NSRect)dirtyRect;
 @end
 
 @implementation DiffHighlightView
 - (instancetype)initWithTextView:(OakTextView*)textView color:(NSColor*)color
 {
-	if(self = [super initWithFrame:textView.bounds])
+	if(self = [super init])
 	{
 		_textView = textView;
 		_highlightedLines = NSIndexSet.indexSet;
 		_markerPositions = NSIndexSet.indexSet;
 		_activeHighlightedLines = NSIndexSet.indexSet;
 		_activeMarkerPositions = NSIndexSet.indexSet;
+		_characterRanges = @[];
+		_characterMarkers = @[];
 		_highlightColor = color;
 		_markerColor = [color colorWithAlphaComponent:0.85];
 		_activeColor = [NSColor.controlAccentColor colorWithAlphaComponent:0.38];
-		self.autoresizingMask = NSViewWidthSizable|NSViewHeightSizable;
-		self.accessibilityElement = NO;
+		_characterColor = [color colorWithAlphaComponent:0.52];
 	}
 	return self;
-}
-
-- (BOOL)isFlipped
-{
-	return YES;
-}
-
-- (BOOL)isOpaque
-{
-	return NO;
-}
-
-- (NSView*)hitTest:(NSPoint)point
-{
-	return nil;
-}
-
-- (void)setFrameSize:(NSSize)newSize
-{
-	[super setFrameSize:newSize];
-	self.needsDisplay = YES;
 }
 
 - (void)setHighlightedLines:(NSIndexSet*)highlightedLines
@@ -64,7 +60,8 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 	if([_highlightedLines isEqualToIndexSet:highlightedLines])
 		return;
 	_highlightedLines = [highlightedLines copy];
-	self.needsDisplay = YES;
+	self.textView.needsDisplay = YES;
+	self.gutterView.needsDisplay = YES;
 }
 
 - (void)setMarkerPositions:(NSIndexSet*)markerPositions
@@ -72,7 +69,8 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 	if([_markerPositions isEqualToIndexSet:markerPositions])
 		return;
 	_markerPositions = [markerPositions copy];
-	self.needsDisplay = YES;
+	self.textView.needsDisplay = YES;
+	self.gutterView.needsDisplay = YES;
 }
 
 - (void)setActiveHighlightedLines:(NSIndexSet*)activeHighlightedLines
@@ -80,7 +78,8 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 	if([_activeHighlightedLines isEqualToIndexSet:activeHighlightedLines])
 		return;
 	_activeHighlightedLines = [activeHighlightedLines copy];
-	self.needsDisplay = YES;
+	self.textView.needsDisplay = YES;
+	self.gutterView.needsDisplay = YES;
 }
 
 - (void)setActiveMarkerPositions:(NSIndexSet*)activeMarkerPositions
@@ -88,7 +87,20 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 	if([_activeMarkerPositions isEqualToIndexSet:activeMarkerPositions])
 		return;
 	_activeMarkerPositions = [activeMarkerPositions copy];
-	self.needsDisplay = YES;
+	self.textView.needsDisplay = YES;
+	self.gutterView.needsDisplay = YES;
+}
+
+- (void)setCharacterRanges:(NSArray<DiffCharacterRange*>*)characterRanges
+{
+	_characterRanges = [characterRanges copy];
+	self.textView.needsDisplay = YES;
+}
+
+- (void)setCharacterMarkers:(NSArray<DiffCharacterRange*>*)characterMarkers
+{
+	_characterMarkers = [characterMarkers copy];
+	self.textView.needsDisplay = YES;
 }
 
 - (void)setLineCount:(NSUInteger)lineCount
@@ -96,17 +108,17 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 	if(_lineCount == lineCount)
 		return;
 	_lineCount = lineCount;
-	self.needsDisplay = YES;
+	self.textView.needsDisplay = YES;
+	self.gutterView.needsDisplay = YES;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
+- (void)drawBackgroundInRect:(NSRect)dirtyRect
 {
-	[super drawRect:dirtyRect];
 	if(!self.textView)
 		return;
 
 	[self.highlightColor setFill];
-	NSRect const bounds = self.bounds;
+	NSRect const bounds = self.textView.bounds;
 	[self.highlightedLines enumerateIndexesUsingBlock:^(NSUInteger line, BOOL* stop) {
 		GVLineRecord const firstFragment = [self.textView lineFragmentForLine:line column:0];
 		if(firstFragment.lineNumber != line)
@@ -128,7 +140,46 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 			NSRectFillUsingOperation(lineRect, NSCompositingOperationSourceOver);
 	}];
 
+	[self.activeColor setFill];
+	[self.activeHighlightedLines enumerateIndexesUsingBlock:^(NSUInteger line, BOOL* stop) {
+		GVLineRecord const firstFragment = [self.textView lineFragmentForLine:line column:0];
+		if(firstFragment.lineNumber != line)
+			return;
+
+		CGFloat bottom = 0;
+		GVLineRecord const nextLine = [self.textView lineFragmentForLine:line + 1 column:0];
+		if(nextLine.lineNumber == line + 1)
+			bottom = nextLine.firstY;
+		else
+			bottom = [self.textView lineFragmentForLine:line column:NSUIntegerMax].lastY;
+
+		NSRect lineRect = NSIntersectionRect(NSMakeRect(NSMinX(bounds), firstFragment.firstY, NSWidth(bounds), MAX(1, bottom - firstFragment.firstY)), dirtyRect);
+		if(!NSIsEmptyRect(lineRect))
+			NSRectFillUsingOperation(lineRect, NSCompositingOperationSourceOver);
+	}];
+
+	[self.characterColor setFill];
+	for(DiffCharacterRange* range in self.characterRanges)
+	{
+		NSRect const layoutRect = [self.textView rectForLine:range.line byteColumnRange:range.byteColumns];
+		NSRect const characterRect = NSIntersectionRect(layoutRect, dirtyRect);
+		if(NSIsEmptyRect(characterRect))
+			continue;
+
+		NSRectFillUsingOperation(characterRect, NSCompositingOperationSourceOver);
+		NSRect const underlineRect = NSIntersectionRect(NSMakeRect(NSMinX(layoutRect), NSMaxY(layoutRect) - 2, NSWidth(layoutRect), 2), dirtyRect);
+		if(!NSIsEmptyRect(underlineRect))
+			NSRectFillUsingOperation(underlineRect, NSCompositingOperationSourceOver);
+	}
+}
+
+- (void)drawForegroundInRect:(NSRect)dirtyRect
+{
+	if(!self.textView)
+		return;
+
 	[self.markerColor setFill];
+	NSRect const bounds = self.textView.bounds;
 	[self.markerPositions enumerateIndexesUsingBlock:^(NSUInteger position, BOOL* stop) {
 		CGFloat y = 0;
 		if(position < self.lineCount)
@@ -148,30 +199,12 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 		else
 			return;
 
-		NSRect markerRect = NSMakeRect(NSMinX(bounds), y - 1, NSWidth(bounds), 2);
-		markerRect = NSIntersectionRect(markerRect, dirtyRect);
+		NSRect markerRect = NSIntersectionRect(NSMakeRect(NSMinX(bounds), y - 1, NSWidth(bounds), 2), dirtyRect);
 		if(!NSIsEmptyRect(markerRect))
 			NSRectFillUsingOperation(markerRect, NSCompositingOperationSourceOver);
 	}];
 
 	[self.activeColor setFill];
-	[self.activeHighlightedLines enumerateIndexesUsingBlock:^(NSUInteger line, BOOL* stop) {
-		GVLineRecord const firstFragment = [self.textView lineFragmentForLine:line column:0];
-		if(firstFragment.lineNumber != line)
-			return;
-
-		CGFloat bottom = 0;
-		GVLineRecord const nextLine = [self.textView lineFragmentForLine:line + 1 column:0];
-		if(nextLine.lineNumber == line + 1)
-			bottom = nextLine.firstY;
-		else
-			bottom = [self.textView lineFragmentForLine:line column:NSUIntegerMax].lastY;
-
-		NSRect lineRect = NSIntersectionRect(NSMakeRect(NSMinX(bounds), firstFragment.firstY, NSWidth(bounds), MAX(1, bottom - firstFragment.firstY)), dirtyRect);
-		if(!NSIsEmptyRect(lineRect))
-			NSRectFillUsingOperation(lineRect, NSCompositingOperationSourceOver);
-	}];
-
 	[self.activeMarkerPositions enumerateIndexesUsingBlock:^(NSUInteger position, BOOL* stop) {
 		CGFloat y = 0;
 		if(position < self.lineCount)
@@ -185,6 +218,58 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 		if(!NSIsEmptyRect(markerRect))
 			NSRectFillUsingOperation(markerRect, NSCompositingOperationSourceOver);
 	}];
+
+	[self.markerColor setFill];
+	for(DiffCharacterRange* marker in self.characterMarkers)
+	{
+		NSRect const caretRect = [self.textView caretRectForLine:marker.line byteColumn:marker.byteColumns.location];
+		NSRect const markerRect = NSIntersectionRect(NSMakeRect(NSMinX(caretRect) - 1, NSMinY(caretRect) + 1, 2, MAX(2, NSHeight(caretRect) - 2)), dirtyRect);
+		if(!NSIsEmptyRect(markerRect))
+			NSRectFillUsingOperation(markerRect, NSCompositingOperationSourceOver);
+	}
+}
+
+- (void)drawGutterBackgroundInRect:(NSRect)dirtyRect
+{
+	if(!self.textView || !self.gutterView)
+		return;
+
+	NSRect const bounds = self.gutterView.bounds;
+	void (^drawLines)(NSIndexSet*, NSColor*) = ^(NSIndexSet* lines, NSColor* color) {
+		[color setFill];
+		[lines enumerateIndexesUsingBlock:^(NSUInteger line, BOOL* stop) {
+			GVLineRecord const firstFragment = [self.textView lineFragmentForLine:line column:0];
+			if(firstFragment.lineNumber != line)
+				return;
+
+			GVLineRecord const nextLine = [self.textView lineFragmentForLine:line + 1 column:0];
+			CGFloat const bottom = nextLine.lineNumber == line + 1 ? nextLine.firstY : [self.textView lineFragmentForLine:line column:NSUIntegerMax].lastY;
+			NSRect const lineRect = NSIntersectionRect(NSMakeRect(NSMinX(bounds), firstFragment.firstY, NSWidth(bounds), MAX(1, bottom - firstFragment.firstY)), dirtyRect);
+			if(!NSIsEmptyRect(lineRect))
+				NSRectFillUsingOperation(lineRect, NSCompositingOperationSourceOver);
+		}];
+	};
+	drawLines(self.highlightedLines, self.highlightColor);
+	drawLines(self.activeHighlightedLines, self.activeColor);
+
+	void (^drawMarkers)(NSIndexSet*, CGFloat, NSColor*) = ^(NSIndexSet* positions, CGFloat thickness, NSColor* color) {
+		[color setFill];
+		[positions enumerateIndexesUsingBlock:^(NSUInteger position, BOOL* stop) {
+			CGFloat y = 0;
+			if(position < self.lineCount)
+				y = [self.textView lineFragmentForLine:position column:0].firstY;
+			else if(position == self.lineCount && self.lineCount != 0)
+				y = [self.textView lineFragmentForLine:self.lineCount - 1 column:NSUIntegerMax].lastY;
+			else
+				return;
+
+			NSRect const markerRect = NSIntersectionRect(NSMakeRect(NSMinX(bounds), y - thickness / 2, NSWidth(bounds), thickness), dirtyRect);
+			if(!NSIsEmptyRect(markerRect))
+				NSRectFillUsingOperation(markerRect, NSCompositingOperationSourceOver);
+		}];
+	};
+	drawMarkers(self.markerPositions, 2, self.markerColor);
+	drawMarkers(self.activeMarkerPositions, 4, self.activeColor);
 }
 @end
 
@@ -204,6 +289,107 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 
 @implementation DiffHunk
 @end
+
+@interface DiffCharacterToken : NSObject
+@property (nonatomic) NSString* string;
+@property (nonatomic) NSRange byteRange;
+@end
+
+@implementation DiffCharacterToken
+@end
+
+static NSArray<DiffCharacterToken*>* CharacterTokensForLine (NSString* line)
+{
+	NSMutableArray<DiffCharacterToken*>* tokens = [NSMutableArray array];
+	__block NSUInteger byteOffset = 0;
+	[line enumerateSubstringsInRange:NSMakeRange(0, line.length) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString* substring, NSRange substringRange, NSRange enclosingRange, BOOL* stop) {
+		NSUInteger const byteLength = [substring lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+		DiffCharacterToken* token = [[DiffCharacterToken alloc] init];
+		token.string = substring;
+		token.byteRange = NSMakeRange(byteOffset, byteLength);
+		[tokens addObject:token];
+		byteOffset += byteLength;
+	}];
+	return tokens;
+}
+
+static void AppendCharacterRange (NSArray<DiffCharacterToken*>* tokens, NSRange tokenRange, NSUInteger line, NSMutableArray<DiffCharacterRange*>* ranges)
+{
+	if(tokenRange.length == 0)
+		return;
+
+	DiffCharacterToken* first = tokens[tokenRange.location];
+	DiffCharacterToken* last = tokens[NSMaxRange(tokenRange) - 1];
+	DiffCharacterRange* range = [[DiffCharacterRange alloc] init];
+	range.line = line;
+	range.byteColumns = NSMakeRange(first.byteRange.location, NSMaxRange(last.byteRange) - first.byteRange.location);
+	[ranges addObject:range];
+}
+
+static NSUInteger ByteColumnForTokenBoundary (NSArray<DiffCharacterToken*>* tokens, NSUInteger tokenIndex)
+{
+	if(tokenIndex < tokens.count)
+		return tokens[tokenIndex].byteRange.location;
+	return tokens.count ? NSMaxRange(tokens.lastObject.byteRange) : 0;
+}
+
+static void AppendCharacterMarker (NSArray<DiffCharacterToken*>* tokens, NSUInteger tokenIndex, NSUInteger line, NSMutableArray<DiffCharacterRange*>* markers)
+{
+	DiffCharacterRange* marker = [[DiffCharacterRange alloc] init];
+	marker.line = line;
+	marker.byteColumns = NSMakeRange(ByteColumnForTokenBoundary(tokens, tokenIndex), 0);
+	[markers addObject:marker];
+}
+
+static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine, NSUInteger leftLineNumber, NSUInteger rightLineNumber, NSMutableArray<DiffCharacterRange*>* leftRanges, NSMutableArray<DiffCharacterRange*>* rightRanges, NSMutableArray<DiffCharacterRange*>* leftMarkers, NSMutableArray<DiffCharacterRange*>* rightMarkers)
+{
+	NSArray<DiffCharacterToken*>* leftTokens = CharacterTokensForLine(leftLine);
+	NSArray<DiffCharacterToken*>* rightTokens = CharacterTokensForLine(rightLine);
+	if(leftTokens.count + rightTokens.count > 8192)
+		return;
+
+	NSArray<NSString*>* leftCharacters = [leftTokens valueForKey:@"string"];
+	NSArray<NSString*>* rightCharacters = [rightTokens valueForKey:@"string"];
+	NSOrderedCollectionDifference<NSString*>* difference = [rightCharacters differenceFromArray:leftCharacters];
+	NSMutableIndexSet* removedCharacters = [NSMutableIndexSet indexSet];
+	NSMutableIndexSet* insertedCharacters = [NSMutableIndexSet indexSet];
+	for(NSOrderedCollectionChange<NSString*>* removal in difference.removals)
+		[removedCharacters addIndex:removal.index];
+	for(NSOrderedCollectionChange<NSString*>* insertion in difference.insertions)
+		[insertedCharacters addIndex:insertion.index];
+
+	NSUInteger leftIndex = 0;
+	NSUInteger rightIndex = 0;
+	while(leftIndex < leftTokens.count || rightIndex < rightTokens.count)
+	{
+		BOOL const leftChanged = leftIndex < leftTokens.count && [removedCharacters containsIndex:leftIndex];
+		BOOL const rightChanged = rightIndex < rightTokens.count && [insertedCharacters containsIndex:rightIndex];
+		if(leftIndex < leftTokens.count && rightIndex < rightTokens.count && !leftChanged && !rightChanged)
+		{
+			++leftIndex;
+			++rightIndex;
+			continue;
+		}
+
+		NSUInteger const leftStart = leftIndex;
+		NSUInteger const rightStart = rightIndex;
+		while(leftIndex < leftTokens.count && [removedCharacters containsIndex:leftIndex])
+			++leftIndex;
+		while(rightIndex < rightTokens.count && [insertedCharacters containsIndex:rightIndex])
+			++rightIndex;
+		NSUInteger const removedCount = leftIndex - leftStart;
+		NSUInteger const insertedCount = rightIndex - rightStart;
+		AppendCharacterRange(leftTokens, NSMakeRange(leftStart, removedCount), leftLineNumber, leftRanges);
+		AppendCharacterRange(rightTokens, NSMakeRange(rightStart, insertedCount), rightLineNumber, rightRanges);
+		if(insertedCount > removedCount)
+			AppendCharacterMarker(leftTokens, leftIndex, leftLineNumber, leftMarkers);
+		else if(removedCount > insertedCount)
+			AppendCharacterMarker(rightTokens, rightIndex, rightLineNumber, rightMarkers);
+
+		if(leftStart == leftIndex && rightStart == rightIndex)
+			break;
+	}
+}
 
 @interface WindowController () <NSWindowDelegate>
 @property (nonatomic) NSWindowController* retainedSelf;
@@ -262,9 +448,29 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 		self.rightDocumentView.textView.scrollPastEnd = YES;
 
 		self.leftDiffHighlightView = [[DiffHighlightView alloc] initWithTextView:self.leftDocumentView.textView color:[NSColor.systemRedColor colorWithAlphaComponent:0.16]];
-		[self.leftDocumentView.textView addSubview:self.leftDiffHighlightView positioned:NSWindowAbove relativeTo:nil];
+		self.leftDiffHighlightView.gutterView = self.leftDocumentView.gutterView;
+		__weak DiffHighlightView* weakLeftDiffHighlightView = self.leftDiffHighlightView;
+		self.leftDocumentView.textView.decorationDrawingBlock = ^(NSRect dirtyRect, OTVDecorationLayer layer) {
+			if(layer == OTVDecorationLayerBackground)
+				[weakLeftDiffHighlightView drawBackgroundInRect:dirtyRect];
+			else
+				[weakLeftDiffHighlightView drawForegroundInRect:dirtyRect];
+		};
+		self.leftDocumentView.gutterView.backgroundDecorationDrawingBlock = ^(NSRect dirtyRect) {
+			[weakLeftDiffHighlightView drawGutterBackgroundInRect:dirtyRect];
+		};
 		self.rightDiffHighlightView = [[DiffHighlightView alloc] initWithTextView:self.rightDocumentView.textView color:[NSColor.systemGreenColor colorWithAlphaComponent:0.16]];
-		[self.rightDocumentView.textView addSubview:self.rightDiffHighlightView positioned:NSWindowAbove relativeTo:nil];
+		self.rightDiffHighlightView.gutterView = self.rightDocumentView.gutterView;
+		__weak DiffHighlightView* weakRightDiffHighlightView = self.rightDiffHighlightView;
+		self.rightDocumentView.textView.decorationDrawingBlock = ^(NSRect dirtyRect, OTVDecorationLayer layer) {
+			if(layer == OTVDecorationLayerBackground)
+				[weakRightDiffHighlightView drawBackgroundInRect:dirtyRect];
+			else
+				[weakRightDiffHighlightView drawForegroundInRect:dirtyRect];
+		};
+		self.rightDocumentView.gutterView.backgroundDecorationDrawingBlock = ^(NSRect dirtyRect) {
+			[weakRightDiffHighlightView drawGutterBackgroundInRect:dirtyRect];
+		};
 
 		self.leftClipView = self.leftDocumentView.textView.enclosingScrollView.contentView;
 		self.rightClipView = self.rightDocumentView.textView.enclosingScrollView.contentView;
@@ -608,6 +814,10 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 		NSMutableIndexSet* insertedLines = [NSMutableIndexSet indexSet];
 		NSMutableIndexSet* leftMarkerPositions = [NSMutableIndexSet indexSet];
 		NSMutableIndexSet* rightMarkerPositions = [NSMutableIndexSet indexSet];
+		NSMutableArray<DiffCharacterRange*>* leftCharacterRanges = [NSMutableArray array];
+		NSMutableArray<DiffCharacterRange*>* rightCharacterRanges = [NSMutableArray array];
+		NSMutableArray<DiffCharacterRange*>* leftCharacterMarkers = [NSMutableArray array];
+		NSMutableArray<DiffCharacterRange*>* rightCharacterMarkers = [NSMutableArray array];
 		NSMutableArray<NSNumber*>* leftToRightLineMap = [NSMutableArray arrayWithCapacity:leftLines.count];
 		NSMutableArray<NSNumber*>* rightToLeftLineMap = [NSMutableArray arrayWithCapacity:rightLines.count];
 		NSMutableArray<DiffScrollTransition*>* leftToRightScrollTransitions = [NSMutableArray array];
@@ -657,6 +867,7 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 			{
 				leftToRightLineMap[leftHunkStart + i] = @(rightHunkStart + i);
 				rightToLeftLineMap[rightHunkStart + i] = @(leftHunkStart + i);
+				AppendCharacterDifferences(leftLines[leftHunkStart + i], rightLines[rightHunkStart + i], leftHunkStart + i, rightHunkStart + i, leftCharacterRanges, rightCharacterRanges, leftCharacterMarkers, rightCharacterMarkers);
 			}
 			for(NSUInteger i = pairedCount; i < removedCount; ++i)
 				leftToRightLineMap[leftHunkStart + i] = @(-((NSInteger)rightIndex) - 1);
@@ -692,9 +903,13 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 				return;
 			strongSelf.leftDiffHighlightView.highlightedLines = removedLines;
 			strongSelf.leftDiffHighlightView.markerPositions = leftMarkerPositions;
+			strongSelf.leftDiffHighlightView.characterRanges = leftCharacterRanges;
+			strongSelf.leftDiffHighlightView.characterMarkers = leftCharacterMarkers;
 			strongSelf.leftDiffHighlightView.lineCount = leftLines.count;
 			strongSelf.rightDiffHighlightView.highlightedLines = insertedLines;
 			strongSelf.rightDiffHighlightView.markerPositions = rightMarkerPositions;
+			strongSelf.rightDiffHighlightView.characterRanges = rightCharacterRanges;
+			strongSelf.rightDiffHighlightView.characterMarkers = rightCharacterMarkers;
 			strongSelf.rightDiffHighlightView.lineCount = rightLines.count;
 			strongSelf.leftToRightLineMap = leftToRightLineMap;
 			strongSelf.rightToLeftLineMap = rightToLeftLineMap;
@@ -718,6 +933,10 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 		++self.diffGeneration;
 		self.diffHunks = @[];
 		self.activeDiffHunkIndex = -1;
+		self.leftDiffHighlightView.characterRanges = @[];
+		self.rightDiffHighlightView.characterRanges = @[];
+		self.leftDiffHighlightView.characterMarkers = @[];
+		self.rightDiffHighlightView.characterMarkers = @[];
 		[self updateActiveChangeHighlights];
 		[self scheduleDiffUpdate];
 	}

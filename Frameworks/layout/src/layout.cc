@@ -855,7 +855,7 @@ namespace ng
 
 	}
 
-	void layout_t::draw (ng::context_t const& context, CGRect visibleRect, bool isFlipped, ng::ranges_t const& selection, ng::ranges_t const& highlightRanges, bool drawBackground)
+	void layout_t::draw (ng::context_t const& context, CGRect visibleRect, bool isFlipped, ng::ranges_t const& selection, ng::ranges_t const& highlightRanges, bool drawBackground, std::function<void()> const& drawBackgroundDecorations)
 	{
 		update_metrics(visibleRect);
 
@@ -896,6 +896,9 @@ namespace ng
 				x = _margin.left + _metrics->column_width() * i;
 			}
 		}
+
+		if(drawBackgroundDecorations)
+			drawBackgroundDecorations();
 
 		std::vector<CGRect> currentLineRects = current_line_rects_for_ranges(selection);
 		if(!currentLineRects.empty())

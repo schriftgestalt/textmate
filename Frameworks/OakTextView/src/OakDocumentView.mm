@@ -172,6 +172,11 @@ static NSUInteger OTVLineIndent (NSString* content, NSUInteger lineNumber, NSUIn
 @end
 
 @implementation OakDocumentView
+- (GutterView*)gutterView
+{
+	return gutterView;
+}
+
 - (id)initWithFrame:(NSRect)aRect
 {
 	if(self = [super initWithFrame:aRect])
@@ -853,6 +858,10 @@ static NSUInteger OTVLineIndent (NSString* content, NSUInteger lineNumber, NSUIn
 - (GVLineRecord)lineRecordForPosition:(CGFloat)yPos                              { return [_textView lineRecordForPosition:yPos];               }
 - (GVLineRecord)lineFragmentForLine:(NSUInteger)aLine column:(NSUInteger)aColumn { return [_textView lineFragmentForLine:aLine column:aColumn]; }
 - (NSColor*)backgroundColorForLineRecord:(GVLineRecord)lineRecord                { return [_textView backgroundColorForLine:lineRecord.lineNumber]; }
+- (void)gutterView:(GutterView*)gutterView drawBackgroundDecorationsInRect:(NSRect)dirtyRect
+{
+	[_textView drawDiagnosticBackgroundInGutterRect:dirtyRect bounds:gutterView.bounds];
+}
 
 // =========================
 // = GutterView DataSource =

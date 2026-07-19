@@ -2,9 +2,11 @@
 #import <oak/debug.h>
 
 @class OakDocument;
+@class GutterView;
 
 @interface OakDocumentView : NSView
 @property (nonatomic, readonly) OakTextView* textView;
+@property (nonatomic, readonly) GutterView* gutterView;
 @property (nonatomic) OakDocument* document;
 @property (nonatomic) BOOL hideStatusBar;
 @property (nonatomic, readonly) NSView* scopeBarView;

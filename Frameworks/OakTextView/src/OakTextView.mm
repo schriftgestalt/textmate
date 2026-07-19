@@ -433,7 +433,7 @@ struct document_view_t : ng::buffer_api_t
 	bool draw_wrap_column () const { return _layout->draw_wrap_column(); }
 	bool draw_indent_guides () const { return _layout->draw_indent_guides(); }
 	void update_metrics (CGRect visibleRect) { _layout->update_metrics(visibleRect); }
-	void draw (ng::context_t const& context, CGRect rectangle, bool isFlipped, ng::ranges_t const& selection, ng::ranges_t const& highlightRanges = ng::ranges_t(), bool drawBackground = true) { _layout->draw(context, rectangle, isFlipped, selection, highlightRanges, drawBackground); }
+	void draw (ng::context_t const& context, CGRect rectangle, bool isFlipped, ng::ranges_t const& selection, ng::ranges_t const& highlightRanges = ng::ranges_t(), bool drawBackground = true, std::function<void()> const& drawBackgroundDecorations = {}) { _layout->draw(context, rectangle, isFlipped, selection, highlightRanges, drawBackground, drawBackgroundDecorations); }
 	ng::index_t index_at_point (CGPoint point) const { return _layout->index_at_point(point); }
 	CGRect rect_at_index (ng::index_t const& index, bool bol_as_eol = false, bool wantsBaseline = false) const { return _layout->rect_at_index(index, bol_as_eol, wantsBaseline); }
 	CGRect rect_for_range (size_t first, size_t last, bool bol_as_eol = false) const { return _layout->rect_for_range(first, last, bol_as_eol); }
@@ -488,9 +488,11 @@ private:
 		std::string fixJSON; // empty when the mark carries no fix
 		size_t index;        // buffer index of the mark
 	};
-	std::map<size_t, std::vector<diagnostic_info_t>> diagnosticsByLine; // rebuilt in drawDiagnosticMarksInRect
-	std::map<size_t, NSRect> diagnosticPillRects;                      // line → clickable icon capsule
-	std::map<size_t, NSRect> diagnosticBannerRects;                    // line → full banner; clicks here are swallowed
+	std::map<size_t, std::vector<diagnostic_info_t>> diagnosticsByLine;
+	std::map<size_t, std::string> diagnosticLineTint;
+	std::vector<std::pair<ng::range_t, std::string>> diagnosticSquiggles;
+	std::map<size_t, NSRect> diagnosticPillRects;   // line → clickable icon capsule
+	std::map<size_t, NSRect> diagnosticBannerRects; // line → full banner; clicks here are swallowed
 	NSPopover* diagnosticsPopover;
 	NSMutableArray<NSDictionary*>* diagnosticFixQueue;
 
@@ -1300,14 +1302,11 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 	return len;
 }
 
-- (void)drawDiagnosticMarksInRect:(NSRect)aRect
+- (void)updateDiagnosticMarks
 {
-	std::map<size_t, std::string> lineTint; // line → most severe mark type
-	std::vector<std::pair<ng::range_t, std::string>> squiggles;
-
 	diagnosticsByLine.clear();
-	diagnosticPillRects.clear();
-	diagnosticBannerRects.clear();
+	diagnosticLineTint.clear();
+	diagnosticSquiggles.clear();
 
 	for(auto const& pair : documentView->all_marks())
 	{
@@ -1320,9 +1319,9 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 			continue;
 
 		size_t const line = documentView->convert(index).line;
-		auto tint = lineTint.find(line);
-		if(tint == lineTint.end() || OTVDiagnosticSeverity(tint->second) < severity)
-			lineTint[line] = type;
+		auto tint = diagnosticLineTint.find(line);
+		if(tint == diagnosticLineTint.end() || OTVDiagnosticSeverity(tint->second) < severity)
+			diagnosticLineTint[line] = type;
 
 		diagnostic_info_t info;
 		info.type  = type;
@@ -1342,10 +1341,29 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 		}
 		to = std::clamp(to, std::min(index + 1, eol), eol);
 		if(index < to)
-			squiggles.emplace_back(ng::range_t(ng::index_t(index), ng::index_t(to)), type);
+			diagnosticSquiggles.emplace_back(ng::range_t(ng::index_t(index), ng::index_t(to)), type);
 	}
+}
 
-	for(auto const& pair : lineTint)
+- (void)drawDiagnosticBackgroundInGutterRect:(NSRect)dirtyRect bounds:(NSRect)bounds
+{
+	[self updateDiagnosticMarks];
+
+	for(auto const& pair : diagnosticLineTint)
+	{
+		CGRect r = documentView->rect_for_range(documentView->begin(pair.first), documentView->eol(pair.first));
+		r.origin.x   = NSMinX(bounds);
+		r.size.width = NSWidth(bounds);
+		if(!NSIntersectsRect(r, dirtyRect))
+			continue;
+		[OTVColorForDiagnosticMark(pair.second, 0.12) set];
+		NSRectFillUsingOperation(NSIntersectionRect(r, dirtyRect), NSCompositingOperationSourceOver);
+	}
+}
+
+- (void)drawDiagnosticBackgroundInRect:(NSRect)aRect
+{
+	for(auto const& pair : diagnosticLineTint)
 	{
 		CGRect r = documentView->rect_for_range(documentView->begin(pair.first), documentView->eol(pair.first));
 		r.origin.x   = NSMinX(self.bounds);
@@ -1355,8 +1373,14 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 		[OTVColorForDiagnosticMark(pair.second, 0.12) set];
 		NSRectFillUsingOperation(NSIntersectionRect(r, aRect), NSCompositingOperationSourceOver);
 	}
+}
 
-	for(auto const& pair : squiggles)
+- (void)drawDiagnosticForegroundInRect:(NSRect)aRect
+{
+	diagnosticPillRects.clear();
+	diagnosticBannerRects.clear();
+
+	for(auto const& pair : diagnosticSquiggles)
 	{
 		NSColor* color = OTVColorForDiagnosticMark(pair.second, 0.85);
 		for(CGRect rect : documentView->rects_for_ranges(pair.first))
@@ -1636,9 +1660,17 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 		return NULL;
 	};
 
-	documentView->draw(ng::context_t(context, _showInvisibles ? documentView->invisibles_map : NULL_STR, [spellingDotImage CGImageForProposedRect:NULL context:[NSGraphicsContext currentContext] hints:nil], foldingDotsFactory), aRect, [self isFlipped], merge(documentView->ranges(), [self markedRanges]), _liveSearchRanges);
+	[self updateDiagnosticMarks];
+	void (^decorationDrawingBlock)(NSRect, OTVDecorationLayer) = self.decorationDrawingBlock;
+	documentView->draw(ng::context_t(context, _showInvisibles ? documentView->invisibles_map : NULL_STR, [spellingDotImage CGImageForProposedRect:NULL context:[NSGraphicsContext currentContext] hints:nil], foldingDotsFactory), aRect, [self isFlipped], merge(documentView->ranges(), [self markedRanges]), _liveSearchRanges, true, [self, decorationDrawingBlock, aRect] {
+		[self drawDiagnosticBackgroundInRect:aRect];
+		if(decorationDrawingBlock)
+			decorationDrawingBlock(aRect, OTVDecorationLayerBackground);
+	});
 
-	[self drawDiagnosticMarksInRect:aRect];
+	if(decorationDrawingBlock)
+		decorationDrawingBlock(aRect, OTVDecorationLayerForeground);
+	[self drawDiagnosticForegroundInRect:aRect];
 }
 
 // =====================
@@ -4010,6 +4042,25 @@ static char const* kOakMenuItemTitle = "OakMenuItemTitle";
 		return GVLineRecord();
 	auto record = documentView->line_record_for(text::pos_t(aLine, aColumn));
 	return GVLineRecord(record.line, record.softline, record.top, record.bottom, record.baseline);
+}
+
+- (NSRect)rectForLine:(NSUInteger)lineNumber byteColumnRange:(NSRange)byteColumnRange
+{
+	if(!documentView || lineNumber >= documentView->lines())
+		return NSZeroRect;
+
+	size_t const first = documentView->convert(text::pos_t(lineNumber, byteColumnRange.location));
+	size_t const last = documentView->convert(text::pos_t(lineNumber, NSMaxRange(byteColumnRange)));
+	return documentView->rect_for_range(first, last);
+}
+
+- (NSRect)caretRectForLine:(NSUInteger)lineNumber byteColumn:(NSUInteger)byteColumn
+{
+	if(!documentView || lineNumber >= documentView->lines())
+		return NSZeroRect;
+
+	size_t const index = documentView->convert(text::pos_t(lineNumber, byteColumn));
+	return documentView->rect_at_index(index);
 }
 
 - (NSColor*)backgroundColorForLine:(NSUInteger)lineNumber
