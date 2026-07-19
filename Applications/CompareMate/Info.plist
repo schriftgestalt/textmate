@@ -1,6 +1,6 @@
-{	CFBundleName                  = "${TARGET_NAME}";
+{	CFBundleName                  = "CompareMate";
 	CFBundleVersion               = "1.0";
-	CFBundleIdentifier            = "org.example.${TARGET_NAME}";
+	CFBundleIdentifier            = "org.example.CompareMate";
 
 	CFBundleExecutable            = "${TARGET_NAME}";
 	CFBundleIconFile              = "";

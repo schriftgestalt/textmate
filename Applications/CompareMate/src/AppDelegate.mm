@@ -1,6 +1,9 @@
 #import "AppDelegate.h"
 #import "WindowController.h"
-#import <MenuBuilder/MenuBuilder.h>
+#import <MenuBuilder/src/MenuBuilder.h>
+#import <BundlesManager/src/BundlesManager.h>
+#import <settings/src/settings.h>
+#import <io/src/path.h>
 
 @interface AppDelegate () <NSApplicationDelegate, NSWindowDelegate>
 @property (nonatomic) NSWindow* window;
@@ -9,20 +12,24 @@
 @implementation AppDelegate
 - (void)applicationWillFinishLaunching:(NSNotification*)aNotification
 {
+	settings_t::set_default_settings_path([[[NSBundle mainBundle] pathForResource:@"Default" ofType:@"tmProperties"] fileSystemRepresentation]);
+	settings_t::set_global_settings_path(path::join(path::home(), "Library/Application Support/TextMate/Global.tmProperties"));
+	[BundlesManager.sharedInstance loadBundlesIndex];
+
 	MBMenu const items = {
-		{ @"NewApplication",
+		{ @"CompareMate",
 			.submenu = {
-				{ @"About NewApplication", @selector(orderFrontStandardAboutPanel:)         },
+				{ @"About CompareMate", @selector(orderFrontStandardAboutPanel:)         },
 				{ /* -------- */ },
 				{ @"Preferences…",         NULL,                                     @","   },
 				{ /* -------- */ },
 				{ @"Services", .systemMenu = MBMenuTypeServices                             },
 				{ /* -------- */ },
-				{ @"Hide NewApplication",  @selector(hide:),                         @"h"   },
+				{ @"Hide CompareMate",      @selector(hide:),                         @"h"   },
 				{ @"Hide Others",          @selector(hideOtherApplications:),        @"h", .modifierFlags = NSEventModifierFlagCommand|NSEventModifierFlagOption },
 				{ @"Show All",             @selector(unhideAllApplications:)                },
 				{ /* -------- */ },
-				{ @"Quit NewApplication",  @selector(terminate:),                    @"q"   },
+				{ @"Quit CompareMate",      @selector(terminate:),                    @"q"   },
 			}
 		},
 		{ @"File",
@@ -196,7 +203,7 @@
 		},
 		{ @"Help",
 			.systemMenu = MBMenuTypeHelp, .submenu = {
-				{ @"NewApplication Help", @selector(showHelp:), @"?" },
+				{ @"CompareMate Help", @selector(showHelp:), @"?" },
 			}
 		},
 	};
