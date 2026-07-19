@@ -94,7 +94,7 @@ static NSUInteger OTVLineIndent (NSString* content, NSUInteger lineNumber, NSUIn
 {
 	if(self = [super initWithFrame:aRect])
 	{
-		self.style = OakBackgroundFillViewStyleHeader;
+		self.style = OakBackgroundFillViewStyleTitlebar;
 		self.accessibilityLabel = @"Scope Bar";
 
 		_divider = OakCreateNSBoxSeparator();
@@ -120,7 +120,7 @@ static NSUInteger OTVLineIndent (NSString* content, NSUInteger lineNumber, NSUIn
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[divider]|" options:0 metrics:nil views:views]];
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[gutter]-(8)-[scope]-(8)-|" options:0 metrics:nil views:views]];
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[gutter]|" options:0 metrics:nil views:views]];
-		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scope(>=16)]-(4)-[divider(==1)]|" options:0 metrics:nil views:views]];
+		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(3)-[scope(>=16)]-(2)-[divider(==1)]|" options:0 metrics:nil views:views]];
 	}
 	return self;
 }
