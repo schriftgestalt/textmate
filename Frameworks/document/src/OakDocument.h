@@ -96,6 +96,7 @@ typedef NS_ENUM(NSInteger, OakDocumentIOResult) {
 + (void)removeAllMarksOfType:(NSString*)aMark;
 
 - (void)enumerateSymbolsUsingBlock:(void(^)(text::pos_t const& pos, NSString* symbol))block;
+- (void)enumerateCachedSymbolsUsingBlock:(void(^)(text::pos_t const& pos, NSString* symbol, NSUInteger lineIndent, BOOL* stop))block;
 - (void)enumerateBookmarksUsingBlock:(void(^)(text::pos_t const& pos, NSString* excerpt))block;
 - (void)enumerateBookmarksAtLine:(NSUInteger)line block:(void(^)(text::pos_t const& pos, NSString* type, NSString* payload))block;
 - (void)enumerateByteRangesUsingBlock:(void(^)(char const* bytes, NSRange byteRange, BOOL* stop))block;

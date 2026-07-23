@@ -1282,6 +1282,35 @@ static void* kDocumentEditedObserverContext = &kDocumentEditedObserverContext;
 	}
 }
 
+- (void)enumerateCachedSymbolsUsingBlock:(void(^)(text::pos_t const& pos, NSString* symbol, NSUInteger lineIndent, BOOL* stop))block
+{
+	if(!(self.isLoaded && _buffer))
+		return;
+
+	NSUInteger tabSize = self.tabSize ?: 4;
+	BOOL stop = NO;
+	for(auto const& pair : _buffer->symbols())
+	{
+		text::pos_t const pos = _buffer->convert(pair.first);
+		std::string const line = _buffer->substr(_buffer->begin(pos.line), _buffer->eol(pos.line));
+
+		NSUInteger lineIndent = 0;
+		for(char ch : line)
+		{
+			if(ch == ' ')
+				++lineIndent;
+			else if(ch == '\t')
+				lineIndent += tabSize;
+			else
+				break;
+		}
+
+		block(pos, to_ns(pair.second), lineIndent, &stop);
+		if(stop)
+			break;
+	}
+}
+
 - (void)enumerateBookmarksUsingBlock:(void(^)(text::pos_t const& pos, NSString* excerpt))block
 {
 	if(self.isLoaded && _buffer)

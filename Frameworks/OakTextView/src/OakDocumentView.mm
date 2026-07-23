@@ -41,41 +41,197 @@ static NSUInteger OTVSymbolTextIndent (NSString* symbol)
 	return indent;
 }
 
-static NSUInteger OTVLineIndent (NSString* content, NSUInteger lineNumber, NSUInteger tabSize)
+static NSString* OTVSymbolTitle (NSString* symbol)
 {
-	NSUInteger currentLine = 0;
-	NSUInteger index       = 0;
-	NSUInteger length      = content.length;
-	NSCharacterSet* newlineCharacters = NSCharacterSet.newlineCharacterSet;
+	if(symbol.length == 0 || [symbol isEqualToString:@"-"])
+		return @"";
 
-	while(currentLine < lineNumber && index < length)
+	NSUInteger indent = OTVSymbolTextIndent(symbol);
+	return [[symbol substringFromIndex:indent] stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+}
+
+static NSString* OTVUnescapeXMLString (NSString* str)
+{
+	NSMutableString* res = [str mutableCopy];
+	[res replaceOccurrencesOfString:@"&lt;" withString:@"<" options:0 range:NSMakeRange(0, res.length)];
+	[res replaceOccurrencesOfString:@"&gt;" withString:@">" options:0 range:NSMakeRange(0, res.length)];
+	[res replaceOccurrencesOfString:@"&quot;" withString:@"\"" options:0 range:NSMakeRange(0, res.length)];
+	[res replaceOccurrencesOfString:@"&apos;" withString:@"'" options:0 range:NSMakeRange(0, res.length)];
+	[res replaceOccurrencesOfString:@"&amp;" withString:@"&" options:0 range:NSMakeRange(0, res.length)];
+	return res;
+}
+
+static NSString* OTVPlistKeyForLine (NSString* line)
+{
+	NSRange keyOpen = [line rangeOfString:@"<key>"];
+	if(keyOpen.location != NSNotFound)
 	{
-		NSRange range = [content rangeOfCharacterFromSet:newlineCharacters options:0 range:NSMakeRange(index, length - index)];
-		if(range.location == NSNotFound)
-			return 0;
-
-		index = NSMaxRange(range);
-		if([content characterAtIndex:range.location] == '\r' && index < length && [content characterAtIndex:index] == '\n')
-			++index;
-		++currentLine;
+		NSUInteger valueStart = NSMaxRange(keyOpen);
+		NSRange keyClose = [line rangeOfString:@"</key>" options:0 range:NSMakeRange(valueStart, line.length - valueStart)];
+		if(keyClose.location != NSNotFound)
+			return OTVUnescapeXMLString([line substringWithRange:NSMakeRange(valueStart, keyClose.location - valueStart)]);
 	}
 
-	NSUInteger indent = 0;
-	tabSize = tabSize ?: 4;
-	while(index < length)
+	NSString* trimmedLine = [line stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+	if(trimmedLine.length == 0 || [trimmedLine hasPrefix:@"//"] || [trimmedLine hasPrefix:@"/*"] || [trimmedLine hasPrefix:@"*"] || [trimmedLine hasPrefix:@"}"])
+		return nil;
+
+	NSRange separator = [trimmedLine rangeOfString:@"="];
+	if(separator.location == NSNotFound || separator.location == 0)
+		return nil;
+
+	NSString* key = [[trimmedLine substringToIndex:separator.location] stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+	if(key.length >= 2)
 	{
-		unichar ch = [content characterAtIndex:index];
-		if(ch == ' ')
-			++indent;
-		else if(ch == '\t')
-			indent += tabSize;
-		else if(ch == 0x2003) // Em-space
-			++indent;
-		else
-			break;
-		++index;
+		unichar first = [key characterAtIndex:0];
+		unichar last  = [key characterAtIndex:key.length - 1];
+		if((first == '"' && last == '"') || (first == '\'' && last == '\''))
+			key = [key substringWithRange:NSMakeRange(1, key.length - 2)];
 	}
-	return indent;
+	return key.length ? key : nil;
+}
+
+static BOOL OTVLineContainsAnyString (NSString* line, NSArray<NSString*>* strings)
+{
+	for(NSString* str in strings)
+	{
+		if([line rangeOfString:str].location != NSNotFound)
+			return YES;
+	}
+	return NO;
+}
+
+static BOOL OTVLooksLikePlist (NSString* content)
+{
+	NSUInteger length = std::min<NSUInteger>(content.length, 4096);
+	NSString* prefix = [content substringToIndex:length];
+	return [prefix rangeOfString:@"<plist"].location != NSNotFound || [prefix rangeOfString:@"DOCTYPE plist" options:NSCaseInsensitiveSearch].location != NSNotFound || [prefix rangeOfString:@"// !$*UTF8*$!"].location != NSNotFound;
+}
+
+static NSString* OTVOldStylePlistValueForLine (NSString* line)
+{
+	NSRange separator = [line rangeOfString:@"="];
+	if(separator.location == NSNotFound)
+		return @"";
+	return [[line substringFromIndex:NSMaxRange(separator)] stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+}
+
+static NSString* OTVOldStylePlistScopePath (NSString* content, NSUInteger caretLine)
+{
+	NSMutableArray<NSString*>* containerStack = [NSMutableArray array];
+	__block NSString* pendingKey = nil;
+	__block NSString* currentKey = nil;
+	__block NSString* res = @"";
+	__block NSUInteger lineNumber = 0;
+
+	[content enumerateSubstringsInRange:NSMakeRange(0, content.length) options:NSStringEnumerationByLines usingBlock:^(NSString* line, NSRange, NSRange, BOOL* stop){
+		NSString* trimmedLine = [line stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+
+		if([trimmedLine hasPrefix:@"}"] || [trimmedLine hasPrefix:@")"])
+		{
+			if(containerStack.count)
+				[containerStack removeLastObject];
+			pendingKey = nil;
+			currentKey = nil;
+		}
+
+		NSString* title = OTVPlistKeyForLine(line);
+		if(title.length)
+		{
+			pendingKey = title;
+			currentKey = title;
+		}
+
+		NSString* value = title.length ? OTVOldStylePlistValueForLine(line) : trimmedLine;
+		BOOL opensContainer = [value hasPrefix:@"{"] || [value hasPrefix:@"("];
+		if(opensContainer && pendingKey.length)
+		{
+			[containerStack addObject:pendingKey];
+			pendingKey = nil;
+			currentKey = nil;
+		}
+		else if(pendingKey.length && value.length && ![value isEqualToString:@"="])
+		{
+			pendingKey = nil;
+		}
+
+		NSMutableArray* titles = [containerStack mutableCopy];
+		if(currentKey.length)
+			[titles addObject:currentKey];
+		res = [titles componentsJoinedByString:@" > "];
+
+		if(lineNumber >= caretLine)
+		{
+			*stop = YES;
+			return;
+		}
+
+		if(!title.length && pendingKey.length && value.length)
+		{
+			currentKey = pendingKey;
+			pendingKey = nil;
+		}
+
+		++lineNumber;
+	}];
+
+	return res;
+}
+
+static NSString* OTVXMLPlistScopePath (NSString* content, NSUInteger caretLine)
+{
+	NSMutableArray<NSString*>* containerStack = [NSMutableArray array];
+	__block NSString* pendingKey = nil;
+	__block NSString* res = @"";
+	__block NSUInteger lineNumber = 0;
+
+	[content enumerateSubstringsInRange:NSMakeRange(0, content.length) options:NSStringEnumerationByLines usingBlock:^(NSString* line, NSRange, NSRange, BOOL* stop){
+		NSString* trimmedLine = [line stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+
+		if([trimmedLine hasPrefix:@"</dict"] || [trimmedLine hasPrefix:@"</array"])
+		{
+			if(containerStack.count)
+				[containerStack removeLastObject];
+			pendingKey = nil;
+		}
+
+		NSString* key = OTVPlistKeyForLine(line);
+		if(key.length)
+			pendingKey = key;
+
+		BOOL opensContainer = OTVLineContainsAnyString(line, @[ @"<dict>", @"<dict ", @"<array>", @"<array " ]);
+		if(opensContainer && pendingKey.length)
+		{
+			[containerStack addObject:pendingKey];
+			pendingKey = nil;
+		}
+
+		NSMutableArray* titles = [containerStack mutableCopy];
+		if(pendingKey.length)
+			[titles addObject:pendingKey];
+		res = [titles componentsJoinedByString:@" > "];
+
+		if(lineNumber >= caretLine)
+		{
+			*stop = YES;
+			return;
+		}
+
+		BOOL scalarValue = OTVLineContainsAnyString(line, @[ @"<string>", @"<integer>", @"<real>", @"<date>", @"<data>", @"<true", @"<false" ]);
+		if(scalarValue && !opensContainer)
+			pendingKey = nil;
+
+		++lineNumber;
+	}];
+
+	return res;
+}
+
+static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOOL forceOldStyle)
+{
+	if(!(forceOldStyle || OTVLooksLikePlist(content)))
+		return @"";
+	return !forceOldStyle && [content rangeOfString:@"<plist"].location != NSNotFound ? OTVXMLPlistScopePath(content, caretLine) : OTVOldStylePlistScopePath(content, caretLine);
 }
 
 @interface OTVScopeBar : OakBackgroundFillView
@@ -410,7 +566,6 @@ static NSUInteger OTVLineIndent (NSString* content, NSUInteger lineNumber, NSUIn
 		[gutterView setHighlightedRange:to_s(str ?: @"1")];
 		[_statusBar setSelectionString:str];
 		_symbolChooser.selectionString = str;
-		[self updateScopeBar];
 	}
 	else if([aKeyPath isEqualToString:@"symbol"])
 	{
@@ -453,18 +608,21 @@ static NSUInteger OTVLineIndent (NSString* content, NSUInteger lineNumber, NSUIn
 {
 	text::selection_t sel(to_s(_textView.selectionString));
 	text::pos_t caret = sel.last().max();
-	NSString* content = self.document.content ?: @"";
 
 	NSMutableArray* scopeStack = [NSMutableArray array];
-	[self.document enumerateSymbolsUsingBlock:^(text::pos_t const& pos, NSString* symbol){
-		if(caret < pos || [symbol isEqualToString:@"-"])
+	[self.document enumerateCachedSymbolsUsingBlock:^(text::pos_t const& pos, NSString* symbol, NSUInteger lineIndent, BOOL* stop){
+		if(caret < pos)
+		{
+			*stop = YES;
+			return;
+		}
+		if([symbol isEqualToString:@"-"])
 			return;
 
 		NSUInteger symbolIndent = OTVSymbolTextIndent(symbol);
-		NSUInteger lineIndent   = OTVLineIndent(content, pos.line, self.document.tabSize);
 		NSUInteger indent       = std::max(symbolIndent, lineIndent);
 
-		NSString* title = [[symbol substringFromIndex:symbolIndent] stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+		NSString* title = OTVSymbolTitle(symbol);
 		if(title.length == 0)
 			return;
 
@@ -484,6 +642,18 @@ static NSUInteger OTVLineIndent (NSString* content, NSUInteger lineNumber, NSUIn
 		[titles addObject:item[@"title"]];
 
 	self.scopeBar.scopePath = [titles componentsJoinedByString:@" > "];
+	if(titles.count <= 1)
+	{
+		NSString* scope = [NSString stringWithCxxString:to_s([_textView scopeContext].right)];
+		NSString* fileType = self.document.fileType ?: @"";
+		BOOL oldStylePlist = [scope rangeOfString:@"source.plist"].location != NSNotFound || [fileType rangeOfString:@"source.plist"].location != NSNotFound;
+		NSString* content = self.document.content ?: @"";
+		NSString* plistScopePath = OTVPlistScopePath(content, caret.line, oldStylePlist);
+		if(plistScopePath.length)
+			self.scopeBar.scopePath = plistScopePath;
+	}
+	if(self.scopeBar.scopePath.length == 0)
+		self.scopeBar.scopePath = OTVSymbolTitle(_textView.symbol);
 }
 
 - (void)updateScopeBarGutterWidth
