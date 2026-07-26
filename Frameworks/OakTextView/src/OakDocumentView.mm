@@ -26,7 +26,6 @@ static NSString* const kUserDefaultsLineNumberFontNameKey    = @"lineNumberFontN
 static NSString* const kBookmarksColumnIdentifier = @"bookmarks";
 static NSString* const kFoldingsColumnIdentifier  = @"foldings";
 static CGFloat const kCurrentLineHighlightAlphaMultiplier = 0.18;
-static CGFloat const kScopeBarHeight = 21;
 
 static NSUInteger OTVSymbolTextIndent (NSString* symbol)
 {
@@ -276,7 +275,10 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[divider]|" options:0 metrics:nil views:views]];
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[gutter]-(8)-[scope]-(8)-|" options:0 metrics:nil views:views]];
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[gutter]|" options:0 metrics:nil views:views]];
-		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(3)-[scope(>=16)]-(2)-[divider(==1)]|" options:0 metrics:nil views:views]];
+		if(@available(macOS 26.0, *))
+			[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(0)-[scope(==16)]-(2)-[divider(==1)]|" options:0 metrics:nil views:views]];
+		else
+			[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(3)-[scope(==16)]-(2)-[divider(==1)]|" options:0 metrics:nil views:views]];
 	}
 	return self;
 }
@@ -298,11 +300,6 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 
 	_gutterWidth = gutterWidth;
 	_gutterWidthConstraint.constant = gutterWidth;
-}
-
-- (NSSize)intrinsicContentSize
-{
-	return NSMakeSize(NSViewNoIntrinsicMetric, kScopeBarHeight);
 }
 @end
 

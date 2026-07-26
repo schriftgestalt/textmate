@@ -17,12 +17,17 @@ static BOOL OakTabBarUsesModernStyle ()
 
 static CGFloat OakTabBarHeight ()
 {
-	return OakTabBarUsesModernStyle() ? 28 : 26;
+	return OakTabBarUsesModernStyle() ? 32 : 26;
+}
+
+static CGFloat OakTabBarContentHeight ()
+{
+	return OakTabBarUsesModernStyle() ? 28 : OakTabBarHeight();
 }
 
 static CGFloat OakTabBarLeadingInset ()
 {
-	return OakTabBarUsesModernStyle() ? 8 : -1;
+	return OakTabBarUsesModernStyle() ? 12 : -1;
 }
 
 static CGFloat OakTabBarTrailingInset ()
@@ -848,7 +853,7 @@ static void* kOakTabViewSelectedContext  = &kOakTabViewSelectedContext;
 		{
 			_tabBarBackgroundView = [[OakBox alloc] initWithFrame:NSZeroRect];
 			_tabBarBackgroundView.fillColor    = [NSColor colorWithCalibratedWhite:0 alpha:0.12];
-			_tabBarBackgroundView.cornerRadius = OakTabBarHeight() / 2;
+			_tabBarBackgroundView.cornerRadius = OakTabBarContentHeight() / 2;
 			[self addSubview:_tabBarBackgroundView positioned:NSWindowBelow relativeTo:nil];
 		}
 
@@ -1522,8 +1527,8 @@ static void* kOakTabViewSelectedContext  = &kOakTabViewSelectedContext;
 	NSRect createNewTabButtonFrame = _createNewTabButton.frame;
 	CGFloat visibleWidth = OakTabBarVisibleWidth(self.bounds, self.createNewTabButton);
 	CGFloat x = OakTabBarLeadingInset();
-	CGFloat y = NSMinY(self.bounds) + (modernStyle ? 0 : 1);
-	CGFloat height = NSHeight(self.bounds) - (modernStyle ? 0 : 1);
+	CGFloat height = modernStyle ? OakTabBarContentHeight() : NSHeight(self.bounds) - 1;
+	CGFloat y = modernStyle ? NSMaxY(self.bounds) - height : NSMinY(self.bounds) + 1;
 	if(modernStyle)
 		_tabBarBackgroundView.frame = NSMakeRect(x, y, visibleWidth, height);
 
@@ -1536,7 +1541,8 @@ static void* kOakTabViewSelectedContext  = &kOakTabViewSelectedContext;
 
 	CGFloat createNewTabButtonX = modernStyle ? OakTabBarLeadingInset() + visibleWidth + OakTabBarNewTabButtonGap() : x;
 	_backgroundView.frame = modernStyle ? NSMakeRect(OakTabBarLeadingInset(), y, visibleWidth, height) : NSMakeRect(x, y, NSWidth(self.bounds)+2 - x, height);
-	_createNewTabButton.frame  = { { createNewTabButtonX, round((NSHeight(self.bounds) - NSHeight(createNewTabButtonFrame)) / 2) }, createNewTabButtonFrame.size };
+	CGFloat createNewTabButtonY = modernStyle ? y : round((NSHeight(self.bounds) - NSHeight(createNewTabButtonFrame)) / 2);
+	_createNewTabButton.frame  = { { createNewTabButtonX, createNewTabButtonY }, createNewTabButtonFrame.size };
 }
 
 - (void)resizeSubviewsWithOldSize:(NSSize)aSize
