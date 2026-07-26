@@ -9,7 +9,6 @@
 @property (nonatomic, readonly) GutterView* gutterView;
 @property (nonatomic) OakDocument* document;
 @property (nonatomic) BOOL hideStatusBar;
-@property (nonatomic, readonly) NSView* scopeBarView;
 @property (nonatomic) BOOL showsScopeBar;
 - (IBAction)toggleLineNumbers:(id)sender;
 - (IBAction)takeTabSizeFrom:(id)sender;

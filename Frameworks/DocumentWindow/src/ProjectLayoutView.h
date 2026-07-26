@@ -2,7 +2,6 @@
 
 @interface ProjectLayoutView : NSSplitViewController
 @property (nonatomic) NSView* documentView;
-@property (nonatomic) NSView* documentTopAccessoryView;
 @property (nonatomic) NSView* fileBrowserView;
 @property (nonatomic) NSView* htmlOutputView;
 

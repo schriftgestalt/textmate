@@ -225,6 +225,7 @@ BOOL HasDocumentWindow (NSArray* windows)
 				MBMenuItem{ @"Show File Browser", @selector(toggleFileBrowser:), @"d" }.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption|NSEventModifierFlagControl),
 				MBMenuItem{ @"Show HTML Output", @selector(toggleHTMLOutput:), @"h" }.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption|NSEventModifierFlagControl),
 				MBMenuItem{ @"Show Line Numbers", @selector(toggleLineNumbers:), @"l" }.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption),
+				{ @"Show Scope Bar", @selector(toggleScopeBar:) },
 				{ /* -------- */ },
 				MBMenuItem{ @"Show Invisibles", @selector(toggleShowInvisibles:), @"i" }.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption),
 				{ /* -------- */ },

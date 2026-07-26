@@ -41,6 +41,7 @@
 - (IBAction)selectPreviousTab:(id)sender;
 - (IBAction)takeSelectedTabIndexFrom:(id)sender;
 - (IBAction)toggleSticky:(id)sender;
+- (IBAction)toggleScopeBar:(id)sender;
 
 - (NSPoint)positionForWindowUnderCaret;
 - (void)performBundleItem:(bundles::item_ptr)anItem;

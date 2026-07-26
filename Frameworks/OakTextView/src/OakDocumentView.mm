@@ -249,7 +249,15 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 {
 	if(self = [super initWithFrame:aRect])
 	{
-		self.style = OakBackgroundFillViewStyleTitlebar;
+		if(@available(macOS 26.0, *))
+		{
+			self.activeBackgroundColor   = NSColor.windowBackgroundColor;
+			self.inactiveBackgroundColor = NSColor.windowBackgroundColor;
+		}
+		else
+		{
+			self.style = OakBackgroundFillViewStyleTitlebar;
+		}
 		self.accessibilityLabel = @"Scope Bar";
 
 		_divider = OakCreateNSBoxSeparator();
@@ -380,11 +388,6 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 			[_textView addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionInitial context:NULL];
 	}
 	return self;
-}
-
-- (NSView*)scopeBarView
-{
-	return self.scopeBar;
 }
 
 - (BOOL)showsScopeBar

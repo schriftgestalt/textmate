@@ -39,6 +39,7 @@
 static NSString* const kUserDefaultsAlwaysFindInDocument = @"alwaysFindInDocument";
 static NSString* const kUserDefaultsDisableFolderStateRestore = @"disableFolderStateRestore";
 static NSString* const kUserDefaultsHideStatusBarKey = @"hideStatusBar";
+static NSString* const kUserDefaultsHideScopeBarKey = @"hideScopeBar";
 static NSString* const kUserDefaultsDisableBundleSuggestionsKey = @"disableBundleSuggestions";
 static NSString* const kUserDefaultsGrammarsToNeverSuggestKey = @"grammarsToNeverSuggest";
 
@@ -99,6 +100,7 @@ static void show_command_error (std::string const& message, oak::uuid_t const& u
 @property (nonatomic) FileBrowserViewController*  fileBrowser;
 
 @property (nonatomic) BOOL                        autoRevealFile;
+@property (nonatomic) BOOL                        scopeBarVisible;
 
 @property (nonatomic) HTMLOutputWindowController* htmlOutputWindowController;
 @property (nonatomic) OakHTMLOutputView*          htmlOutputView;
@@ -224,11 +226,6 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 
 		self.layoutView = [[ProjectLayoutView alloc] init];
 		self.layoutView.documentView = self.documentView;
-		if(@available(macOS 26.0, *))
-		{
-			self.documentView.showsScopeBar = NO;
-			self.layoutView.documentTopAccessoryView = self.documentView.scopeBarView;
-		}
 
 		NSUInteger windowStyle = (NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskResizable|NSWindowStyleMaskMiniaturizable);
 		windowStyle |= NSWindowStyleMaskFullSizeContentView;
@@ -238,14 +235,16 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		self.window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
 		self.window.delegate           = self;
 		self.window.releasedWhenClosed = NO;
+		self.window.titlebarAppearsTransparent = YES;
 
 		_titlebarViewController = [[NSTitlebarAccessoryViewController alloc] init];
 		CGFloat const tabBarHeight = OakTabBarView.preferredHeight;
 		_titlebarViewController.view = [OakTabBarAccessoryView accessoryViewWithTabBarView:self.tabBarView];
 		[_titlebarViewController.view setFrameSize:_titlebarViewController.view.fittingSize];
 		_titlebarViewController.fullScreenMinHeight = tabBarHeight;
-		if(@available(macOS 26.1, *))
+		if(@available(macOS 26.1, *)) {
 			_titlebarViewController.preferredScrollEdgeEffectStyle = NSScrollEdgeEffectStyle.softStyle;
+		}
 		[self.window addTitlebarAccessoryViewController:_titlebarViewController];
 
 		OakAddAutoLayoutViewsToSuperview(@[ self.layoutView.view ], self.window.contentView);
@@ -269,7 +268,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 
 		[self userDefaultsDidChange:nil];
 
-		self.window.titlebarSeparatorStyle = NSTitlebarSeparatorStyleAutomatic;
+		self.window.titlebarSeparatorStyle = NSTitlebarSeparatorStyleNone;
 	}
 	return self;
 }
@@ -416,6 +415,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	self.htmlOutputInWindow = [[NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsHTMLOutputPlacementKey] isEqualToString:@"window"];
 	self.autoRevealFile = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsAutoRevealFileKey];
 	self.documentView.hideStatusBar = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsHideStatusBarKey];
+	self.scopeBarVisible = ![NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsHideScopeBarKey];
 
 	BOOL disableTabBarCollapsingKey = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsDisableTabBarCollapsingKey];
 	self.titlebarViewController.hidden = !disableTabBarCollapsingKey && self.documents.count <= 1;
@@ -1893,6 +1893,26 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 
 - (IBAction)toggleFileBrowser:(id)sender    { self.fileBrowserVisible = !self.fileBrowserVisible; }
 
+- (BOOL)scopeBarVisible
+{
+	return self.documentView.showsScopeBar;
+}
+
+- (void)setScopeBarVisible:(BOOL)visible
+{
+	self.documentView.showsScopeBar = visible;
+}
+
+- (IBAction)toggleScopeBar:(id)sender
+{
+	BOOL visible = !self.scopeBarVisible;
+	self.scopeBarVisible = visible;
+	if(visible)
+		[NSUserDefaults.standardUserDefaults removeObjectForKey:kUserDefaultsHideScopeBarKey];
+	else
+		[NSUserDefaults.standardUserDefaults setBool:YES forKey:kUserDefaultsHideScopeBarKey];
+}
+
 - (id)fileBrowserHistory                    { return self.fileBrowser.sessionState ?: _fileBrowserHistory; }
 - (CGFloat)fileBrowserWidth                 { return self.layoutView.fileBrowserWidth;   }
 - (void)setFileBrowserWidth:(CGFloat)aWidth { self.layoutView.fileBrowserWidth = aWidth; }
@@ -2289,6 +2309,8 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	BOOL active = YES;
 	if([menuItem action] == @selector(toggleFileBrowser:))
 		[menuItem setTitle:self.fileBrowserVisible ? @"Hide File Browser" : @"Show File Browser"];
+	else if([menuItem action] == @selector(toggleScopeBar:))
+		[menuItem setTitle:self.scopeBarVisible ? @"Hide Scope Bar" : @"Show Scope Bar"];
 	else if([menuItem action] == @selector(toggleHTMLOutput:))
 	{
 		BOOL isVisibleAndKey = self.htmlOutputVisible && (!self.htmlOutputInWindow || self.htmlOutputWindowController.window.isKeyWindow);
