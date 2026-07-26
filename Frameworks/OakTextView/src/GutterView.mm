@@ -93,7 +93,9 @@ struct data_source_t
 	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(cursorDidHide:) name:OakCursorDidHideNotification object:nil];
 	OakObserveUserDefaults(self);
 }
-
+- (BOOL)clipsToBounds {
+	return YES;
+}
 - (void)userDefaultsDidChange:(id)sender
 {
 	self.antiAlias = ![NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsDisableAntiAliasKey];
