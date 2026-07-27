@@ -492,7 +492,8 @@ private:
 	std::map<size_t, std::string> diagnosticLineTint;
 	std::vector<std::pair<ng::range_t, std::string>> diagnosticSquiggles;
 	std::map<size_t, NSRect> diagnosticPillRects;   // line → clickable icon capsule
-	std::map<size_t, NSRect> diagnosticBannerRects; // line → full banner; clicks here are swallowed
+	std::map<size_t, NSRect> diagnosticBannerRects; // line → full banner; padding clicks are swallowed
+	std::map<size_t, NSTextField*> diagnosticBannerTextFields;
 	NSPopover* diagnosticsPopover;
 	NSMutableArray<NSDictionary*>* diagnosticFixQueue;
 
@@ -1379,6 +1380,7 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 {
 	diagnosticPillRects.clear();
 	diagnosticBannerRects.clear();
+	std::set<size_t> visibleBannerTextFields;
 
 	for(auto const& pair : diagnosticSquiggles)
 	{
@@ -1414,9 +1416,9 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 	// Xcode-style issue banner per marked line, right-aligned and never
 	// overlapping the code: a solid icon capsule (with issue count when a line
 	// has several) plus a tinted message section that truncates — or vanishes,
-	// leaving only the icon — when the code runs long. Clicking it opens the
-	// diagnostics popover (see mouseDown:). Rects are stored for hit-testing
-	// even when outside the dirty rect.
+	// leaving only the icon — when the code runs long. The message is selectable,
+	// while clicking the icon opens the diagnostics popover (see mouseDown:).
+	// Rects are stored for hit-testing even when outside the dirty rect.
 	NSRect const visible = self.visibleRect;
 	NSFont* pillFont = [NSFont systemFontOfSize:documentView->font().pointSize * documentView->font_scale_factor()]; // match the editor’s effective text size
 	BOOL const isDark = self.theme->is_dark();
@@ -1464,7 +1466,26 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 
 		NSRect const iconRect = NSMakeRect(NSMinX(pill), NSMinY(pill), iconW, pillH);
 		diagnosticPillRects[line]   = iconRect; // only the icon capsule opens the popover
-		diagnosticBannerRects[line] = pill;     // the rest of the banner swallows clicks
+		diagnosticBannerRects[line] = pill;     // padding outside the selectable text swallows clicks
+
+		if(textWidth > 0 && NSIntersectsRect(pill, visible))
+		{
+			NSTextField* textField = diagnosticBannerTextFields[line];
+			if(!textField)
+			{
+				textField = [NSTextField labelWithAttributedString:str];
+				textField.selectable = YES;
+				textField.focusRingType = NSFocusRingTypeNone;
+				textField.lineBreakMode = NSLineBreakByTruncatingTail;
+				textField.usesSingleLineMode = YES;
+				[self addSubview:textField];
+				diagnosticBannerTextFields[line] = textField;
+			}
+			if(![textField.attributedStringValue isEqualToAttributedString:str])
+				textField.attributedStringValue = str;
+			textField.frame = NSMakeRect(NSMinX(pill) + iconW + padX, round(NSMidY(pill) - str.size.height/2) - 1, textWidth - 2*padX, str.size.height);
+			visibleBannerTextFields.insert(line);
+		}
 
 		if(!NSIntersectsRect(pill, aRect))
 			continue;
@@ -1494,8 +1515,17 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 		NSSize const glyphSize = glyphStr.size;
 		[glyphStr drawAtPoint:NSMakePoint(round(NSMidX(iconRect) - glyphSize.width/2), round(NSMidY(iconRect) - glyphSize.height/2) - 1)];
 
-		if (textWidth > 0)
-			[str drawWithRect:NSMakeRect(NSMinX(pill) + iconW + padX, round(NSMidY(pill) - str.size.height/2) - 1, textWidth - 2*padX, str.size.height) options:NSStringDrawingUsesLineFragmentOrigin];
+	}
+
+	for(auto it = diagnosticBannerTextFields.begin(); it != diagnosticBannerTextFields.end();)
+	{
+		if(visibleBannerTextFields.count(it->first))
+			++it;
+		else
+		{
+			[it->second removeFromSuperview];
+			it = diagnosticBannerTextFields.erase(it);
+		}
 	}
 }
 
@@ -1537,6 +1567,7 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 		[str appendAttributedString:[[NSAttributedString alloc] initWithString:message attributes:@{ NSForegroundColorAttributeName: NSColor.labelColor, NSFontAttributeName: messageFont }]];
 
 		NSTextField* label = [NSTextField labelWithAttributedString:str];
+		label.selectable = YES;
 		label.lineBreakMode = NSLineBreakByWordWrapping;
 		label.preferredMaxLayoutWidth = labelWidth;
 		[label setContentHuggingPriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
