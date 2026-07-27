@@ -105,12 +105,7 @@ static NSColor* DividerColor ()
 		OakAddAutoLayoutViewsToSuperview(@[ view ], viewController.view);
 		[viewController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{ @"view": view }]];
 
-		NSLayoutYAxisAnchor* topAnchor = viewController.view.topAnchor;
-		if(@available(macOS 26.0, *))
-		{
-			if(viewController == _documentViewController)
-				topAnchor = viewController.view.safeAreaLayoutGuide.topAnchor;
-		}
+		NSLayoutYAxisAnchor* topAnchor = viewController == _documentViewController ? viewController.view.safeAreaLayoutGuide.topAnchor : viewController.view.topAnchor;
 		[view.topAnchor constraintEqualToAnchor:topAnchor].active = YES;
 		[view.bottomAnchor constraintEqualToAnchor:viewController.view.bottomAnchor].active = YES;
 	}
