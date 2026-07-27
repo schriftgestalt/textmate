@@ -1684,19 +1684,20 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	}
 }
 
-- (void)showTabInProjectFolder:(id)sender
+- (void)showTabInProjectFilesSidebar:(id)sender
 {
-	if(!self.fileBrowserVisible || !self.projectPath)
-		return;
-
 	if(NSIndexSet* indexSet = [self tryObtainIndexSetFrom:sender])
 	{
 		NSUInteger index = indexSet.firstIndex;
 		if(index < _documents.count)
 		{
 			OakDocument* doc = _documents[index];
-			if(doc.path && path::is_child(to_s(doc.path), to_s(self.projectPath)))
-				[self.fileBrowser selectURL:[NSURL fileURLWithPath:doc.path] withParentURL:[NSURL fileURLWithPath:self.projectPath]];
+			if(doc.path)
+			{
+				NSURL* fileURL = [NSURL fileURLWithPath:doc.path];
+				self.fileBrowserVisible = YES;
+				[self.fileBrowser selectURL:fileURL withParentURL:fileURL.URLByDeletingLastPathComponent];
+			}
 		}
 	}
 }
@@ -1729,12 +1730,9 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		}
 	}
 
-	BOOL showInProjectFolder = NO;
-	if(tabIndex != -1 && tabIndex < total && self.fileBrowserVisible && self.projectPath)
-	{
-		OakDocument* doc = _documents[tabIndex];
-		showInProjectFolder = doc.path && path::is_child(to_s(doc.path), to_s(self.projectPath));
-	}
+	BOOL showInProjectFilesSidebar = NO;
+	if(tabIndex != -1 && tabIndex < total)
+		showInProjectFilesSidebar = _documents[tabIndex].path != nil;
 
 	SEL closeSingleTabSelector = tabIndex == _selectedTabIndex ? @selector(performCloseTab:) : @selector(takeTabsToCloseFrom:);
 	MBMenu const items = {
@@ -1750,9 +1748,9 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	};
 
 	NSMenu* menu = MBCreateMenu(items);
-	if(showInProjectFolder)
+	if(showInProjectFilesSidebar)
 	{
-		NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:@"Show in Project Folder" action:@selector(showTabInProjectFolder:) keyEquivalent:@""];
+		NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:@"Show File in Project Files Sidebar" action:@selector(showTabInProjectFilesSidebar:) keyEquivalent:@""];
 		item.representedObject = clickedTab;
 		item.target = self;
 		[menu insertItem:item atIndex:2];
@@ -2350,7 +2348,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	else if([menuItem action] == @selector(performBundleItemWithUUIDStringFrom:))
 		active = [_textView validateMenuItem:menuItem];
 
-	SEL tabBarActions[] = { @selector(performCloseTab:), @selector(takeNewTabIndexFrom::), @selector(takeTabsToCloseFrom:), @selector(takeTabsToTearOffFrom:), @selector(toggleSticky:), @selector(showTabInProjectFolder:) };
+	SEL tabBarActions[] = { @selector(performCloseTab:), @selector(takeNewTabIndexFrom::), @selector(takeTabsToCloseFrom:), @selector(takeTabsToTearOffFrom:), @selector(toggleSticky:), @selector(showTabInProjectFilesSidebar:) };
 	if(oak::contains(std::begin(tabBarActions), std::end(tabBarActions), [menuItem action]))
 	{
 		if(NSIndexSet* indexSet = [self tryObtainIndexSetFrom:menuItem])
