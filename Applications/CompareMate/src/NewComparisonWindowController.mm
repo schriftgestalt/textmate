@@ -1,43 +1,22 @@
 #import "NewComparisonWindowController.h"
 
-@interface FileDropView : NSView
+@interface FileDropImageView : NSImageView
 @property (nonatomic, copy) void (^fileDropHandler)(NSString* path);
-@property (nonatomic) NSImageView* imageView;
 @property (nonatomic) BOOL receivingDrag;
 - (void)setFilePath:(NSString*)path;
 @end
 
-@implementation FileDropView
-- (instancetype)init
+@implementation FileDropImageView
+- (void)awakeFromNib
 {
-	if(self = [super initWithFrame:NSZeroRect])
-	{
-		self.wantsLayer = YES;
-		self.layer.cornerRadius = 7;
-		self.layer.borderWidth = 1;
-		[self registerForDraggedTypes:@[ NSPasteboardTypeFileURL ]];
-
-		_imageView = [[NSImageView alloc] initWithFrame:NSZeroRect];
-		_imageView.imageScaling = NSImageScaleProportionallyUpOrDown;
-		_imageView.translatesAutoresizingMaskIntoConstraints = NO;
-		_imageView.image = [NSImage imageWithSystemSymbolName:@"doc" accessibilityDescription:@"File"];
-		[self addSubview:_imageView];
-
-		[NSLayoutConstraint activateConstraints:@[
-			[_imageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:10],
-			[_imageView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10],
-			[_imageView.topAnchor constraintEqualToAnchor:self.topAnchor constant:10],
-			[_imageView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-10],
-		]];
-
-		[self updateAppearance];
-	}
-	return self;
-}
-
-- (NSView*)hitTest:(NSPoint)point
-{
-	return NSPointInRect(point, self.bounds) ? self : nil;
+	[super awakeFromNib];
+	self.wantsLayer = YES;
+	self.layer.cornerRadius = 7;
+	self.layer.borderWidth = 1;
+	self.imageScaling = NSImageScaleProportionallyDown;
+	[self registerForDraggedTypes:@[ NSPasteboardTypeFileURL ]];
+	[self setFilePath:nil];
+	[self updateAppearance];
 }
 
 - (void)viewDidChangeEffectiveAppearance
@@ -87,28 +66,32 @@
 - (void)setFilePath:(NSString*)path
 {
 	BOOL isDirectory = NO;
+	NSImage* image = nil;
 	if(path.length && [NSFileManager.defaultManager fileExistsAtPath:path isDirectory:&isDirectory] && !isDirectory)
 	{
-		self.imageView.image = [NSWorkspace.sharedWorkspace iconForFile:path];
+		image = [NSWorkspace.sharedWorkspace iconForFile:path];
 		self.toolTip = path;
 		self.accessibilityLabel = [NSString stringWithFormat:@"Selected file: %@", path.lastPathComponent];
 	}
 	else
 	{
-		self.imageView.image = [NSImage imageWithSystemSymbolName:@"doc" accessibilityDescription:@"File"];
+		image = [NSImage imageWithSystemSymbolName:@"doc" accessibilityDescription:@"File"];
 		self.toolTip = @"Drop a file here";
 		self.accessibilityLabel = @"File drop target";
 	}
+
+	self.image = [image copy];
+	self.image.size = NSMakeSize(56, 56);
 }
 @end
 
 @interface NewComparisonWindowController () <NSComboBoxDelegate>
 @property (nonatomic, copy) NewComparisonHandler completionHandler;
-@property (nonatomic) NSComboBox* leftPathField;
-@property (nonatomic) NSComboBox* rightPathField;
-@property (nonatomic) FileDropView* leftDropView;
-@property (nonatomic) FileDropView* rightDropView;
-@property (nonatomic) NSButton* compareButton;
+@property (nonatomic) IBOutlet NSComboBox* leftPathField;
+@property (nonatomic) IBOutlet NSComboBox* rightPathField;
+@property (nonatomic) IBOutlet FileDropImageView* leftDropImageView;
+@property (nonatomic) IBOutlet FileDropImageView* rightDropImageView;
+@property (nonatomic) IBOutlet NSButton* compareButton;
 @end
 
 @implementation NewComparisonWindowController
@@ -117,115 +100,28 @@ static NSString* const RightFileHistoryKey = @"CompareMateRightFileHistory";
 
 - (instancetype)initWithCompletionHandler:(NewComparisonHandler)completionHandler
 {
-	NSRect const contentRect = NSMakeRect(0, 0, 920, 218);
-	NSWindowStyleMask const styleMask = NSWindowStyleMaskTitled|NSWindowStyleMaskClosable;
-	NSWindow* window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:styleMask backing:NSBackingStoreBuffered defer:NO];
-	if(self = [super initWithWindow:window])
-	{
+	if(self = [super initWithWindowNibName:@"NewComparisonWindow"])
 		_completionHandler = [completionHandler copy];
-		window.title = @"New Comparison";
-		window.releasedWhenClosed = NO;
-		window.restorable = NO;
-
-		NSView* contentView = [[NSView alloc] initWithFrame:contentRect];
-		window.contentView = contentView;
-
-		NSButton* leftButton = [NSButton buttonWithTitle:@"Left…" target:self action:@selector(chooseLeftFile:)];
-		NSButton* rightButton = [NSButton buttonWithTitle:@"Right…" target:self action:@selector(chooseRightFile:)];
-		leftButton.translatesAutoresizingMaskIntoConstraints = NO;
-		rightButton.translatesAutoresizingMaskIntoConstraints = NO;
-
-		_leftPathField = [[NSComboBox alloc] initWithFrame:NSZeroRect];
-		_leftPathField.placeholderString = @"Choose the left file";
-		_leftPathField.delegate = self;
-		_leftPathField.lineBreakMode = NSLineBreakByTruncatingMiddle;
-		_leftPathField.numberOfVisibleItems = 10;
-		_leftPathField.completes = YES;
-		[_leftPathField addItemsWithObjectValues:[NSUserDefaults.standardUserDefaults stringArrayForKey:LeftFileHistoryKey] ?: @[ ]];
-		_leftPathField.translatesAutoresizingMaskIntoConstraints = NO;
-
-		_rightPathField = [[NSComboBox alloc] initWithFrame:NSZeroRect];
-		_rightPathField.placeholderString = @"Choose the right file";
-		_rightPathField.delegate = self;
-		_rightPathField.lineBreakMode = NSLineBreakByTruncatingMiddle;
-		_rightPathField.numberOfVisibleItems = 10;
-		_rightPathField.completes = YES;
-		[_rightPathField addItemsWithObjectValues:[NSUserDefaults.standardUserDefaults stringArrayForKey:RightFileHistoryKey] ?: @[ ]];
-		_rightPathField.translatesAutoresizingMaskIntoConstraints = NO;
-
-		NSTextField* leftLabel = [NSTextField labelWithString:@"Left"];
-		NSTextField* rightLabel = [NSTextField labelWithString:@"Right"];
-		leftLabel.alignment = NSTextAlignmentCenter;
-		rightLabel.alignment = NSTextAlignmentCenter;
-		leftLabel.translatesAutoresizingMaskIntoConstraints = NO;
-		rightLabel.translatesAutoresizingMaskIntoConstraints = NO;
-
-		_leftDropView = [[FileDropView alloc] init];
-		_rightDropView = [[FileDropView alloc] init];
-		_leftDropView.translatesAutoresizingMaskIntoConstraints = NO;
-		_rightDropView.translatesAutoresizingMaskIntoConstraints = NO;
-
-		__weak NewComparisonWindowController* weakSelf = self;
-		_leftDropView.fileDropHandler = ^(NSString* path) {
-			[weakSelf setPath:path forLeftSide:YES];
-		};
-		_rightDropView.fileDropHandler = ^(NSString* path) {
-			[weakSelf setPath:path forLeftSide:NO];
-		};
-
-		NSButton* cancelButton = [NSButton buttonWithTitle:@"Cancel" target:self action:@selector(cancel:)];
-		_compareButton = [NSButton buttonWithTitle:@"Compare" target:self action:@selector(compare:)];
-		cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
-		_compareButton.translatesAutoresizingMaskIntoConstraints = NO;
-		_compareButton.keyEquivalent = @"\r";
-
-		for(NSView* view in @[ leftButton, rightButton, _leftPathField, _rightPathField, leftLabel, rightLabel, _leftDropView, _rightDropView, cancelButton, _compareButton ])
-			[contentView addSubview:view];
-
-		[NSLayoutConstraint activateConstraints:@[
-			[leftButton.leadingAnchor constraintEqualToAnchor:contentView.leadingAnchor constant:24],
-			[leftButton.topAnchor constraintEqualToAnchor:contentView.topAnchor constant:55],
-			[leftButton.widthAnchor constraintEqualToConstant:100],
-			[rightButton.leadingAnchor constraintEqualToAnchor:leftButton.leadingAnchor],
-			[rightButton.topAnchor constraintEqualToAnchor:leftButton.bottomAnchor constant:12],
-			[rightButton.widthAnchor constraintEqualToAnchor:leftButton.widthAnchor],
-
-			[_leftPathField.leadingAnchor constraintEqualToAnchor:leftButton.trailingAnchor constant:12],
-			[_leftPathField.centerYAnchor constraintEqualToAnchor:leftButton.centerYAnchor],
-			[_leftPathField.trailingAnchor constraintEqualToAnchor:_leftDropView.leadingAnchor constant:-20],
-			[_rightPathField.leadingAnchor constraintEqualToAnchor:rightButton.trailingAnchor constant:12],
-			[_rightPathField.centerYAnchor constraintEqualToAnchor:rightButton.centerYAnchor],
-			[_rightPathField.trailingAnchor constraintEqualToAnchor:_leftDropView.leadingAnchor constant:-20],
-
-			[leftLabel.centerXAnchor constraintEqualToAnchor:_leftDropView.centerXAnchor],
-			[leftLabel.topAnchor constraintEqualToAnchor:contentView.topAnchor constant:18],
-			[leftLabel.widthAnchor constraintEqualToAnchor:_leftDropView.widthAnchor],
-			[_leftDropView.topAnchor constraintEqualToAnchor:leftLabel.bottomAnchor constant:7],
-			[_leftDropView.widthAnchor constraintEqualToConstant:76],
-			[_leftDropView.heightAnchor constraintEqualToConstant:76],
-
-			[rightLabel.centerXAnchor constraintEqualToAnchor:_rightDropView.centerXAnchor],
-			[rightLabel.topAnchor constraintEqualToAnchor:leftLabel.topAnchor],
-			[rightLabel.widthAnchor constraintEqualToAnchor:_rightDropView.widthAnchor],
-			[_rightDropView.leadingAnchor constraintEqualToAnchor:_leftDropView.trailingAnchor constant:16],
-			[_rightDropView.topAnchor constraintEqualToAnchor:_leftDropView.topAnchor],
-			[_rightDropView.widthAnchor constraintEqualToAnchor:_leftDropView.widthAnchor],
-			[_rightDropView.heightAnchor constraintEqualToAnchor:_leftDropView.heightAnchor],
-			[_rightDropView.trailingAnchor constraintEqualToAnchor:contentView.trailingAnchor constant:-24],
-
-			[_compareButton.trailingAnchor constraintEqualToAnchor:contentView.trailingAnchor constant:-24],
-			[_compareButton.bottomAnchor constraintEqualToAnchor:contentView.bottomAnchor constant:-20],
-			[_compareButton.widthAnchor constraintEqualToConstant:104],
-			[cancelButton.trailingAnchor constraintEqualToAnchor:_compareButton.leadingAnchor constant:-12],
-			[cancelButton.centerYAnchor constraintEqualToAnchor:_compareButton.centerYAnchor],
-			[cancelButton.widthAnchor constraintEqualToConstant:104],
-		]];
-
-		[self updateState];
-		[window center];
-		window.initialFirstResponder = _leftPathField;
-	}
 	return self;
+}
+
+- (void)windowDidLoad
+{
+	[super windowDidLoad];
+
+	[self.leftPathField addItemsWithObjectValues:[NSUserDefaults.standardUserDefaults stringArrayForKey:LeftFileHistoryKey] ?: @[ ]];
+	[self.rightPathField addItemsWithObjectValues:[NSUserDefaults.standardUserDefaults stringArrayForKey:RightFileHistoryKey] ?: @[ ]];
+
+	__weak NewComparisonWindowController* weakSelf = self;
+	self.leftDropImageView.fileDropHandler = ^(NSString* path) {
+		[weakSelf setPath:path forLeftSide:YES];
+	};
+	self.rightDropImageView.fileDropHandler = ^(NSString* path) {
+		[weakSelf setPath:path forLeftSide:NO];
+	};
+
+	[self updateState];
+	[self.window center];
 }
 
 - (NSString*)normalizedPathFromField:(NSComboBox*)field
@@ -243,8 +139,8 @@ static NSString* const RightFileHistoryKey = @"CompareMateRightFileHistory";
 {
 	NSString* leftPath = [self normalizedPathFromField:self.leftPathField];
 	NSString* rightPath = [self normalizedPathFromField:self.rightPathField];
-	[self.leftDropView setFilePath:leftPath];
-	[self.rightDropView setFilePath:rightPath];
+	[self.leftDropImageView setFilePath:leftPath];
+	[self.rightDropImageView setFilePath:rightPath];
 	self.compareButton.enabled = [self isRegularFileAtPath:leftPath] && [self isRegularFileAtPath:rightPath];
 }
 

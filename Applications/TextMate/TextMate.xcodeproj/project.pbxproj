@@ -709,6 +709,7 @@
 		6AD7A1DB822E0A9FE115B04A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4222DF04F8E00DCE20D /* Cocoa.framework */; };
 		6B436B05195535EFC3EDA591 /* DocumentWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D88A2B5959FF0049910C /* DocumentWindowController.mm */; };
 		6B705F5FD086A56E3C2971F1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35DB48B68473F6CF26516974 /* MainMenu.xib */; };
+		C04A0001300D000000000001 /* NewComparisonWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C04A0001300D000000000002 /* NewComparisonWindow.xib */; };
 		6B7EDD00298303C8E62EC58B /* events.md in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6152B5959410049910C /* events.md */; };
 		6CF06314833C51FD5C317E2C /* parse.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43C2DF0879500DCE20D /* parse.cc */; };
 		6D5C3AC2385E2140308D95BE /* parser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7392B5959FE0049910C /* parser.cc */; };
@@ -1331,6 +1332,7 @@
 		1EFDEBAA6741B3596F45FDA2 /* ViewController.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = ViewController.mm; sourceTree = "<group>"; };
 		2AC0083D226B1DF7B6FE3593 /* QuickLook.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = QuickLook.entitlements; sourceTree = "<group>"; };
 		35DB48B68473F6CF26516974 /* MainMenu.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = MainMenu.xib; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		C04A0001300D000000000002 /* NewComparisonWindow.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = NewComparisonWindow.xib; path = en.lproj/NewComparisonWindow.xib; sourceTree = "<group>"; };
 		36CC25BF908200E4162E218A /* NewComparisonWindowController.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = NewComparisonWindowController.mm; sourceTree = "<group>"; };
 		378D2D67D4D92A8FCEB06514 /* QuickLookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookUI.framework; path = System/Library/Frameworks/QuickLookUI.framework; sourceTree = SDKROOT; };
 		3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = System/Library/Frameworks/ExceptionHandling.framework; sourceTree = SDKROOT; };
@@ -4562,6 +4564,7 @@
 			children = (
 				56D2239D300D1FB7006F75AD /* AppIcon.icon */,
 				35DB48B68473F6CF26516974 /* MainMenu.xib */,
+				C04A0001300D000000000002 /* NewComparisonWindow.xib */,
 				A79B3841EB3E761D12CC0E2A /* InfoPlist.strings */,
 			);
 			path = resources;
@@ -4980,6 +4983,7 @@
 				F3A054B7ED602039E65F3F56 /* Charsets.plist in Resources */,
 				963E18418CB474B2841DCC63 /* symbolicate in Resources */,
 				6B705F5FD086A56E3C2971F1 /* MainMenu.xib in Resources */,
+				C04A0001300D000000000001 /* NewComparisonWindow.xib in Resources */,
 				75F074D66D711BD4AAA74461 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
