@@ -9,6 +9,8 @@
 - (IBAction)findPrevious:(id)sender;
 - (IBAction)goToNextBookmark:(id)sender;
 - (IBAction)goToPreviousBookmark:(id)sender;
+- (IBAction)goBackInNavigationHistory:(id)sender;
+- (IBAction)goForwardInNavigationHistory:(id)sender;
 - (IBAction)incrementalSearch:(id)sender;
 - (IBAction)incrementalSearchPrevious:(id)sender;
 - (IBAction)jumpToNextMark:(id)sender;

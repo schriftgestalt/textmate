@@ -40,6 +40,8 @@
 - (IBAction)selectNextTab:(id)sender;
 - (IBAction)selectPreviousTab:(id)sender;
 - (IBAction)takeSelectedTabIndexFrom:(id)sender;
+- (IBAction)goBackInNavigationHistory:(id)sender;
+- (IBAction)goForwardInNavigationHistory:(id)sender;
 - (IBAction)toggleSticky:(id)sender;
 - (IBAction)toggleScopeBar:(id)sender;
 

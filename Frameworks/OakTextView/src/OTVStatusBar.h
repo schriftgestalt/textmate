@@ -12,7 +12,10 @@
 @property (nonatomic, getter = isRecordingMacro) BOOL recordingMacro;
 @property (nonatomic) BOOL softTabs;
 @property (nonatomic) NSUInteger tabSize;
+@property (nonatomic) BOOL canNavigateBack;
+@property (nonatomic) BOOL canNavigateForward;
 
 @property (nonatomic, weak) id <OTVStatusBarDelegate> delegate;
 @property (nonatomic, weak) id target;
+@property (nonatomic, weak) id navigationTarget;
 @end

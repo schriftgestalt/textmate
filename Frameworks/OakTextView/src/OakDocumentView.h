@@ -10,6 +10,9 @@
 @property (nonatomic) OakDocument* document;
 @property (nonatomic) BOOL hideStatusBar;
 @property (nonatomic) BOOL showsScopeBar;
+@property (nonatomic, weak) id navigationTarget;
+@property (nonatomic) BOOL canNavigateBack;
+@property (nonatomic) BOOL canNavigateForward;
 - (IBAction)toggleLineNumbers:(id)sender;
 - (IBAction)takeTabSizeFrom:(id)sender;
 - (IBAction)showTabSizeSelectorPanel:(id)sender;

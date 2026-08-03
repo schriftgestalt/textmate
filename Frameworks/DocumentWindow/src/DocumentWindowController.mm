@@ -42,6 +42,23 @@ static NSString* const kUserDefaultsHideStatusBarKey = @"hideStatusBar";
 static NSString* const kUserDefaultsHideScopeBarKey = @"hideScopeBar";
 static NSString* const kUserDefaultsDisableBundleSuggestionsKey = @"disableBundleSuggestions";
 static NSString* const kUserDefaultsGrammarsToNeverSuggestKey = @"grammarsToNeverSuggest";
+static NSUInteger const kNavigationHistoryLimit = 50;
+
+@interface DWNavigationHistoryEntry : NSObject
+@property (nonatomic) OakDocument* document;
+@property (nonatomic) NSString* selection;
++ (instancetype)entryWithDocument:(OakDocument*)document selection:(NSString*)selection;
+@end
+
+@implementation DWNavigationHistoryEntry
++ (instancetype)entryWithDocument:(OakDocument*)document selection:(NSString*)selection
+{
+	DWNavigationHistoryEntry* entry = [self new];
+	entry.document = document;
+	entry.selection = selection;
+	return entry;
+}
+@end
 
 static bool can_reach_host (char const* host)
 {
@@ -113,6 +130,10 @@ static void show_command_error (std::string const& message, oak::uuid_t const& u
 @property (nonatomic) NSString*                   documentPath;
 
 @property (nonatomic) NSArray<Bundle*>*           bundlesAlreadySuggested;
+@property (nonatomic) NSMutableArray<DWNavigationHistoryEntry*>* navigationHistory;
+@property (nonatomic) NSUInteger                  navigationHistoryIndex;
+@property (nonatomic) NSUInteger                  navigationHistoryIndexBeforePendingNavigation;
+@property (nonatomic) OakDocument*                pendingNavigationDocument;
 
 @property (nonatomic, readwrite) NSArray<OakDocument*>* documents;
 @property (nonatomic, readwrite) OakDocument*           selectedDocument;
@@ -127,6 +148,9 @@ static void show_command_error (std::string const& message, oak::uuid_t const& u
 
 - (void)takeNewTabIndexFrom:(id)sender;   // used by newDocumentInTab:
 - (void)takeTabsToTearOffFrom:(id)sender; // used by moveDocumentToNewWindow:
+- (void)recordNavigationFromDocument:(OakDocument*)oldDocument toDocument:(OakDocument*)newDocument;
+- (void)recordNavigationWithinSelectedDocumentToSelection:(NSString*)selection;
+- (void)updateNavigationHistoryButtons;
 @end
 
 namespace
@@ -221,6 +245,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		self.tabBarView.delegate   = self;
 
 		self.documentView = [[OakDocumentView alloc] init];
+		self.documentView.navigationTarget = self;
 		self.textView = self.documentView.textView;
 		self.textView.delegate = self;
 
@@ -269,6 +294,10 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		[self userDefaultsDidChange:nil];
 
 		self.window.titlebarSeparatorStyle = NSTitlebarSeparatorStyleNone;
+
+		self.navigationHistory = [NSMutableArray array];
+		self.navigationHistoryIndex = NSNotFound;
+		self.navigationHistoryIndexBeforePendingNavigation = NSNotFound;
 	}
 	return self;
 }
@@ -415,6 +444,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	self.htmlOutputInWindow = [[NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsHTMLOutputPlacementKey] isEqualToString:@"window"];
 	self.autoRevealFile = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsAutoRevealFileKey];
 	self.documentView.hideStatusBar = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsHideStatusBarKey];
+	[self updateNavigationHistoryButtons];
 	self.scopeBarVisible = ![NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsHideScopeBarKey];
 
 	BOOL disableTabBarCollapsingKey = [NSUserDefaults.standardUserDefaults boolForKey:kUserDefaultsDisableTabBarCollapsingKey];
@@ -1096,6 +1126,14 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		}
 		else
 		{
+			if([self.pendingNavigationDocument isEqual:document])
+			{
+				self.navigationHistoryIndex = self.navigationHistoryIndexBeforePendingNavigation;
+				self.navigationHistoryIndexBeforePendingNavigation = NSNotFound;
+				self.pendingNavigationDocument = nil;
+				[self updateNavigationHistoryButtons];
+			}
+
 			if(filterUUID)
 				show_command_error(to_s(errorMessage), filterUUID);
 
@@ -1527,6 +1565,137 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 // = Properties =
 // ==============
 
+- (NSString*)navigationSelectionForDocument:(OakDocument*)document
+{
+	if([document isEqual:self.selectedDocument])
+		return self.textView.selectionString ?: document.selection ?: @"1";
+	return document.selection ?: @"1";
+}
+
+- (void)discardNavigationHistoryAfterCurrentEntry
+{
+	if(self.navigationHistoryIndex != NSNotFound && self.navigationHistoryIndex + 1 < self.navigationHistory.count)
+		[self.navigationHistory removeObjectsInRange:NSMakeRange(self.navigationHistoryIndex + 1, self.navigationHistory.count - self.navigationHistoryIndex - 1)];
+}
+
+- (void)appendNavigationHistoryEntryForDocument:(OakDocument*)document selection:(NSString*)selection
+{
+	if(!document)
+		return;
+
+	[self.navigationHistory addObject:[DWNavigationHistoryEntry entryWithDocument:document selection:selection ?: @"1"]];
+	self.navigationHistoryIndex = self.navigationHistory.count - 1;
+
+	if(self.navigationHistory.count > kNavigationHistoryLimit)
+	{
+		NSUInteger const excess = self.navigationHistory.count - kNavigationHistoryLimit;
+		[self.navigationHistory removeObjectsInRange:NSMakeRange(0, excess)];
+		self.navigationHistoryIndex -= excess;
+	}
+}
+
+- (void)recordNavigationFromDocument:(OakDocument*)oldDocument toDocument:(OakDocument*)newDocument
+{
+	if(!oldDocument)
+	{
+		if(newDocument && self.navigationHistory.count == 0)
+			[self appendNavigationHistoryEntryForDocument:newDocument selection:[self navigationSelectionForDocument:newDocument]];
+		return;
+	}
+
+	NSString* const oldSelection = [self navigationSelectionForDocument:oldDocument];
+	if(self.navigationHistoryIndex == NSNotFound || self.navigationHistory.count == 0)
+	{
+		[self appendNavigationHistoryEntryForDocument:oldDocument selection:oldSelection];
+	}
+	else
+	{
+		DWNavigationHistoryEntry* currentEntry = self.navigationHistory[self.navigationHistoryIndex];
+		if([currentEntry.document isEqual:oldDocument])
+		{
+			currentEntry.selection = oldSelection;
+		}
+		else
+		{
+			[self discardNavigationHistoryAfterCurrentEntry];
+			[self appendNavigationHistoryEntryForDocument:oldDocument selection:oldSelection];
+		}
+	}
+
+	[self discardNavigationHistoryAfterCurrentEntry];
+	[self appendNavigationHistoryEntryForDocument:newDocument selection:[self navigationSelectionForDocument:newDocument]];
+}
+
+- (void)recordNavigationWithinSelectedDocumentToSelection:(NSString*)selection
+{
+	if(!self.selectedDocument || !selection.length)
+		return;
+
+	NSString* const currentSelection = [self navigationSelectionForDocument:self.selectedDocument];
+	if([currentSelection isEqualToString:selection])
+		return;
+
+	if(self.navigationHistoryIndex == NSNotFound || self.navigationHistory.count == 0)
+		[self appendNavigationHistoryEntryForDocument:self.selectedDocument selection:currentSelection];
+	else
+		self.navigationHistory[self.navigationHistoryIndex].selection = currentSelection;
+
+	[self discardNavigationHistoryAfterCurrentEntry];
+	[self appendNavigationHistoryEntryForDocument:self.selectedDocument selection:selection];
+	[self updateNavigationHistoryButtons];
+}
+
+- (void)updateNavigationHistoryButtons
+{
+	BOOL const navigationInProgress = self.pendingNavigationDocument != nil;
+	self.documentView.canNavigateBack = !navigationInProgress && self.navigationHistoryIndex != NSNotFound && self.navigationHistoryIndex > 0;
+	self.documentView.canNavigateForward = !navigationInProgress && self.navigationHistoryIndex != NSNotFound && self.navigationHistoryIndex + 1 < self.navigationHistory.count;
+}
+
+- (void)navigateToHistoryIndex:(NSUInteger)index
+{
+	if(self.pendingNavigationDocument || index >= self.navigationHistory.count || index == self.navigationHistoryIndex)
+		return;
+
+	if(self.navigationHistoryIndex != NSNotFound && self.navigationHistoryIndex < self.navigationHistory.count)
+	{
+		DWNavigationHistoryEntry* currentEntry = self.navigationHistory[self.navigationHistoryIndex];
+		if([currentEntry.document isEqual:self.selectedDocument])
+			currentEntry.selection = [self navigationSelectionForDocument:self.selectedDocument];
+	}
+
+	self.navigationHistoryIndexBeforePendingNavigation = self.navigationHistoryIndex;
+	self.navigationHistoryIndex = index;
+	DWNavigationHistoryEntry* entry = self.navigationHistory[index];
+	self.pendingNavigationDocument = entry.document;
+	entry.document.selection = entry.selection;
+	[self updateNavigationHistoryButtons];
+
+	NSUInteger documentIndex = [self.documents indexOfObject:entry.document];
+	if(documentIndex == NSNotFound)
+	{
+		NSArray<NSUUID*>* closeDocuments = self.disposableDocument ? @[ self.disposableDocument ] : nil;
+		[self insertDocuments:@[ entry.document ] atIndex:self.selectedTabIndex + 1 selecting:entry.document andClosing:closeDocuments];
+	}
+	else
+	{
+		self.selectedTabIndex = documentIndex;
+	}
+	[self openAndSelectDocument:entry.document activate:YES];
+}
+
+- (IBAction)goBackInNavigationHistory:(id)sender
+{
+	if(self.navigationHistoryIndex != NSNotFound && self.navigationHistoryIndex > 0)
+		[self navigateToHistoryIndex:self.navigationHistoryIndex - 1];
+}
+
+- (IBAction)goForwardInNavigationHistory:(id)sender
+{
+	if(self.navigationHistoryIndex != NSNotFound && self.navigationHistoryIndex + 1 < self.navigationHistory.count)
+		[self navigateToHistoryIndex:self.navigationHistoryIndex + 1];
+}
+
 - (void)setDocuments:(NSArray<OakDocument*>*)newDocuments
 {
 	for(OakDocument* document in newDocuments)
@@ -1561,11 +1730,28 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 - (void)setSelectedDocument:(OakDocument*)newDocument
 {
 	ASSERT(!newDocument || newDocument.isLoaded);
+	BOOL const isPendingNavigation = self.pendingNavigationDocument && [self.pendingNavigationDocument isEqual:newDocument];
+	if(isPendingNavigation)
+	{
+		self.pendingNavigationDocument = nil;
+		self.navigationHistoryIndexBeforePendingNavigation = NSNotFound;
+	}
+
 	if([_selectedDocument isEqual:newDocument])
 	{
 		self.documentView.document = _selectedDocument;
+		[self updateNavigationHistoryButtons];
 		return;
 	}
+
+	if(self.pendingNavigationDocument)
+	{
+		self.navigationHistoryIndex = self.navigationHistoryIndexBeforePendingNavigation;
+		self.navigationHistoryIndexBeforePendingNavigation = NSNotFound;
+		self.pendingNavigationDocument = nil;
+	}
+	if(!isPendingNavigation)
+		[self recordNavigationFromDocument:_selectedDocument toDocument:newDocument];
 
 	[OakDocumentController.sharedInstance didTouchDocument:_selectedDocument];
 	[OakDocumentController.sharedInstance didTouchDocument:newDocument];
@@ -1596,6 +1782,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	{
 		self.projectPath = nil;
 	}
+	[self updateNavigationHistoryButtons];
 }
 
 - (void)setSelectedTabIndex:(NSUInteger)newSelectedTabIndex
@@ -2855,10 +3042,14 @@ static NSUInteger DisableSessionSavingCount = 0;
 
 - (void)showDocument:(OakDocument*)aDocument andSelect:(text::range_t const&)range inProject:(NSUUID*)identifier bringToFront:(BOOL)bringToFront
 {
-	if(range != text::range_t::undefined)
-		aDocument.selection = to_ns(range);
-
 	DocumentWindowController* controller = [self controllerWithDocuments:@[ aDocument ] project:identifier];
+	if(range != text::range_t::undefined)
+	{
+		if([controller.selectedDocument isEqual:aDocument])
+			[controller recordNavigationWithinSelectedDocumentToSelection:to_ns(range)];
+		aDocument.selection = to_ns(range);
+	}
+
 	if(bringToFront)
 		[controller bringToFront];
 	else if(![controller.window isVisible])

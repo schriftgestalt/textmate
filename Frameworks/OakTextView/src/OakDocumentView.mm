@@ -372,6 +372,7 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 		_statusBar = [[OTVStatusBar alloc] initWithFrame:NSZeroRect];
 		_statusBar.delegate = self;
 		_statusBar.target = self;
+		_statusBar.navigationTarget = self.navigationTarget;
 
 		self.scopeBar = [[OTVScopeBar alloc] initWithFrame:NSZeroRect];
 		topAuxiliaryViews = [NSMutableArray new];
@@ -463,10 +464,31 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 		_statusBar = [[OTVStatusBar alloc] initWithFrame:NSZeroRect];
 		_statusBar.delegate = self;
 		_statusBar.target = self;
+		_statusBar.navigationTarget = self.navigationTarget;
+		_statusBar.canNavigateBack = self.canNavigateBack;
+		_statusBar.canNavigateForward = self.canNavigateForward;
 
 		OakAddAutoLayoutViewsToSuperview(@[ _statusBar ], self);
 	}
 	[self setNeedsUpdateConstraints:YES];
+}
+
+- (void)setNavigationTarget:(id)newTarget
+{
+	_navigationTarget = newTarget;
+	_statusBar.navigationTarget = newTarget;
+}
+
+- (void)setCanNavigateBack:(BOOL)flag
+{
+	_canNavigateBack = flag;
+	_statusBar.canNavigateBack = flag;
+}
+
+- (void)setCanNavigateForward:(BOOL)flag
+{
+	_canNavigateForward = flag;
+	_statusBar.canNavigateForward = flag;
 }
 
 - (CGFloat)lineHeight
