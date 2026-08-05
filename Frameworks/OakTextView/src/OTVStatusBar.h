@@ -11,6 +11,7 @@
 @property (nonatomic) NSString* fileType; // This will update grammarName
 @property (nonatomic, getter = isRecordingMacro) BOOL recordingMacro;
 @property (nonatomic) BOOL softTabs;
+@property (nonatomic) BOOL automaticallyDetectsIndentation;
 @property (nonatomic) NSUInteger tabSize;
 @property (nonatomic) BOOL canNavigateBack;
 @property (nonatomic) BOOL canNavigateForward;

@@ -122,6 +122,8 @@ typedef NS_ENUM(NSInteger, OakDocumentIOResult) {
 // Read from .tm_properties so will update if we change fileType
 @property (nonatomic) NSUInteger tabSize;
 @property (nonatomic) BOOL softTabs;
+@property (nonatomic) BOOL automaticallyDetectsIndentation;
+- (void)reloadIndentationSettings;
 
 - (void)runPrintOperationModalForWindow:(NSWindow*)aWindow fontName:(NSString*)aFontName;
 

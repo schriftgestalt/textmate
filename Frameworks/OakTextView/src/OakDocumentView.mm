@@ -610,6 +610,10 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 	{
 		_statusBar.softTabs = self.document.softTabs;
 	}
+	else if([aKeyPath isEqualToString:@"automaticallyDetectsIndentation"])
+	{
+		_statusBar.automaticallyDetectsIndentation = self.document.automaticallyDetectsIndentation;
+	}
 	else if([aKeyPath isEqualToString:@"themeUUID"])
 	{
 		//[self updateStyle];
@@ -685,7 +689,7 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 
 - (void)setDocument:(OakDocument*)aDocument
 {
-	NSArray* const documentKeys = @[ @"fileType", @"tabSize", @"softTabs" ];
+	NSArray* const documentKeys = @[ @"fileType", @"tabSize", @"softTabs", @"automaticallyDetectsIndentation" ];
 
 	OakDocument* oldDocument = self.document;
 	if(oldDocument)
@@ -696,7 +700,10 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 	}
 
 	if(aDocument)
+	{
 		[aDocument loadModalForWindow:self.window completionHandler:nullptr];
+		[aDocument reloadIndentationSettings];
+	}
 
 	if(_document = aDocument)
 	{
@@ -795,10 +802,12 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 			[aMenuItem setState:NSControlStateValueOn];
 		}
 	}
+	else if([aMenuItem action] == @selector(setIndentAutomatically:))
+		[aMenuItem setState:self.document.automaticallyDetectsIndentation ? NSControlStateValueOn : NSControlStateValueOff];
 	else if([aMenuItem action] == @selector(setIndentWithTabs:))
-		[aMenuItem setState:_textView.softTabs ? NSControlStateValueOff : NSControlStateValueOn];
+		[aMenuItem setState:!self.document.automaticallyDetectsIndentation && !_textView.softTabs ? NSControlStateValueOn : NSControlStateValueOff];
 	else if([aMenuItem action] == @selector(setIndentWithSpaces:))
-		[aMenuItem setState:_textView.softTabs ? NSControlStateValueOn : NSControlStateValueOff];
+		[aMenuItem setState:!self.document.automaticallyDetectsIndentation && _textView.softTabs ? NSControlStateValueOn : NSControlStateValueOff];
 	else if([aMenuItem action] == @selector(takeGrammarUUIDFrom:))
 	{
 		NSString* uuidString = [aMenuItem representedObject];
@@ -1024,14 +1033,20 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 
 - (IBAction)setIndentWithSpaces:(id)sender
 {
-	_textView.softTabs = YES;
 	settings_t::set(kSettingsSoftTabsKey, true, to_s(self.document.fileType));
+	[self.document reloadIndentationSettings];
 }
 
 - (IBAction)setIndentWithTabs:(id)sender
 {
-	_textView.softTabs = NO;
 	settings_t::set(kSettingsSoftTabsKey, false, to_s(self.document.fileType));
+	[self.document reloadIndentationSettings];
+}
+
+- (IBAction)setIndentAutomatically:(id)sender
+{
+	settings_t::set(kSettingsSoftTabsKey, "auto", to_s(self.document.fileType));
+	[self.document reloadIndentationSettings];
 }
 
 - (IBAction)showTabSizeSelectorPanel:(id)sender

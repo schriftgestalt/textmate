@@ -21,6 +21,7 @@
 #import <undo/src/undo.h>
 #import <selection/src/types.h>
 #import <text/src/newlines.h>
+#import <text/src/indent.h>
 #import <text/src/utf8.h>
 #import <io/src/entries.h>
 #import <file/src/type.h>
@@ -294,8 +295,23 @@ static void* kDocumentEditedObserverContext = &kDocumentEditedObserverContext;
 	if(updateIndent)
 	{
 		self.tabSize = std::max(1, settings.get(kSettingsTabSizeKey, 4));
-		self.softTabs = settings.get(kSettingsSoftTabsKey, false);
+		std::string const indentStyle = settings.get(kSettingsSoftTabsKey, "false");
+		self.automaticallyDetectsIndentation = indentStyle == "auto";
+		if(self.automaticallyDetectsIndentation)
+		{
+			if(auto softTabs = text::detect_soft_tabs(_buffer->substr(0, _buffer->size())))
+				self.softTabs = *softTabs;
+		}
+		else
+		{
+			self.softTabs = indentStyle != "0" && indentStyle != "false";
+		}
 	}
+}
+
+- (void)reloadIndentationSettings
+{
+	[self updateSpellingSettings:NO andIndentSettings:YES];
 }
 
 // ==================

@@ -198,6 +198,7 @@ static NSButton* OakCreateImageToggleButton (NSImage* image, NSString* accessibi
 		{ @"Other…",       @selector(showTabSizeSelectorPanel:),  .indent = 1, .target = self.target },
 		{ /* -------- */ },
 		{ @"Indent Using", @selector(nop:) },
+		{ @"Auto",         @selector(setIndentAutomatically:),     .indent = 1, .target = self.target },
 		{ @"Tabs",         @selector(setIndentWithTabs:),         .indent = 1, .target = self.target },
 		{ @"Spaces",       @selector(setIndentWithSpaces:),       .indent = 1, .target = self.target },
 	};
@@ -359,7 +360,10 @@ static NSButton* OakCreateImageToggleButton (NSImage* image, NSString* accessibi
 
 - (void)updateTabSettings
 {
-	self.tabSizePopUp.title = [NSString stringWithFormat:@"%@:\u2003%lu", _softTabs ? @"Soft Tabs" : @"Tab Size", _tabSize];
+	NSString* label = _softTabs ? @"Soft Tabs" : @"Tab Size";
+	if(_automaticallyDetectsIndentation)
+		label = _softTabs ? @"Auto (Spaces)" : @"Auto (Tabs)";
+	self.tabSizePopUp.title = [NSString stringWithFormat:@"%@:\u2003%lu", label, _tabSize];
 }
 
 - (void)setTabSize:(NSUInteger)size
@@ -371,6 +375,12 @@ static NSButton* OakCreateImageToggleButton (NSImage* image, NSString* accessibi
 - (void)setSoftTabs:(BOOL)flag
 {
 	_softTabs = flag;
+	[self updateTabSettings];
+}
+
+- (void)setAutomaticallyDetectsIndentation:(BOOL)flag
+{
+	_automaticallyDetectsIndentation = flag;
 	[self updateTabSettings];
 }
 
