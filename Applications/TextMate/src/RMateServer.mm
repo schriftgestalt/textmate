@@ -94,20 +94,23 @@ static bool rmate_connection_handler_t (socket_t const& socket);
 
 namespace
 {
-	static char const* socket_path ()
+	static std::string socket_path ()
 	{
-		static std::string const str = text::format("/tmp/textmate-%d.sock", getuid());
-		return str.c_str();
+		return text::format("/tmp/textmate-%d.sock", getuid());
+	}
+
+	static std::string instance_socket_path ()
+	{
+		return text::format("/tmp/textmate-%d-%d.sock", getuid(), getpid());
 	}
 
 	struct mate_server_t
 	{
-		mate_server_t ()
+		mate_server_t (std::string const& socketPath) : _socket_path(socketPath), _socket_dev(0), _socket_ino(0)
 		{
-			_socket_path = socket_path();
-			if(unlink(_socket_path) == -1 && errno != ENOENT)
+			if(unlink(_socket_path.c_str()) == -1 && errno != ENOENT)
 			{
-				OakRunIOAlertPanel("Unable to delete socket left from old instance:\n%s", _socket_path);
+				OakRunIOAlertPanel("Unable to delete socket left from old instance:\n%s", _socket_path.c_str());
 				return;
 			}
 
@@ -120,23 +123,37 @@ namespace
 
 			fcntl(fd, F_SETFD, FD_CLOEXEC);
 			struct sockaddr_un addr = { 0, AF_UNIX };
-			strcpy(addr.sun_path, _socket_path);
+			strcpy(addr.sun_path, _socket_path.c_str());
 			addr.sun_len = SUN_LEN(&addr);
 			if(bind(fd, (sockaddr*)&addr, sizeof(addr)) == -1)
-				OakRunIOAlertPanel("Could not bind to socket:\n%s", _socket_path);
-			else if(listen(fd, SOMAXCONN) == -1)
-				OakRunIOAlertPanel("Could not listen to socket");
+				OakRunIOAlertPanel("Could not bind to socket:\n%s", _socket_path.c_str());
+			else
+			{
+				struct stat info;
+				if(lstat(_socket_path.c_str(), &info) == 0)
+				{
+					_socket_dev = info.st_dev;
+					_socket_ino = info.st_ino;
+				}
+
+				if(listen(fd, SOMAXCONN) == -1)
+					OakRunIOAlertPanel("Could not listen to socket");
+			}
 
 			_callback = std::make_shared<socket_callback_t>(&rmate_connection_handler_t, fd);
 		}
 
 		~mate_server_t ()
 		{
-			unlink(_socket_path);
+			struct stat info;
+			if(_socket_ino && lstat(_socket_path.c_str(), &info) == 0 && info.st_dev == _socket_dev && info.st_ino == _socket_ino)
+				unlink(_socket_path.c_str());
 		}
 
 	private:
-		char const* _socket_path;
+		std::string _socket_path;
+		dev_t _socket_dev;
+		ino_t _socket_ino;
 		socket_callback_ptr _callback;
 	};
 
@@ -175,7 +192,8 @@ namespace
 
 void setup_rmate_server (bool enabled, uint16_t port, bool listenForRemoteClients)
 {
-	static mate_server_t mate_server;
+	static mate_server_t mate_server(socket_path());
+	static mate_server_t instance_mate_server(instance_socket_path());
 
 	static std::shared_ptr<rmate_server_t> rmate_server;
 	if(!enabled || !rmate_server || port != rmate_server->port() || listenForRemoteClients != rmate_server->listen_for_remote_clients())

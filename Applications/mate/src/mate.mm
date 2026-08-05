@@ -8,13 +8,34 @@
 
 static char const* const AppVersion = "2.13.3";
 
+static long target_pid ()
+{
+	static long const pid = []() {
+		if(char const* value = getenv("TM_PID"))
+		{
+			char* last = nullptr;
+			long res = strtol(value, &last, 10);
+			if(value != last && *last == '\0' && 0 < res)
+				return res;
+		}
+
+		return 0L;
+	}();
+	return pid;
+}
+
 static char const* socket_path ()
 {
 	int uid = getuid();
 	if(getenv("SUDO_UID"))
 		uid = atoi(getenv("SUDO_UID"));
 
-	static std::string const str = text::format("/tmp/textmate-%d.sock", uid);
+	static std::string const str = [uid]() {
+		if(long pid = target_pid())
+			return text::format("/tmp/textmate-%d-%ld.sock", uid, pid);
+
+		return text::format("/tmp/textmate-%d.sock", uid);
+	}();
 	return str.c_str();
 }
 
@@ -395,14 +416,14 @@ int main (int argc, char const* argv[])
 		rc = connect(fd, (sockaddr*)&addr, sizeof(addr));
 		if(rc == 0)
 			break;
-		if(i == 0)
+		if(i == 0 && !target_pid())
 			launch_app(!files.empty());
 		usleep(500000);
 	}
 
 	if(rc == -1)
 	{
-		perror("unable to bind to socket");
+		perror("unable to connect to socket");
 		exit(EX_IOERR);
 	}
 
