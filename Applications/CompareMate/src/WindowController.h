@@ -4,4 +4,6 @@
 - (IBAction)previousChange:(id)sender;
 - (IBAction)copyChangeToLeft:(id)sender;
 - (IBAction)copyChangeToRight:(id)sender;
+- (IBAction)saveDocument:(id)sender;
+- (IBAction)saveDocumentAs:(id)sender;
 @end

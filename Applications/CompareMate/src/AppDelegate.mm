@@ -49,8 +49,8 @@
 				{ /* -------- */ },
 				{ @"Close",           @selector(performClose:),          @"w"   },
 				{ @"Close All",       @selector(closeAll:),              @"w", .modifierFlags = NSEventModifierFlagCommand|NSEventModifierFlagOption, .target = NSApp, .alternate = YES },
-				{ @"Save…",           @selector(saveDocument:),          @"s"   },
-				{ @"Save As…",        @selector(saveDocumentAs:),        @"S"   },
+				{ @"Save",            @selector(saveDocument:),          @"s", .target = self },
+				{ @"Save As…",        @selector(saveDocumentAs:),        @"S", .target = self },
 				{ @"Revert to Saved", @selector(revertDocumentToSaved:), @"r"   },
 				{ /* -------- */ },
 				{ @"Page Setup…",     @selector(runPageLayout:),         @"P"   },
@@ -304,6 +304,16 @@
 - (IBAction)copyChangeToRight:(id)sender
 {
 	[[self activeComparisonWindowController] copyChangeToRight:sender];
+}
+
+- (IBAction)saveDocument:(id)sender
+{
+	[[self activeComparisonWindowController] saveDocument:sender];
+}
+
+- (IBAction)saveDocumentAs:(id)sender
+{
+	[[self activeComparisonWindowController] saveDocumentAs:sender];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)sender

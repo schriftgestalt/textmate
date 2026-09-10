@@ -2,6 +2,8 @@
 #import <OakTextView/src/OakDocumentView.h>
 #import <OakTextView/src/GutterView.h>
 #import <document/src/OakDocument.h>
+#import <OakAppKit/src/OakSavePanel.h>
+#import <ns/src/ns.h>
 
 static NSString* const LeftPathRestorationKey = @"CompareMate.leftPath";
 static NSString* const RightPathRestorationKey = @"CompareMate.rightPath";
@@ -413,6 +415,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 @property (nonatomic, weak) NSClipView* rightClipView;
 @property (nonatomic, weak) NSClipView* lastScrolledClipView;
 @property (nonatomic) BOOL synchronizingScroll;
+@property (nonatomic) BOOL closingWithoutSaving;
 @end
 
 @implementation WindowController
@@ -790,6 +793,110 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 	[self copyActiveChangeToLeft:NO];
 }
 
+- (OakDocumentView*)activeDocumentView
+{
+	NSResponder* firstResponder = self.window.firstResponder;
+	if([firstResponder isKindOfClass:NSView.class])
+	{
+		NSView* firstResponderView = (NSView*)firstResponder;
+		if(firstResponderView == self.rightDocumentView || [firstResponderView isDescendantOf:self.rightDocumentView])
+			return self.rightDocumentView;
+		if(firstResponderView == self.leftDocumentView || [firstResponderView isDescendantOf:self.leftDocumentView])
+			return self.leftDocumentView;
+	}
+	return self.leftDocumentView;
+}
+
+- (void)updateDocumentState
+{
+	OakDocument* leftDocument = self.leftDocumentView.document;
+	OakDocument* rightDocument = self.rightDocumentView.document;
+	self.leftPath = leftDocument.path;
+	self.rightPath = rightDocument.path;
+	self.window.title = [NSString stringWithFormat:@"%@ ↔ %@", leftDocument.displayName, rightDocument.displayName];
+	self.window.documentEdited = leftDocument.isDocumentEdited || rightDocument.isDocumentEdited;
+	[self invalidateRestorableState];
+}
+
+- (void)saveOakDocument:(OakDocument*)document completionHandler:(void(^)(OakDocumentIOResult result))completionHandler
+{
+	[document saveModalForWindow:self.window completionHandler:^(OakDocumentIOResult result, NSString* errorMessage, oak::uuid_t const& filterUUID) {
+		if(result == OakDocumentIOResultSuccess)
+		{
+			[self updateDocumentState];
+		}
+		else if(result == OakDocumentIOResultFailure)
+		{
+			NSAlert* alert = [[NSAlert alloc] init];
+			alert.alertStyle = NSAlertStyleCritical;
+			alert.messageText = [NSString stringWithFormat:@"Couldn’t save “%@”", document.displayName];
+			alert.informativeText = errorMessage.length ? errorMessage : @"Please check the Console for more information.";
+			[alert beginSheetModalForWindow:self.window completionHandler:nil];
+		}
+
+		if(completionHandler)
+			completionHandler(result);
+	}];
+}
+
+- (NSArray<OakDocument*>*)editedDocuments
+{
+	NSMutableArray<OakDocument*>* documents = [NSMutableArray array];
+	if(self.leftDocumentView.document.isDocumentEdited)
+		[documents addObject:self.leftDocumentView.document];
+	if(self.rightDocumentView.document.isDocumentEdited)
+		[documents addObject:self.rightDocumentView.document];
+	return documents;
+}
+
+- (void)saveDocuments:(NSArray<OakDocument*>*)documents atIndex:(NSUInteger)index completionHandler:(void(^)(OakDocumentIOResult result))completionHandler
+{
+	if(index == documents.count)
+	{
+		if(completionHandler)
+			completionHandler(OakDocumentIOResultSuccess);
+		return;
+	}
+
+	[self saveOakDocument:documents[index] completionHandler:^(OakDocumentIOResult result) {
+		if(result == OakDocumentIOResultSuccess)
+			[self saveDocuments:documents atIndex:index + 1 completionHandler:completionHandler];
+		else if(completionHandler)
+			completionHandler(result);
+	}];
+}
+
+- (IBAction)saveDocument:(id)sender
+{
+	NSArray<OakDocument*>* documents = self.editedDocuments;
+	if(documents.count)
+		[self saveDocuments:documents atIndex:0 completionHandler:nil];
+}
+
+- (IBAction)saveDocumentAs:(id)sender
+{
+	OakDocument* document = self.activeDocumentView.document;
+	if(!document.isLoaded)
+	{
+		NSBeep();
+		return;
+	}
+
+	NSString* suggestedDirectory = document.path.stringByDeletingLastPathComponent;
+	NSString* suggestedName = document.path.lastPathComponent ?: [document displayNameWithExtension:YES];
+	encoding::type const encoding(to_s(document.diskNewlines), to_s(document.diskEncoding));
+	[OakSavePanel showWithPath:suggestedName directory:suggestedDirectory fowWindow:self.window encoding:encoding fileType:document.fileType completionHandler:^(NSString* path, encoding::type const& selectedEncoding) {
+		if(!path)
+			return;
+
+		document.path = path;
+		document.diskNewlines = to_ns(selectedEncoding.newlines());
+		document.diskEncoding = to_ns(selectedEncoding.charset());
+		[self updateDocumentState];
+		[self saveOakDocument:document completionHandler:nil];
+	}];
+}
+
 - (void)scheduleDiffUpdate
 {
 	if(!self.leftDocumentLoaded || !self.rightDocumentLoaded)
@@ -930,6 +1037,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 {
 	if(notification.object == self.leftDocumentView.document || notification.object == self.rightDocumentView.document)
 	{
+		[self updateDocumentState];
 		++self.diffGeneration;
 		self.diffHunks = @[];
 		self.activeDiffHunkIndex = -1;
@@ -974,5 +1082,38 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 	++self.diffGeneration;
 	[NSNotificationCenter.defaultCenter removeObserver:self];
 	_retainedSelf = nil;
+}
+
+- (BOOL)windowShouldClose:(NSWindow*)sender
+{
+	if(self.closingWithoutSaving)
+		return YES;
+
+	NSArray<OakDocument*>* documents = self.editedDocuments;
+	if(documents.count == 0)
+		return YES;
+
+	NSAlert* alert = [[NSAlert alloc] init];
+	alert.alertStyle = NSAlertStyleWarning;
+	alert.messageText = documents.count == 1 ? [NSString stringWithFormat:@"Do you want to save the changes made to “%@”?", documents.firstObject.displayName] : @"Do you want to save the changes made to both files?";
+	alert.informativeText = @"Your changes will be lost if you don’t save them.";
+	[alert addButtonWithTitle:@"Save"];
+	[alert addButtonWithTitle:@"Cancel"];
+	[alert addButtonWithTitle:@"Don’t Save"];
+	[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+		if(returnCode == NSAlertFirstButtonReturn)
+		{
+			[self saveDocuments:documents atIndex:0 completionHandler:^(OakDocumentIOResult result) {
+				if(result == OakDocumentIOResultSuccess)
+					[self.window close];
+			}];
+		}
+		else if(returnCode == NSAlertThirdButtonReturn)
+		{
+			self.closingWithoutSaving = YES;
+			[self.window close];
+		}
+	}];
+	return NO;
 }
 @end
