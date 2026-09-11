@@ -316,11 +316,6 @@
 	[[self activeComparisonWindowController] saveDocumentAs:sender];
 }
 
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)sender
-{
-	return YES;
-}
-
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication*)app
 {
 	return YES;
