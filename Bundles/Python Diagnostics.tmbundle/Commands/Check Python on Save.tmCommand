@@ -41,7 +41,7 @@ esac
 {
 	export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin"
 	/usr/bin/python3 &lt;&lt;'PYEOF'
-import json, os, shlex, shutil, subprocess, time
+import json, os, shlex, shutil, subprocess, time, tokenize
 
 LOG = "/tmp/tm-python-diagnostics.log"
 
@@ -80,6 +80,50 @@ uuid     = os.environ["TM_DOCUMENT_UUID"]
 filepath = os.environ["TM_FILEPATH"]
 cwd      = os.environ.get("TM_PROJECT_DIRECTORY") or os.path.dirname(filepath)
 
+try:
+    with tokenize.open(filepath) as source_file:
+        source_lines = source_file.read().splitlines()
+except (OSError, SyntaxError, UnicodeError) as e:
+    log("WARNING: could not decode source for diagnostic coordinates: %r" % (e,))
+    source_lines = []
+
+def utf8_column(text, character_index):
+    character_index = max(0, min(character_index, len(text)))
+    return len(text[:character_index].encode("utf-8")) + 1
+
+def character_index_from_utf16(text, units):
+    used = 0
+    for index, character in enumerate(text):
+        width = len(character.encode("utf-16-le")) // 2
+        if used + width &gt; units:
+            return index
+        used += width
+        if used == units:
+            return index + 1
+    return len(text)
+
+def codepoint_column_to_utf8(row, column):
+    if 1 &lt;= row &lt;= len(source_lines):
+        return utf8_column(source_lines[row - 1], max(0, column - 1))
+    return column
+
+def utf16_column_to_utf8(row, column):
+    if 1 &lt;= row &lt;= len(source_lines):
+        line = source_lines[row - 1]
+        return utf8_column(line, character_index_from_utf16(line, max(0, column - 1)))
+    return column
+
+def ruff_position_to_mate(position):
+    result = dict(position)
+    result["column"] = codepoint_column_to_utf8(result["row"], result["column"])
+    return result
+
+def ruff_edit_to_mate(edit):
+    result = dict(edit)
+    result["location"] = ruff_position_to_mate(edit["location"])
+    result["end_location"] = ruff_position_to_mate(edit["end_location"])
+    return result
+
 ruff    = resolve("TM_RUFF", "ruff")
 pyright = resolve("TM_PYRIGHT", "pyright")
 if not ruff and not pyright:
@@ -101,13 +145,19 @@ if ruff:
         for d in json.loads(r.stdout or "[]"):
             code = d.get("code")
             kind = "error" if code in (None, "E999") else "warning"
-            row, col = d["location"]["row"], d["location"]["column"]
+            row, raw_col = d["location"]["row"], d["location"]["column"]
             end = d.get("end_location") or {}
-            length = max(0, end.get("column", col) - col) if end.get("row") == row else 0
+            end_row, raw_end_col = end.get("row", row), end.get("column", raw_col)
+            col = codepoint_column_to_utf8(row, raw_col)
+            end_col = codepoint_column_to_utf8(end_row, raw_end_col)
+            length = max(0, end_col - col) if end_row == row else 0
             msg = ("%s %s" % (code, d["message"])) if code else d["message"]
             fix = d.get("fix")
             if fix and fix.get("edits"):
-                payload = {"message": (fix.get("message") or "Apply fix").splitlines()[0], "edits": fix["edits"]}
+                payload = {
+                    "message": (fix.get("message") or "Apply fix").splitlines()[0],
+                    "edits": [ruff_edit_to_mate(edit) for edit in fix["edits"]]
+                }
                 msg = msg + chr(31) + json.dumps(payload, separators=(",", ":"))
             diagnostics.append((kind, row, col, length, msg))
     except ValueError:
@@ -146,8 +196,11 @@ if pyright:
             sev = d.get("severity", "error")
             kind = {"error": "error", "warning": "warning"}.get(sev, "note")
             start = d["range"]["start"]; end = d["range"]["end"]
-            row, col = start["line"] + 1, start["character"] + 1
-            length = max(0, end["character"] - start["character"]) if end["line"] == start["line"] else 0
+            row, raw_col = start["line"] + 1, start["character"] + 1
+            end_row, raw_end_col = end["line"] + 1, end["character"] + 1
+            col = utf16_column_to_utf8(row, raw_col)
+            end_col = utf16_column_to_utf8(end_row, raw_end_col)
+            length = max(0, end_col - col) if end_row == row else 0
             rule = d.get("rule")
             msg = ("%s (%s)" % (d["message"].splitlines()[0], rule)) if rule else d["message"].splitlines()[0]
             diagnostics.append((kind, row, col, length, msg))

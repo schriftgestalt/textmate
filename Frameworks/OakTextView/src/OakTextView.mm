@@ -1285,7 +1285,7 @@ static size_t OTVDiagnosticSeverity (std::string const& markType)
 // Mark content format: “<length>|<message>” optionally followed by U+001F and
 // a JSON fix payload ({ "message": …, "edits": [ { "content": …, "location":
 // { "row": …, "column": … }, "end_location": … } ] }, rows/columns 1-based).
-// The length (in characters) sizes the squiggle; without it we underline to
+// The length (in UTF-8 bytes) sizes the squiggle; without it we underline to
 // the end of the word at the mark’s position.
 static size_t OTVParseDiagnosticContent (std::string const& content, std::string& message, std::string& fixJSON)
 {
@@ -1311,7 +1311,7 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 
 	for(auto const& pair : documentView->all_marks())
 	{
-		size_t const index         = pair.first;
+		size_t const index         = documentView->sanitize_index(pair.first);
 		std::string const& type    = pair.second.first;
 		std::string const& content = pair.second.second;
 
@@ -1333,14 +1333,16 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 		lineInfos.insert(insertAt, info);
 
 		size_t const eol = documentView->eol(line);
-		size_t to = index + markLen;
+		size_t to = index + std::min(markLen, eol - index);
 		if(to == index) // no length given: extend to end of word
 		{
 			std::string const rest = documentView->substr(index, eol);
-			while(to - index < rest.size() && (isalnum(rest[to - index]) || rest[to - index] == '_'))
+			while(to - index < rest.size() && (isalnum((unsigned char)rest[to - index]) || rest[to - index] == '_'))
 				++to;
 		}
-		to = std::clamp(to, std::min(index + 1, eol), eol);
+		to = documentView->sanitize_index(std::clamp(to, index, eol));
+		if(to <= index && index < eol)
+			to = std::min(index + (*documentView)[index].size(), eol);
 		if(index < to)
 			diagnosticSquiggles.emplace_back(ng::range_t(ng::index_t(index), ng::index_t(to)), type);
 	}
