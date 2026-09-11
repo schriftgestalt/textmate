@@ -405,6 +405,8 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 	{
 		[topAuxiliaryViews insertObject:self.scopeBar atIndex:0];
 		OakAddAutoLayoutViewsToSuperview(@[ self.scopeBar ], self);
+		if(self.document)
+			[self updateScopeBar];
 	}
 	else
 	{
@@ -632,6 +634,9 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 
 - (void)updateScopeBar
 {
+	if(!self.showsScopeBar)
+		return;
+
 	text::selection_t sel(to_s(_textView.selectionString));
 	text::pos_t caret = sel.last().max();
 
