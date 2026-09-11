@@ -10,7 +10,9 @@
 # Pick a project directory with AppKit's directory chooser, copy inherited
 # checker settings into it, and fall back to starter settings when necessary.
 
-INITIAL_LOCATION="${TM_PROJECT_DIRECTORY:-${TM_DIRECTORY:-$HOME}}"
+# Start at the active document. A project can contain nested Python projects,
+# so its root may be above the configuration we want to inherit.
+INITIAL_LOCATION="${TM_DIRECTORY:-${TM_PROJECT_DIRECTORY:-$HOME}}"
 [[ -d "$INITIAL_LOCATION" ]] || INITIAL_LOCATION="$HOME"
 TARGET=$(/usr/bin/osascript -l AppleScript - "$INITIAL_LOCATION" <<'APPLESCRIPT'
 on run argv
@@ -160,6 +162,19 @@ def find_pyright_config():
         candidate = os.path.join(directory, "pyproject.toml")
         if os.path.isfile(candidate) and pyproject_configures(candidate, "pyright"):
             return candidate
+
+    # Match Check Python on Save: loose files can inherit a configuration from
+    # TM_PYRIGHT_PROJECT or the bundle's conventional user-level location.
+    fallback = os.environ.get("TM_PYRIGHT_PROJECT")
+    if fallback:
+        fallback = os.path.abspath(os.path.expanduser(fallback))
+        if os.path.isfile(fallback):
+            return fallback
+    fallback = os.path.expanduser(
+        "~/Library/Application Support/TextMate/pyrightconfig.json"
+    )
+    if os.path.isfile(fallback):
+        return fallback
     return None
 
 def find_ruff_config():
