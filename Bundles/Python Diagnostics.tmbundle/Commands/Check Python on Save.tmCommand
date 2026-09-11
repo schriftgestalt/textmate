@@ -17,7 +17,8 @@
 #                  ~/.config/ruff/ruff.toml; pyright falls back to
 #                  ~/Library/Application Support/TextMate/pyrightconfig.json
 #                  (override with TM_PYRIGHT_PROJECT). Extra flags via
-#                  TM_RUFF_ARGS / TM_PYRIGHT_ARGS.
+#                  TM_RUFF_ARGS / TM_PYRIGHT_ARGS. Pyright targets Python 3.13
+#                  by default; override with TM_PYRIGHT_PYTHON_VERSION.
 # Troubleshooting: tail -f /tmp/tm-python-diagnostics.log
 
 LOG=/tmp/tm-python-diagnostics.log
@@ -114,6 +115,14 @@ if ruff:
 
 if pyright:
     pyright_args = shlex.split(os.environ.get("TM_PYRIGHT_ARGS", ""))
+    # Keep the analysis language level independent of whichever Python happens
+    # to be first on TextMate's PATH. An explicit argument remains the most
+    # specific override for backwards compatibility.
+    if not any(arg == "--pythonversion" or arg.startswith("--pythonversion=")
+               for arg in pyright_args):
+        python_version = os.environ.get("TM_PYRIGHT_PYTHON_VERSION", "3.13").strip()
+        if python_version:
+            pyright_args += ["--pythonversion", python_version]
     pyright_cwd = cwd
     # pyright resolves pyrightconfig.json from cwd, not from the checked file:
     # walk up from the file; fall back to a user-level config for loose files.

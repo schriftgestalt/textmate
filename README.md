@@ -108,7 +108,13 @@ Both tools use their native configuration files:
  * **Ruff** looks for `ruff.toml` / `.ruff.toml` / `pyproject.toml` next to (or above) the checked file; without one it falls back to the user-level `~/.config/ruff/ruff.toml`.
  * **Pyright** — the bundle searches upward from the file for a `pyrightconfig.json`; without one it uses `~/Library/Application Support/TextMate/pyrightconfig.json` (e.g. for `extraPaths` to custom module stubs). Override the fallback with the `TM_PYRIGHT_PROJECT` variable.
 
-Extra command-line flags can be passed via the `TM_RUFF_ARGS` and `TM_PYRIGHT_ARGS` variables; `TM_RUFF` / `TM_PYRIGHT` override the tool binaries themselves.
+Pyright targets Python 3.13 by default. To select another language version, set `TM_PYRIGHT_PYTHON_VERSION` under *Preferences → Variables* or in `.tm_properties`:
+
+```
+TM_PYRIGHT_PYTHON_VERSION = 3.14
+```
+
+Extra command-line flags can be passed via the `TM_RUFF_ARGS` and `TM_PYRIGHT_ARGS` variables; `TM_RUFF` / `TM_PYRIGHT` override the tool binaries themselves. An explicit `--pythonversion` in `TM_PYRIGHT_ARGS` takes precedence over `TM_PYRIGHT_PYTHON_VERSION`.
 
 [Ruff]:    https://docs.astral.sh/ruff/
 [Pyright]: https://microsoft.github.io/pyright/

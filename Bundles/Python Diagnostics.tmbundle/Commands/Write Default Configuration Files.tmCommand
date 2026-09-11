@@ -41,7 +41,8 @@ import tempfile
 target = os.path.abspath(os.environ["TARGET"])
 pyright_default = """\
 {
-    "typeCheckingMode": "basic"
+    "typeCheckingMode": "basic",
+    "pythonVersion": "3.13"
 }
 """
 ruff_default = """\
