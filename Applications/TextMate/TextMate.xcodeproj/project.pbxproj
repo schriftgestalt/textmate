@@ -709,7 +709,6 @@
 		6AD7A1DB822E0A9FE115B04A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4222DF04F8E00DCE20D /* Cocoa.framework */; };
 		6B436B05195535EFC3EDA591 /* DocumentWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D88A2B5959FF0049910C /* DocumentWindowController.mm */; };
 		6B705F5FD086A56E3C2971F1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35DB48B68473F6CF26516974 /* MainMenu.xib */; };
-		C04A0001300D000000000001 /* NewComparisonWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C04A0001300D000000000002 /* NewComparisonWindow.xib */; };
 		6B7EDD00298303C8E62EC58B /* events.md in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D6152B5959410049910C /* events.md */; };
 		6CF06314833C51FD5C317E2C /* parse.cc in Sources */ = {isa = PBXBuildFile; fileRef = 5656C43C2DF0879500DCE20D /* parse.cc */; };
 		6D5C3AC2385E2140308D95BE /* parser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7392B5959FE0049910C /* parser.cc */; };
@@ -991,6 +990,7 @@
 		BF89A472C9716DB1B7BCD1BE /* ProjectLayoutView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D88B2B5959FF0049910C /* ProjectLayoutView.mm */; };
 		BF9350E694D20C1BB5D6E0D6 /* layout.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D82E2B5959FF0049910C /* layout.cc */; };
 		BFE4E01A9351C1C99E3166EF /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D72F2B5959FE0049910C /* .gitignore */; };
+		C04A0001300D000000000001 /* NewComparisonWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C04A0001300D000000000002 /* NewComparisonWindow.xib */; };
 		C12FA9EC53D2AABED10BE8DF /* OakCommandRefresh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8DA2B5959FF0049910C /* OakCommandRefresh.mm */; };
 		C1909A6501E2B8B019A1B54D /* NSSavePanel Additions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D6E02B5959FE0049910C /* NSSavePanel Additions.mm */; };
 		C1ECDB38E788558D318C29D5 /* TableView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9BD2B595A000049910C /* TableView.mm */; };
@@ -1324,16 +1324,15 @@
 
 /* Begin PBXFileReference section */
 		07F8B69B62307211B6B598CB /* CompareMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CompareMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		085773496819D5B552363928 /* WindowController.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = WindowController.mm; sourceTree = "<group>"; };
+		085773496819D5B552363928 /* WindowController.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = WindowController.mm; sourceTree = "<group>"; };
 		0AD5FD2D9C2AE0AE3966727A /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
 		0F9B3FED8EF850B7D575EF04 /* ThumbnailProvider.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = ThumbnailProvider.mm; sourceTree = "<group>"; };
 		1B0D09459656F8B981266435 /* ThumbnailProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ThumbnailProvider.h; sourceTree = "<group>"; };
 		1E8FCE980B264A9257252FF2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		1EFDEBAA6741B3596F45FDA2 /* ViewController.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = ViewController.mm; sourceTree = "<group>"; };
+		1EFDEBAA6741B3596F45FDA2 /* ViewController.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		2AC0083D226B1DF7B6FE3593 /* QuickLook.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = QuickLook.entitlements; sourceTree = "<group>"; };
 		35DB48B68473F6CF26516974 /* MainMenu.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = MainMenu.xib; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		C04A0001300D000000000002 /* NewComparisonWindow.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = NewComparisonWindow.xib; path = en.lproj/NewComparisonWindow.xib; sourceTree = "<group>"; };
-		36CC25BF908200E4162E218A /* NewComparisonWindowController.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = NewComparisonWindowController.mm; sourceTree = "<group>"; };
+		36CC25BF908200E4162E218A /* NewComparisonWindowController.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = NewComparisonWindowController.mm; sourceTree = "<group>"; };
 		378D2D67D4D92A8FCEB06514 /* QuickLookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookUI.framework; path = System/Library/Frameworks/QuickLookUI.framework; sourceTree = SDKROOT; };
 		3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = System/Library/Frameworks/ExceptionHandling.framework; sourceTree = SDKROOT; };
 		459247091B895CB06FFDCC1F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
@@ -2161,7 +2160,7 @@
 		56A4DCBB2B596F990049910C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		56D2239D300D1FB7006F75AD /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		5BD3F2824F7E55FB1AECC257 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		605111C79E5550B65B6529C1 /* AppDelegate.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = AppDelegate.mm; sourceTree = "<group>"; };
+		605111C79E5550B65B6529C1 /* AppDelegate.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		6DBEEAC1104A8C93B73F9CE8 /* PreviewProvider.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewProvider.mm; sourceTree = "<group>"; };
 		76DAB02BFBB5384976DB690E /* ViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		79EAD2B3F35B75AD95CACE1E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2205,11 +2204,12 @@
 		ABCDEF00000000000000013E /* Shell Script.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Shell Script.tmbundle"; path = ../../Bundles/Core/shellscript.tmbundle; sourceTree = "<group>"; };
 		ABCDEF00000000000000013F /* JavaScript.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JavaScript.tmbundle; path = ../../Bundles/Core/javascript.tmbundle; sourceTree = "<group>"; };
 		B859C963D4FF719720173012 /* mate.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = mate.mm; sourceTree = "<group>"; };
+		C04A0001300D000000000002 /* NewComparisonWindow.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = NewComparisonWindow.xib; path = en.lproj/NewComparisonWindow.xib; sourceTree = "<group>"; };
 		C2DCC1836A2FC9F316575FD9 /* AppDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C47D5A3EBAA5F65B20433519 /* libTextMateQuickLookEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTextMateQuickLookEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC3966BCB37E30893C0717CF /* QuickLookRenderer.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = QuickLookRenderer.mm; sourceTree = "<group>"; };
 		CC6D2FA4BC9513BFBBBC2695 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D4568475B74863D49C3D6039 /* main.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = main.mm; sourceTree = "<group>"; };
+		D4568475B74863D49C3D6039 /* main.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		E4D5F1157C94525CDB08D59E /* QuickLookThumbnailing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookThumbnailing.framework; path = System/Library/Frameworks/QuickLookThumbnailing.framework; sourceTree = SDKROOT; };
 		EC0EF4FA304F44AACF097A8E /* TextMateQuickLookPreview.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TextMateQuickLookPreview.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F033C83A456D00E29D4527EC /* WindowController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
