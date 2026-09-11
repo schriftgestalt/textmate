@@ -416,6 +416,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 @property (nonatomic, weak) NSClipView* lastScrolledClipView;
 @property (nonatomic) BOOL synchronizingScroll;
 @property (nonatomic) BOOL closingWithoutSaving;
+- (OakDocumentView*)activeDocumentView;
 @end
 
 @implementation WindowController
@@ -729,14 +730,46 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 		return;
 	}
 
-	if(self.activeDiffHunkIndex < 0)
-		self.activeDiffHunkIndex = offset < 0 ? self.diffHunks.count - 1 : 0;
+	OakDocumentView* activeDocumentView = self.activeDocumentView;
+	BOOL const useLeftRange = activeDocumentView == self.leftDocumentView;
+	text::selection_t const selection(to_s(activeDocumentView.textView.selectionString));
+	NSUInteger const cursorLine = selection.last().to.line;
+	NSInteger targetIndex = -1;
+	if(offset > 0)
+	{
+		for(NSUInteger i = 0; i < self.diffHunks.count; ++i)
+		{
+			DiffHunk* hunk = self.diffHunks[i];
+			NSRange const range = useLeftRange ? hunk.leftLines : hunk.rightLines;
+			if(range.location > cursorLine || (range.location == cursorLine && self.activeDiffHunkIndex != (NSInteger)i))
+			{
+				targetIndex = i;
+				break;
+			}
+		}
+		if(targetIndex == -1)
+			targetIndex = 0;
+	}
 	else
 	{
-		NSInteger const hunkCount = (NSInteger)self.diffHunks.count;
-		self.activeDiffHunkIndex = (self.activeDiffHunkIndex + offset + hunkCount) % hunkCount;
+		for(NSInteger i = self.diffHunks.count - 1; i >= 0; --i)
+		{
+			DiffHunk* hunk = self.diffHunks[i];
+			NSRange const range = useLeftRange ? hunk.leftLines : hunk.rightLines;
+			if(range.location < cursorLine || (range.location == cursorLine && self.activeDiffHunkIndex != i))
+			{
+				targetIndex = i;
+				break;
+			}
+		}
+		if(targetIndex == -1)
+			targetIndex = self.diffHunks.count - 1;
 	}
 
+	self.activeDiffHunkIndex = targetIndex;
+	DiffHunk* targetHunk = self.diffHunks[targetIndex];
+	NSRange const targetRange = useLeftRange ? targetHunk.leftLines : targetHunk.rightLines;
+	activeDocumentView.textView.selectionString = to_ns(text::pos_t(targetRange.location, 0));
 	[self updateActiveChangeHighlights];
 	[self centerActiveChange];
 }
