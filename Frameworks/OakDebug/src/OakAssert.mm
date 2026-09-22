@@ -120,6 +120,8 @@ void OakPrintBadAssertion (char const* lhs, char const* op, char const* rhs, std
 	if([[exception name] isEqualToString:@"FSExecutionErrorException"])
 		return NO;
 	os_log_error(OS_LOG_DEFAULT, "%{public}@: %{public}@\n", exception.name, exception.reason);
+	if(mask & NSLogOtherExceptionMask)
+		return YES;
 	abort();
 	return YES;
 }
