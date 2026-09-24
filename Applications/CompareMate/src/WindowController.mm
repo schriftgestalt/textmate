@@ -322,21 +322,23 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 		self.filterControl.autoresizingMask = NSViewMaxXMargin|NSViewMinYMargin;
 		[contentView addSubview:self.filterControl];
 
-		NSTextField* leftPathLabel = [NSTextField labelWithString:leftPath];
-		NSTextField* rightPathLabel = [NSTextField labelWithString:rightPath];
-		for(NSTextField* label in @[ leftPathLabel, rightPathLabel ])
+		NSPathControl* leftPathControl = [[NSPathControl alloc] initWithFrame:NSZeroRect];
+		NSPathControl* rightPathControl = [[NSPathControl alloc] initWithFrame:NSZeroRect];
+		for(NSPathControl* pathControl in @[ leftPathControl, rightPathControl ])
 		{
-			label.lineBreakMode = NSLineBreakByTruncatingMiddle;
-			label.font = [NSFont systemFontOfSize:NSFont.smallSystemFontSize weight:NSFontWeightMedium];
+			pathControl.pathStyle = NSPathStyleStandard;
+			pathControl.editable = NO;
+			pathControl.focusRingType = NSFocusRingTypeNone;
 		}
-		leftPathLabel.toolTip = leftPath;
-		rightPathLabel.toolTip = rightPath;
-		NSStackView* pathHeader = [NSStackView stackViewWithViews:@[ leftPathLabel, rightPathLabel ]];
+		leftPathControl.URL = [NSURL fileURLWithPath:leftPath isDirectory:YES];
+		rightPathControl.URL = [NSURL fileURLWithPath:rightPath isDirectory:YES];
+		leftPathControl.toolTip = leftPath;
+		rightPathControl.toolTip = rightPath;
+		NSStackView* pathHeader = [NSStackView stackViewWithViews:@[ leftPathControl, rightPathControl ]];
 		pathHeader.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 		pathHeader.distribution = NSStackViewDistributionFillEqually;
-		pathHeader.spacing = 20;
-		pathHeader.edgeInsets = NSEdgeInsetsMake(0, 10, 0, 10);
-		pathHeader.frame = NSMakeRect(0, NSMinY(self.filterControl.frame) - 28, NSWidth(contentRect), 20);
+		pathHeader.spacing = 0;
+		pathHeader.frame = NSMakeRect(0, NSMinY(self.filterControl.frame) - 32, NSWidth(contentRect), 24);
 		pathHeader.autoresizingMask = NSViewWidthSizable|NSViewMinYMargin;
 		[contentView addSubview:pathHeader];
 
