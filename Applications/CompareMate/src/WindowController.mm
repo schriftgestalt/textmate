@@ -2,8 +2,15 @@
 #import <OakTextView/src/OakDocumentView.h>
 #import <OakTextView/src/GutterView.h>
 #import <document/src/OakDocument.h>
+#import <FileBrowser/src/FSEventsManager.h>
+#import <FileBrowser/src/KEventManager.h>
 #import <OakAppKit/src/OakSavePanel.h>
 #import <ns/src/ns.h>
+
+@interface OakDocument (CompareMateExternalChanges)
+@property (nonatomic) BOOL observeFileSystem;
+- (void)importDocumentChanges:(id)sender;
+@end
 
 static NSString* const LeftPathRestorationKey = @"CompareMate.leftPath";
 static NSString* const RightPathRestorationKey = @"CompareMate.rightPath";
@@ -239,6 +246,10 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 @property (nonatomic, copy) NSArray<FolderComparisonNode*>* allNodes;
 @property (nonatomic, copy) NSArray<FolderComparisonNode*>* nodes;
 @property (nonatomic) NSUInteger scanGeneration;
+@property (nonatomic) BOOL hasCompletedScan;
+@property (nonatomic) id leftFileSystemObserver;
+@property (nonatomic) id rightFileSystemObserver;
+@property (nonatomic) NSTimer* fileSystemRefreshTimer;
 @end
 
 @implementation FolderWindowController
@@ -369,6 +380,14 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 
 		window.initialFirstResponder = self.outlineView;
 		[window center];
+
+		__weak FolderWindowController* weakSelf = self;
+		void (^folderDidChange)(NSURL*) = ^(NSURL* changedURL) {
+			[weakSelf scheduleRefreshFromFileSystemEvent];
+		};
+		self.leftFileSystemObserver = [FSEventsManager.sharedInstance addObserverToDirectoryAtURL:[NSURL fileURLWithPath:leftPath isDirectory:YES] observeSubdirectories:YES usingBlock:folderDidChange];
+		self.rightFileSystemObserver = [FSEventsManager.sharedInstance addObserverToDirectoryAtURL:[NSURL fileURLWithPath:rightPath isDirectory:YES] observeSubdirectories:YES usingBlock:folderDidChange];
+
 		[self refreshComparison];
 		[self invalidateRestorableState];
 	}
@@ -411,6 +430,27 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 		if(selectedSegment >= 0 && selectedSegment < self.filterControl.segmentCount)
 			self.filterControl.selectedSegment = selectedSegment;
 	}
+}
+
+- (void)scheduleRefreshFromFileSystemEvent
+{
+	if(!NSThread.isMainThread)
+	{
+		__weak FolderWindowController* weakSelf = self;
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[weakSelf scheduleRefreshFromFileSystemEvent];
+		});
+		return;
+	}
+
+	[self.fileSystemRefreshTimer invalidate];
+	self.fileSystemRefreshTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(fileSystemRefreshTimerDidFire:) userInfo:nil repeats:NO];
+}
+
+- (void)fileSystemRefreshTimerDidFire:(NSTimer*)timer
+{
+	self.fileSystemRefreshTimer = nil;
+	[self refreshComparison];
 }
 
 - (void)refreshComparison
@@ -711,6 +751,14 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 - (void)windowWillClose:(NSNotification*)notification
 {
 	++self.scanGeneration;
+	[self.fileSystemRefreshTimer invalidate];
+	self.fileSystemRefreshTimer = nil;
+	if(self.leftFileSystemObserver)
+		[FSEventsManager.sharedInstance removeObserver:self.leftFileSystemObserver];
+	if(self.rightFileSystemObserver)
+		[FSEventsManager.sharedInstance removeObserver:self.rightFileSystemObserver];
+	self.leftFileSystemObserver = nil;
+	self.rightFileSystemObserver = nil;
 	[NSNotificationCenter.defaultCenter removeObserver:self];
 	_retainedSelf = nil;
 }
@@ -1128,6 +1176,12 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 @property (nonatomic, weak) NSClipView* lastScrolledClipView;
 @property (nonatomic) BOOL synchronizingScroll;
 @property (nonatomic) BOOL closingWithoutSaving;
+@property (nonatomic) id leftFileSystemObserver;
+@property (nonatomic) id rightFileSystemObserver;
+@property (nonatomic) NSTimer* fileSystemRefreshTimer;
+@property (nonatomic) BOOL leftFileSystemNeedsRefresh;
+@property (nonatomic) BOOL rightFileSystemNeedsRefresh;
+@property (nonatomic) BOOL handlingExternalFileChanges;
 - (OakDocumentView*)activeDocumentView;
 @end
 
@@ -1235,6 +1289,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 			[self loadDocumentAtPath:leftPath intoDocumentView:self.leftDocumentView sideName:@"Left"];
 		if(rightPath)
 			[self loadDocumentAtPath:rightPath intoDocumentView:self.rightDocumentView sideName:@"Right"];
+		[self startObservingComparedFiles];
 
 		[self invalidateRestorableState];
 	}
@@ -1258,6 +1313,140 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 	[windowController.window setFrameAutosaveName:identifier];
 
 	completionHandler(windowController.window, nil);
+}
+
+- (void)stopObservingComparedFiles
+{
+	[self.fileSystemRefreshTimer invalidate];
+	self.fileSystemRefreshTimer = nil;
+	self.leftFileSystemNeedsRefresh = NO;
+	self.rightFileSystemNeedsRefresh = NO;
+	if(self.leftFileSystemObserver)
+		[KEventManager.sharedInstance removeObserver:self.leftFileSystemObserver];
+	if(self.rightFileSystemObserver)
+		[KEventManager.sharedInstance removeObserver:self.rightFileSystemObserver];
+	self.leftFileSystemObserver = nil;
+	self.rightFileSystemObserver = nil;
+}
+
+- (void)startObservingComparedFiles
+{
+	[self stopObservingComparedFiles];
+	__weak WindowController* weakSelf = self;
+	if(self.leftPath.length)
+	{
+		self.leftFileSystemObserver = [KEventManager.sharedInstance addObserverToItemAtURL:[NSURL fileURLWithPath:self.leftPath] usingBlock:^(NSURL* URL, NSUInteger mask) {
+			[weakSelf scheduleFileSystemRefreshForLeftSide:YES];
+		}];
+	}
+	if(self.rightPath.length)
+	{
+		self.rightFileSystemObserver = [KEventManager.sharedInstance addObserverToItemAtURL:[NSURL fileURLWithPath:self.rightPath] usingBlock:^(NSURL* URL, NSUInteger mask) {
+			[weakSelf scheduleFileSystemRefreshForLeftSide:NO];
+		}];
+	}
+}
+
+- (void)scheduleFileSystemRefreshForLeftSide:(BOOL)leftSide
+{
+	if(!NSThread.isMainThread)
+	{
+		__weak WindowController* weakSelf = self;
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[weakSelf scheduleFileSystemRefreshForLeftSide:leftSide];
+		});
+		return;
+	}
+
+	if(leftSide)
+		self.leftFileSystemNeedsRefresh = YES;
+	else
+		self.rightFileSystemNeedsRefresh = YES;
+	[self.fileSystemRefreshTimer invalidate];
+	self.fileSystemRefreshTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(fileSystemRefreshTimerDidFire:) userInfo:nil repeats:NO];
+}
+
+- (void)handleExternalChangeForDocumentView:(OakDocumentView*)documentView completionHandler:(void (^)(void))completionHandler
+{
+	OakDocument* document = documentView.document;
+	if(!document.isLoaded || !document.path.length)
+	{
+		completionHandler();
+		return;
+	}
+
+	BOOL isDirectory = NO;
+	if(![NSFileManager.defaultManager fileExistsAtPath:document.path isDirectory:&isDirectory] || isDirectory)
+	{
+		completionHandler();
+		return;
+	}
+
+	void (^reloadDocument)(void) = ^{
+		if(documentView.document == document)
+		{
+			if(document.isDocumentEdited)
+				[document markDocumentSaved];
+			document.onDisk = YES;
+			[document importDocumentChanges:self];
+		}
+		completionHandler();
+	};
+
+	if(!document.isDocumentEdited)
+	{
+		reloadDocument();
+		return;
+	}
+
+	NSAlert* alert = [[NSAlert alloc] init];
+	alert.alertStyle = NSAlertStyleWarning;
+	alert.messageText = [NSString stringWithFormat:@"“%@” Was Changed Outside CompareMate", document.displayName];
+	alert.informativeText = @"This file also has unsaved changes in CompareMate. Reload the version on disk and discard the local changes, or ignore the external change?";
+	[alert addButtonWithTitle:@"Ignore"];
+	[alert addButtonWithTitle:@"Reload"];
+	[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
+		if(response == NSAlertSecondButtonReturn)
+			reloadDocument();
+		else
+			completionHandler();
+	}];
+}
+
+- (void)fileSystemRefreshTimerDidFire:(NSTimer*)timer
+{
+	self.fileSystemRefreshTimer = nil;
+	if(self.handlingExternalFileChanges)
+		return;
+
+	BOOL const refreshLeft = self.leftFileSystemNeedsRefresh;
+	BOOL const refreshRight = self.rightFileSystemNeedsRefresh;
+	self.leftFileSystemNeedsRefresh = NO;
+	self.rightFileSystemNeedsRefresh = NO;
+	self.handlingExternalFileChanges = YES;
+
+	__weak WindowController* weakSelf = self;
+	void (^finish)(void) = ^{
+		WindowController* strongSelf = weakSelf;
+		if(!strongSelf)
+			return;
+		strongSelf.handlingExternalFileChanges = NO;
+		if(strongSelf.leftFileSystemNeedsRefresh || strongSelf.rightFileSystemNeedsRefresh)
+			[strongSelf scheduleFileSystemRefreshForLeftSide:strongSelf.leftFileSystemNeedsRefresh];
+	};
+	void (^handleRight)(void) = ^{
+		WindowController* strongSelf = weakSelf;
+		if(!strongSelf)
+			return;
+		if(refreshRight)
+			[strongSelf handleExternalChangeForDocumentView:strongSelf.rightDocumentView completionHandler:finish];
+		else
+			finish();
+	};
+	if(refreshLeft)
+		[self handleExternalChangeForDocumentView:self.leftDocumentView completionHandler:handleRight];
+	else
+		handleRight();
 }
 
 - (void)encodeRestorableStateWithCoder:(NSCoder*)coder
@@ -1568,7 +1757,9 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 	[document saveModalForWindow:self.window completionHandler:^(OakDocumentIOResult result, NSString* errorMessage, oak::uuid_t const& filterUUID) {
 		if(result == OakDocumentIOResultSuccess)
 		{
+			document.observeFileSystem = NO;
 			[self updateDocumentState];
+			[self startObservingComparedFiles];
 		}
 		else if(result == OakDocumentIOResultFailure)
 		{
@@ -1804,6 +1995,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 		document.path = path;
 		document.onDisk = NO;
 		documentView.document = document;
+		document.observeFileSystem = NO;
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentContentDidChange:) name:OakDocumentContentDidChangeNotification object:document];
 		if(documentView == self.leftDocumentView)
 			self.leftDocumentLoaded = YES;
@@ -1819,6 +2011,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 		if(result == OakDocumentIOResultSuccess)
 		{
 			documentView.document = document;
+			document.observeFileSystem = NO;
 			[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentContentDidChange:) name:OakDocumentContentDidChangeNotification object:document];
 			if(documentView == self.leftDocumentView)
 				self.leftDocumentLoaded = YES;
@@ -1841,6 +2034,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 - (void)windowWillClose:(NSNotification*)aNotification
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateDiff) object:nil];
+	[self stopObservingComparedFiles];
 	++self.diffGeneration;
 	[NSNotificationCenter.defaultCenter removeObserver:self];
 	_retainedSelf = nil;
