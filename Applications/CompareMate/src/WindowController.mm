@@ -468,17 +468,44 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 			FolderWindowController* strongSelf = weakSelf;
 			if(!strongSelf || generation != strongSelf.scanGeneration)
 				return;
+			NSSet<NSString*>* expandedFolderPaths = strongSelf.hasCompletedScan ? [strongSelf expandedFolderPaths] : nil;
+			strongSelf.hasCompletedScan = YES;
 			strongSelf.allNodes = allNodes;
-			[strongSelf reloadOutlineKeepingSelection:selectedPath];
+			[strongSelf reloadOutlineKeepingSelection:selectedPath expandedFolderPaths:expandedFolderPaths];
 		});
 	});
 }
 
-- (void)reloadOutlineKeepingSelection:(NSString*)selectedPath
+- (NSSet<NSString*>*)expandedFolderPaths
+{
+	NSMutableSet<NSString*>* result = [NSMutableSet set];
+	for(NSInteger row = 0; row < self.outlineView.numberOfRows; ++row)
+	{
+		FolderComparisonNode* node = [self.outlineView itemAtRow:row];
+		if(node.isDirectory && [self.outlineView isItemExpanded:node] && node.relativePath.length)
+			[result addObject:node.relativePath];
+	}
+	return result;
+}
+
+- (void)expandFolderNodes:(NSArray<FolderComparisonNode*>*)nodes matchingPaths:(NSSet<NSString*>*)expandedFolderPaths
+{
+	for(FolderComparisonNode* node in nodes)
+	{
+		if(node.isDirectory && [expandedFolderPaths containsObject:node.relativePath])
+			[self.outlineView expandItem:node];
+		[self expandFolderNodes:node.children matchingPaths:expandedFolderPaths];
+	}
+}
+
+- (void)reloadOutlineKeepingSelection:(NSString*)selectedPath expandedFolderPaths:(NSSet<NSString*>*)expandedFolderPaths
 {
 	self.nodes = FilterFolderComparison(self.allNodes, self.filterControl.selectedSegment == 0);
 	[self.outlineView reloadData];
-	[self.outlineView expandItem:nil expandChildren:YES];
+	if(expandedFolderPaths)
+		[self expandFolderNodes:self.nodes matchingPaths:expandedFolderPaths];
+	else
+		[self.outlineView expandItem:nil expandChildren:YES];
 
 	if(selectedPath.length)
 	{
@@ -502,7 +529,8 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 - (IBAction)changeFolderFilter:(id)sender
 {
 	FolderComparisonNode* selectedNode = [self selectedFileNode];
-	[self reloadOutlineKeepingSelection:selectedNode.relativePath];
+	NSSet<NSString*>* expandedFolderPaths = [self expandedFolderPaths];
+	[self reloadOutlineKeepingSelection:selectedNode.relativePath expandedFolderPaths:expandedFolderPaths];
 	[self invalidateRestorableState];
 }
 
