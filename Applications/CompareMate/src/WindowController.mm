@@ -8,10 +8,676 @@
 static NSString* const LeftPathRestorationKey = @"CompareMate.leftPath";
 static NSString* const RightPathRestorationKey = @"CompareMate.rightPath";
 static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosition";
+static NSString* const FolderIconLeadingConstraintIdentifier = @"CompareMate.folderIconLeading";
 
 @interface DiffCharacterRange : NSObject
 @property (nonatomic) NSUInteger line;
 @property (nonatomic) NSRange byteColumns;
+@end
+
+typedef NS_ENUM(NSInteger, FolderEntryKind) {
+	FolderEntryKindMissing,
+	FolderEntryKindFile,
+	FolderEntryKindDirectory,
+	FolderEntryKindOther,
+};
+
+@interface FolderComparisonNode : NSObject
+@property (nonatomic) NSString* name;
+@property (nonatomic) NSString* relativePath;
+@property (nonatomic) NSString* leftPath;
+@property (nonatomic) NSString* rightPath;
+@property (nonatomic) FolderEntryKind leftKind;
+@property (nonatomic) FolderEntryKind rightKind;
+@property (nonatomic) NSNumber* leftFileSize;
+@property (nonatomic) NSNumber* rightFileSize;
+@property (nonatomic) NSDate* leftModificationDate;
+@property (nonatomic) NSDate* rightModificationDate;
+@property (nonatomic) NSArray<FolderComparisonNode*>* children;
+@property (nonatomic) NSString* scanError;
+@property (nonatomic, readonly) BOOL isDirectory;
+@property (nonatomic, readonly) BOOL representsFile;
+@end
+
+@implementation FolderComparisonNode
+- (BOOL)isDirectory
+{
+	return self.leftKind == FolderEntryKindDirectory || self.rightKind == FolderEntryKindDirectory;
+}
+
+- (BOOL)representsFile
+{
+	return self.leftKind == FolderEntryKindFile || self.rightKind == FolderEntryKindFile;
+}
+@end
+
+static FolderEntryKind FolderEntryKindAtPath (NSString* path)
+{
+	NSDictionary<NSFileAttributeKey, id>* attributes = [NSFileManager.defaultManager attributesOfItemAtPath:path error:nil];
+	NSString* type = attributes[NSFileType];
+	if(!type)
+		return FolderEntryKindMissing;
+	if([type isEqualToString:NSFileTypeDirectory])
+		return FolderEntryKindDirectory;
+	if([type isEqualToString:NSFileTypeRegular] || [type isEqualToString:NSFileTypeSymbolicLink])
+		return FolderEntryKindFile;
+	return FolderEntryKindOther;
+}
+
+static BOOL FolderFilesAreEqual (NSString* leftPath, NSString* rightPath)
+{
+	NSDictionary<NSFileAttributeKey, id>* leftAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:leftPath error:nil];
+	NSDictionary<NSFileAttributeKey, id>* rightAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:rightPath error:nil];
+	if(![leftAttributes[NSFileType] isEqual:rightAttributes[NSFileType]])
+		return NO;
+	if([leftAttributes[NSFileType] isEqualToString:NSFileTypeSymbolicLink])
+	{
+		NSString* leftDestination = [NSFileManager.defaultManager destinationOfSymbolicLinkAtPath:leftPath error:nil];
+		NSString* rightDestination = [NSFileManager.defaultManager destinationOfSymbolicLinkAtPath:rightPath error:nil];
+		return leftDestination && [leftDestination isEqualToString:rightDestination];
+	}
+	if(![leftAttributes[NSFileSize] isEqual:rightAttributes[NSFileSize]])
+		return NO;
+	return [NSFileManager.defaultManager contentsEqualAtPath:leftPath andPath:rightPath];
+}
+
+static FolderComparisonNode* BuildFolderComparisonNode (NSString* relativePath, NSString* leftRoot, NSString* rightRoot)
+{
+	FolderComparisonNode* node = [[FolderComparisonNode alloc] init];
+	node.relativePath = relativePath;
+	node.name = relativePath.lastPathComponent;
+	node.leftPath = [leftRoot stringByAppendingPathComponent:relativePath];
+	node.rightPath = [rightRoot stringByAppendingPathComponent:relativePath];
+	node.leftKind = FolderEntryKindAtPath(node.leftPath);
+	node.rightKind = FolderEntryKindAtPath(node.rightPath);
+	NSDictionary<NSFileAttributeKey, id>* leftAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:node.leftPath error:nil];
+	NSDictionary<NSFileAttributeKey, id>* rightAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:node.rightPath error:nil];
+	node.leftFileSize = leftAttributes[NSFileSize];
+	node.rightFileSize = rightAttributes[NSFileSize];
+	node.leftModificationDate = leftAttributes[NSFileModificationDate];
+	node.rightModificationDate = rightAttributes[NSFileModificationDate];
+
+	if(node.leftKind == FolderEntryKindDirectory || node.rightKind == FolderEntryKindDirectory)
+	{
+		NSMutableSet<NSString*>* names = [NSMutableSet set];
+		NSError* leftError = nil, *rightError = nil;
+		if(node.leftKind == FolderEntryKindDirectory)
+		{
+			NSArray<NSString*>* leftNames = [NSFileManager.defaultManager contentsOfDirectoryAtPath:node.leftPath error:&leftError];
+			if(leftNames)
+				[names addObjectsFromArray:leftNames];
+		}
+		if(node.rightKind == FolderEntryKindDirectory)
+		{
+			NSArray<NSString*>* rightNames = [NSFileManager.defaultManager contentsOfDirectoryAtPath:node.rightPath error:&rightError];
+			if(rightNames)
+				[names addObjectsFromArray:rightNames];
+		}
+		if(leftError || rightError)
+			node.scanError = (leftError ?: rightError).localizedDescription;
+
+		NSMutableArray<FolderComparisonNode*>* children = [NSMutableArray array];
+		NSArray<NSString*>* sortedNames = [names.allObjects sortedArrayUsingComparator:^NSComparisonResult(NSString* first, NSString* second) {
+			return [first localizedStandardCompare:second];
+		}];
+		for(NSString* name in sortedNames)
+		{
+			FolderComparisonNode* child = BuildFolderComparisonNode([relativePath stringByAppendingPathComponent:name], leftRoot, rightRoot);
+			if(child)
+				[children addObject:child];
+		}
+		node.children = children;
+
+		BOOL const typeMismatchWithFile = (node.leftKind == FolderEntryKindDirectory && node.rightKind != FolderEntryKindDirectory && node.rightKind != FolderEntryKindMissing) || (node.rightKind == FolderEntryKindDirectory && node.leftKind != FolderEntryKindDirectory && node.leftKind != FolderEntryKindMissing);
+		return children.count || node.scanError || typeMismatchWithFile ? node : nil;
+	}
+
+	node.children = @[];
+	if(node.leftKind == FolderEntryKindMissing && node.rightKind == FolderEntryKindMissing)
+		return nil;
+	if(node.leftKind != node.rightKind)
+		return node;
+	if(node.leftKind == FolderEntryKindFile && !FolderFilesAreEqual(node.leftPath, node.rightPath))
+		return node;
+	if(node.leftKind == FolderEntryKindOther)
+		return node;
+	return nil;
+}
+
+static NSArray<FolderComparisonNode*>* BuildFolderComparison (NSString* leftRoot, NSString* rightRoot)
+{
+	NSMutableSet<NSString*>* names = [NSMutableSet set];
+	NSError* leftError = nil, *rightError = nil;
+	NSArray<NSString*>* leftNames = [NSFileManager.defaultManager contentsOfDirectoryAtPath:leftRoot error:&leftError];
+	NSArray<NSString*>* rightNames = [NSFileManager.defaultManager contentsOfDirectoryAtPath:rightRoot error:&rightError];
+	if(leftNames)
+		[names addObjectsFromArray:leftNames];
+	if(rightNames)
+		[names addObjectsFromArray:rightNames];
+
+	NSMutableArray<FolderComparisonNode*>* result = [NSMutableArray array];
+	NSArray<NSString*>* sortedNames = [names.allObjects sortedArrayUsingComparator:^NSComparisonResult(NSString* first, NSString* second) {
+		return [first localizedStandardCompare:second];
+	}];
+	for(NSString* name in sortedNames)
+	{
+		FolderComparisonNode* node = BuildFolderComparisonNode(name, leftRoot, rightRoot);
+		if(node)
+			[result addObject:node];
+	}
+	if((leftError || rightError) && result.count == 0)
+	{
+		FolderComparisonNode* errorNode = [[FolderComparisonNode alloc] init];
+		errorNode.name = @"Couldn’t read folder";
+		errorNode.relativePath = @"";
+		errorNode.children = @[];
+		errorNode.scanError = (leftError ?: rightError).localizedDescription;
+		[result addObject:errorNode];
+	}
+	return result;
+}
+
+static FolderComparisonNode* FilterFolderComparisonNode (FolderComparisonNode* node, BOOL includeSingleFiles)
+{
+	BOOL const existsOnBothSides = node.leftKind != FolderEntryKindMissing && node.rightKind != FolderEntryKindMissing;
+	if(!node.isDirectory)
+		return includeSingleFiles || existsOnBothSides ? node : nil;
+
+	NSMutableArray<FolderComparisonNode*>* children = [NSMutableArray array];
+	for(FolderComparisonNode* child in node.children)
+	{
+		if(FolderComparisonNode* filteredChild = FilterFolderComparisonNode(child, includeSingleFiles))
+			[children addObject:filteredChild];
+	}
+	BOOL const kindDiffers = existsOnBothSides && node.leftKind != node.rightKind;
+	if(children.count == 0 && !node.scanError.length && !kindDiffers)
+		return nil;
+	if(children.count == node.children.count)
+		return node;
+
+	FolderComparisonNode* filteredNode = [[FolderComparisonNode alloc] init];
+	filteredNode.name = node.name;
+	filteredNode.relativePath = node.relativePath;
+	filteredNode.leftPath = node.leftPath;
+	filteredNode.rightPath = node.rightPath;
+	filteredNode.leftKind = node.leftKind;
+	filteredNode.rightKind = node.rightKind;
+	filteredNode.leftFileSize = node.leftFileSize;
+	filteredNode.rightFileSize = node.rightFileSize;
+	filteredNode.leftModificationDate = node.leftModificationDate;
+	filteredNode.rightModificationDate = node.rightModificationDate;
+	filteredNode.children = children;
+	filteredNode.scanError = node.scanError;
+	return filteredNode;
+}
+
+static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderComparisonNode*>* nodes, BOOL includeSingleFiles)
+{
+	if(includeSingleFiles)
+		return nodes;
+	NSMutableArray<FolderComparisonNode*>* result = [NSMutableArray array];
+	for(FolderComparisonNode* node in nodes)
+	{
+		if(FolderComparisonNode* filteredNode = FilterFolderComparisonNode(node, NO))
+			[result addObject:filteredNode];
+	}
+	return result;
+}
+
+@interface FolderWindowController () <NSWindowDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate>
+@property (nonatomic) FolderWindowController* retainedSelf;
+@property (nonatomic, copy) NSString* leftPath;
+@property (nonatomic, copy) NSString* rightPath;
+@property (nonatomic) NSOutlineView* outlineView;
+@property (nonatomic) NSScrollView* outlineScrollView;
+@property (nonatomic) NSTableColumn* leftNameColumn;
+@property (nonatomic) NSTableColumn* rightNameColumn;
+@property (nonatomic) NSSegmentedControl* filterControl;
+@property (nonatomic) NSTextField* statusLabel;
+@property (nonatomic) NSDateFormatter* dateFormatter;
+@property (nonatomic, copy) NSArray<FolderComparisonNode*>* allNodes;
+@property (nonatomic, copy) NSArray<FolderComparisonNode*>* nodes;
+@property (nonatomic) NSUInteger scanGeneration;
+@end
+
+@implementation FolderWindowController
+- (NSOutlineView*)newOutlineView
+{
+	NSOutlineView* outlineView = [[NSOutlineView alloc] initWithFrame:NSZeroRect];
+	outlineView.dataSource = self;
+	outlineView.delegate = self;
+	outlineView.rowSizeStyle = NSTableViewRowSizeStyleDefault;
+	outlineView.indentationPerLevel = 16;
+	outlineView.allowsMultipleSelection = NO;
+	outlineView.columnAutoresizingStyle = NSTableViewNoColumnAutoresizing;
+	outlineView.target = self;
+	outlineView.doubleAction = @selector(openSelectedFile:);
+
+	NSTableColumn* (^addColumn)(NSString*, NSString*, CGFloat, CGFloat) = ^NSTableColumn*(NSString* identifier, NSString* title, CGFloat width, CGFloat minimumWidth) {
+		NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier:identifier];
+		column.title = title;
+		column.width = width;
+		column.minWidth = minimumWidth;
+		column.resizingMask = NSTableColumnNoResizing;
+		[outlineView addTableColumn:column];
+		return column;
+	};
+	self.leftNameColumn = addColumn(@"leftName", @"Left", 220, 100);
+	outlineView.outlineTableColumn = self.leftNameColumn;
+	addColumn(@"leftDate", @"Modified", 116, 116);
+	addColumn(@"leftSize", @"Size", 60, 60);
+	self.rightNameColumn = addColumn(@"rightName", @"Right", 220, 100);
+	addColumn(@"rightDate", @"Modified", 116, 116);
+	addColumn(@"rightSize", @"Size", 60, 60);
+	return outlineView;
+}
+
+- (void)resizeFolderColumnsToFit
+{
+	if(!self.outlineScrollView || !self.leftNameColumn || !self.rightNameColumn)
+		return;
+
+	CGFloat fixedWidth = 0;
+	for(NSTableColumn* column in self.outlineView.tableColumns)
+	{
+		if(column != self.leftNameColumn && column != self.rightNameColumn)
+			fixedWidth += column.width;
+	}
+	CGFloat const spacingWidth = self.outlineView.intercellSpacing.width * self.outlineView.tableColumns.count;
+	CGFloat const availableWidth = NSWidth(self.outlineScrollView.contentView.bounds);
+	CGFloat const nameWidth = MAX(self.leftNameColumn.minWidth, floor((availableWidth - fixedWidth - spacingWidth) / 2));
+	self.leftNameColumn.width = nameWidth;
+	self.rightNameColumn.width = nameWidth;
+}
+
+- (instancetype)initWithLeftPath:(NSString*)leftPath rightPath:(NSString*)rightPath
+{
+	NSRect const contentRect = NSMakeRect(0, 0, 900, 620);
+	NSWindowStyleMask const styleMask = NSWindowStyleMaskTitled|NSWindowStyleMaskResizable|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
+	if(self = [self initWithWindow:[[NSWindow alloc] initWithContentRect:contentRect styleMask:styleMask backing:NSBackingStoreBuffered defer:NO]])
+	{
+		_retainedSelf = self;
+		_leftPath = [leftPath copy];
+		_rightPath = [rightPath copy];
+		_allNodes = @[];
+		_nodes = @[];
+
+		NSWindow* window = self.window;
+		window.title = [NSString stringWithFormat:@"%@ ↔ %@", leftPath.lastPathComponent, rightPath.lastPathComponent];
+		window.delegate = self;
+		window.minSize = NSMakeSize(620, 360);
+		window.identifier = [NSString stringWithFormat:@"CompareMate.FolderComparison.%@", NSUUID.UUID.UUIDString];
+
+		NSView* contentView = [[NSView alloc] initWithFrame:contentRect];
+		window.contentView = contentView;
+
+		self.filterControl = [NSSegmentedControl segmentedControlWithLabels:@[ @"Changed and Single", @"Changed Only" ] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(changeFolderFilter:)];
+		self.filterControl.selectedSegment = 0;
+		[self.filterControl sizeToFit];
+		self.filterControl.frame = NSMakeRect(12, NSHeight(contentRect) - NSHeight(self.filterControl.frame) - 9, NSWidth(self.filterControl.frame), NSHeight(self.filterControl.frame));
+		self.filterControl.autoresizingMask = NSViewMaxXMargin|NSViewMinYMargin;
+		[contentView addSubview:self.filterControl];
+
+		NSTextField* leftPathLabel = [NSTextField labelWithString:leftPath];
+		NSTextField* rightPathLabel = [NSTextField labelWithString:rightPath];
+		for(NSTextField* label in @[ leftPathLabel, rightPathLabel ])
+		{
+			label.lineBreakMode = NSLineBreakByTruncatingMiddle;
+			label.font = [NSFont systemFontOfSize:NSFont.smallSystemFontSize weight:NSFontWeightMedium];
+		}
+		leftPathLabel.toolTip = leftPath;
+		rightPathLabel.toolTip = rightPath;
+		NSStackView* pathHeader = [NSStackView stackViewWithViews:@[ leftPathLabel, rightPathLabel ]];
+		pathHeader.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+		pathHeader.distribution = NSStackViewDistributionFillEqually;
+		pathHeader.spacing = 20;
+		pathHeader.edgeInsets = NSEdgeInsetsMake(0, 10, 0, 10);
+		pathHeader.frame = NSMakeRect(0, NSMinY(self.filterControl.frame) - 28, NSWidth(contentRect), 20);
+		pathHeader.autoresizingMask = NSViewWidthSizable|NSViewMinYMargin;
+		[contentView addSubview:pathHeader];
+
+		self.outlineView = [self newOutlineView];
+		CGFloat const outlineTop = NSMinY(pathHeader.frame) - 6;
+		NSScrollView* scrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 28, NSWidth(contentRect), outlineTop - 28)];
+		scrollView.autoresizingMask = NSViewWidthSizable|NSViewHeightSizable;
+		scrollView.hasVerticalScroller = YES;
+		scrollView.hasHorizontalScroller = NO;
+		scrollView.borderType = NSBezelBorder;
+		self.outlineScrollView = scrollView;
+		self.outlineView.frame = scrollView.bounds;
+		self.outlineView.autoresizingMask = NSViewWidthSizable;
+		scrollView.documentView = self.outlineView;
+		[contentView addSubview:scrollView];
+		[self resizeFolderColumnsToFit];
+
+		self.dateFormatter = [[NSDateFormatter alloc] init];
+		self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
+		self.dateFormatter.timeStyle = NSDateFormatterShortStyle;
+
+		self.statusLabel = [NSTextField labelWithString:@"Comparing folders…"];
+		self.statusLabel.frame = NSMakeRect(12, 6, NSWidth(contentRect) - 24, 17);
+		self.statusLabel.autoresizingMask = NSViewWidthSizable|NSViewMaxYMargin;
+		self.statusLabel.textColor = NSColor.secondaryLabelColor;
+		self.statusLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+		[contentView addSubview:self.statusLabel];
+
+		window.initialFirstResponder = self.outlineView;
+		[window center];
+		[self refreshComparison];
+	}
+	return self;
+}
+
+- (void)refreshComparison
+{
+	NSUInteger const generation = ++self.scanGeneration;
+	NSString* leftPath = self.leftPath;
+	NSString* rightPath = self.rightPath;
+	NSInteger const selectedRow = self.outlineView.selectedRow;
+	NSString* selectedPath = selectedRow >= 0 ? [(FolderComparisonNode*)[self.outlineView itemAtRow:selectedRow] relativePath] : nil;
+	self.statusLabel.stringValue = @"Comparing folders…";
+	__weak FolderWindowController* weakSelf = self;
+	dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+		NSArray<FolderComparisonNode*>* allNodes = BuildFolderComparison(leftPath, rightPath);
+		dispatch_async(dispatch_get_main_queue(), ^{
+			FolderWindowController* strongSelf = weakSelf;
+			if(!strongSelf || generation != strongSelf.scanGeneration)
+				return;
+			strongSelf.allNodes = allNodes;
+			[strongSelf reloadOutlineKeepingSelection:selectedPath];
+		});
+	});
+}
+
+- (void)reloadOutlineKeepingSelection:(NSString*)selectedPath
+{
+	self.nodes = FilterFolderComparison(self.allNodes, self.filterControl.selectedSegment == 0);
+	[self.outlineView reloadData];
+	[self.outlineView expandItem:nil expandChildren:YES];
+
+	if(selectedPath.length)
+	{
+		for(FolderComparisonNode* node in [self fileNodesInDisplayOrder])
+		{
+			if([node.relativePath isEqualToString:selectedPath])
+			{
+				NSInteger row = [self.outlineView rowForItem:node];
+				if(row >= 0)
+					[self.outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+				break;
+			}
+		}
+	}
+
+	NSUInteger count = [self fileNodesInDisplayOrder].count;
+	NSString* summary = count ? [NSString stringWithFormat:@"%lu different %@", count, count == 1 ? @"file" : @"files"] : @"No file differences";
+	self.statusLabel.stringValue = [summary stringByAppendingString:@" — ⌘⌥←/→ copy; ⇧⌘⌥←/→ move"];
+}
+
+- (IBAction)changeFolderFilter:(id)sender
+{
+	FolderComparisonNode* selectedNode = [self selectedFileNode];
+	[self reloadOutlineKeepingSelection:selectedNode.relativePath];
+}
+
+- (NSInteger)outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
+{
+	return item ? [(FolderComparisonNode*)item children].count : self.nodes.count;
+}
+
+- (id)outlineView:(NSOutlineView*)outlineView child:(NSInteger)index ofItem:(id)item
+{
+	return item ? [(FolderComparisonNode*)item children][index] : self.nodes[index];
+}
+
+- (BOOL)outlineView:(NSOutlineView*)outlineView isItemExpandable:(id)item
+{
+	return [(FolderComparisonNode*)item children].count != 0;
+}
+
+- (NSView*)outlineView:(NSOutlineView*)outlineView viewForTableColumn:(NSTableColumn*)tableColumn item:(id)item
+{
+	FolderComparisonNode* node = item;
+	NSString* identifier = tableColumn.identifier;
+	BOOL const leftSide = [identifier hasPrefix:@"left"];
+	BOOL const nameColumn = [identifier hasSuffix:@"Name"];
+	BOOL const dateColumn = [identifier hasSuffix:@"Date"];
+	FolderEntryKind const kind = leftSide ? node.leftKind : node.rightKind;
+	NSString* path = leftSide ? node.leftPath : node.rightPath;
+	NSNumber* fileSize = leftSide ? node.leftFileSize : node.rightFileSize;
+	NSDate* modificationDate = leftSide ? node.leftModificationDate : node.rightModificationDate;
+	NSTableCellView* cell = [outlineView makeViewWithIdentifier:identifier owner:self];
+	if(!cell)
+	{
+		if(nameColumn)
+		{
+			cell = [[NSTableCellView alloc] initWithFrame:NSMakeRect(0, 0, tableColumn.width, 22)];
+			NSImageView* imageView = [[NSImageView alloc] initWithFrame:NSZeroRect];
+			imageView.translatesAutoresizingMaskIntoConstraints = NO;
+			imageView.imageAlignment = NSImageAlignCenter;
+			imageView.imageScaling = NSImageScaleProportionallyDown;
+			cell.imageView = imageView;
+			[cell addSubview:imageView];
+
+			NSTextField* textField = [NSTextField labelWithString:@""];
+			textField.translatesAutoresizingMaskIntoConstraints = NO;
+			textField.lineBreakMode = NSLineBreakByTruncatingMiddle;
+			cell.textField = textField;
+			[cell addSubview:textField];
+
+			NSLayoutConstraint* imageLeadingConstraint = [imageView.leadingAnchor constraintEqualToAnchor:cell.leadingAnchor constant:2];
+			imageLeadingConstraint.identifier = FolderIconLeadingConstraintIdentifier;
+			[NSLayoutConstraint activateConstraints:@[
+				imageLeadingConstraint,
+				[imageView.centerYAnchor constraintEqualToAnchor:cell.centerYAnchor],
+				[imageView.widthAnchor constraintEqualToConstant:16],
+				[imageView.heightAnchor constraintEqualToConstant:16],
+				[textField.leadingAnchor constraintEqualToAnchor:imageView.trailingAnchor constant:6],
+				[textField.trailingAnchor constraintEqualToAnchor:cell.trailingAnchor constant:-4],
+				[textField.centerYAnchor constraintEqualToAnchor:cell.centerYAnchor],
+			]];
+		}
+		else
+		{
+			cell = [[NSTableCellView alloc] initWithFrame:NSMakeRect(0, 0, tableColumn.width, 22)];
+			NSTextField* textField = [NSTextField labelWithString:@""];
+			textField.lineBreakMode = NSLineBreakByTruncatingMiddle;
+			textField.autoresizingMask = NSViewWidthSizable;
+			cell.textField = textField;
+			[cell addSubview:textField];
+			textField.frame = NSMakeRect(4, 3, tableColumn.width - 8, 17);
+			textField.textColor = NSColor.secondaryLabelColor;
+			if([identifier hasSuffix:@"Size"])
+				textField.alignment = NSTextAlignmentRight;
+		}
+		cell.identifier = identifier;
+	}
+
+	if(nameColumn)
+	{
+		cell.textField.stringValue = kind == FolderEntryKindMissing ? @"" : node.name ?: @"";
+		cell.imageView.image = kind == FolderEntryKindMissing ? nil : [NSWorkspace.sharedWorkspace iconForFile:path];
+		for(NSLayoutConstraint* constraint in cell.constraints)
+		{
+			if([constraint.identifier isEqualToString:FolderIconLeadingConstraintIdentifier])
+			{
+				constraint.constant = 2 + (leftSide ? 0 : [outlineView levelForItem:node] * outlineView.indentationPerLevel);
+				break;
+			}
+		}
+		cell.toolTip = kind == FolderEntryKindMissing ? nil : path;
+	}
+	else if(kind == FolderEntryKindMissing)
+		cell.textField.stringValue = @"";
+	else if(dateColumn)
+		cell.textField.stringValue = modificationDate ? [self.dateFormatter stringFromDate:modificationDate] : @"";
+	else
+		cell.textField.stringValue = kind == FolderEntryKindFile && fileSize ? [NSByteCountFormatter stringFromByteCount:fileSize.longLongValue countStyle:NSByteCountFormatterCountStyleFile] : @"";
+	return cell;
+}
+
+- (void)addFileNodes:(NSArray<FolderComparisonNode*>*)nodes toArray:(NSMutableArray<FolderComparisonNode*>*)result
+{
+	for(FolderComparisonNode* node in nodes)
+	{
+		if(node.representsFile)
+			[result addObject:node];
+		if(node.isDirectory)
+			[self addFileNodes:node.children toArray:result];
+	}
+}
+
+- (NSArray<FolderComparisonNode*>*)fileNodesInDisplayOrder
+{
+	NSMutableArray<FolderComparisonNode*>* result = [NSMutableArray array];
+	[self addFileNodes:self.nodes toArray:result];
+	return result;
+}
+
+- (FolderComparisonNode*)selectedFileNode
+{
+	NSInteger row = self.outlineView.selectedRow;
+	FolderComparisonNode* node = row >= 0 ? [self.outlineView itemAtRow:row] : nil;
+	return node.representsFile && node.relativePath.length ? node : nil;
+}
+
+- (IBAction)openSelectedFile:(id)sender
+{
+	NSInteger row = self.outlineView.clickedRow >= 0 ? self.outlineView.clickedRow : self.outlineView.selectedRow;
+	FolderComparisonNode* node = row >= 0 ? [self.outlineView itemAtRow:row] : nil;
+	if(!node || node.leftKind == FolderEntryKindDirectory || node.rightKind == FolderEntryKindDirectory || node.leftKind == FolderEntryKindOther || node.rightKind == FolderEntryKindOther)
+		return;
+	WindowController* controller = [[WindowController alloc] initWithLeftPath:node.leftPath rightPath:node.rightPath];
+	[controller showWindow:self];
+}
+
+- (void)selectFileWithOffset:(NSInteger)offset
+{
+	NSArray<FolderComparisonNode*>* files = [self fileNodesInDisplayOrder];
+	if(files.count == 0)
+	{
+		NSBeep();
+		return;
+	}
+	FolderComparisonNode* selected = self.selectedFileNode;
+	NSInteger index = selected ? [files indexOfObjectIdenticalTo:selected] : NSNotFound;
+	if(index == NSNotFound)
+		index = offset > 0 ? 0 : files.count - 1;
+	else
+		index = (index + offset + files.count) % files.count;
+	NSInteger row = [self.outlineView rowForItem:files[index]];
+	if(row >= 0)
+	{
+		[self.outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+		[self.outlineView scrollRowToVisible:row];
+	}
+}
+
+- (IBAction)nextChange:(id)sender { [self selectFileWithOffset:1]; }
+- (IBAction)previousChange:(id)sender { [self selectFileWithOffset:-1]; }
+
+- (void)showFileOperationError:(NSError*)error
+{
+	NSAlert* alert = [NSAlert alertWithError:error];
+	[alert beginSheetModalForWindow:self.window completionHandler:nil];
+}
+
+- (void)performTransferOfNode:(FolderComparisonNode*)node toLeft:(BOOL)toLeft move:(BOOL)move
+{
+	NSString* sourcePath = toLeft ? node.rightPath : node.leftPath;
+	NSString* targetPath = toLeft ? node.leftPath : node.rightPath;
+	FolderEntryKind sourceKind = toLeft ? node.rightKind : node.leftKind;
+	FolderEntryKind targetKind = toLeft ? node.leftKind : node.rightKind;
+	if(sourceKind == FolderEntryKindMissing || sourceKind == FolderEntryKindDirectory || sourceKind == FolderEntryKindOther)
+	{
+		NSBeep();
+		return;
+	}
+
+	void (^performTransfer)(void) = ^{
+		NSFileManager* fileManager = NSFileManager.defaultManager;
+		NSString* targetDirectory = targetPath.stringByDeletingLastPathComponent;
+		NSError* error = nil;
+		if(![fileManager createDirectoryAtPath:targetDirectory withIntermediateDirectories:YES attributes:nil error:&error])
+		{
+			[self showFileOperationError:error];
+			return;
+		}
+
+		NSString* temporaryPath = [targetDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@".CompareMate-%@", NSUUID.UUID.UUIDString]];
+		if(![fileManager copyItemAtPath:sourcePath toPath:temporaryPath error:&error])
+		{
+			[self showFileOperationError:error];
+			return;
+		}
+
+		BOOL const targetExists = [fileManager fileExistsAtPath:targetPath] || [fileManager attributesOfItemAtPath:targetPath error:nil] != nil;
+		BOOL installed = targetExists ? [fileManager replaceItemAtURL:[NSURL fileURLWithPath:targetPath] withItemAtURL:[NSURL fileURLWithPath:temporaryPath] backupItemName:nil options:0 resultingItemURL:nil error:&error] : [fileManager moveItemAtPath:temporaryPath toPath:targetPath error:&error];
+		if(!installed)
+		{
+			[fileManager removeItemAtPath:temporaryPath error:nil];
+			[self showFileOperationError:error];
+			return;
+		}
+
+		if(move && ![fileManager removeItemAtPath:sourcePath error:&error])
+		{
+			[self showFileOperationError:error];
+			[self refreshComparison];
+			return;
+		}
+		[self refreshComparison];
+	};
+
+	if(targetKind != FolderEntryKindMissing)
+	{
+		NSAlert* alert = [[NSAlert alloc] init];
+		alert.alertStyle = NSAlertStyleWarning;
+		alert.messageText = [NSString stringWithFormat:@"Replace “%@”?", targetPath.lastPathComponent];
+		alert.informativeText = move ? @"The destination will be replaced, then the original file will be removed." : @"The destination file will be replaced.";
+		[alert addButtonWithTitle:@"Replace"];
+		[alert addButtonWithTitle:@"Cancel"];
+		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
+			if(response == NSAlertFirstButtonReturn)
+				performTransfer();
+		}];
+	}
+	else
+		performTransfer();
+}
+
+- (void)transferSelectedFileToLeft:(BOOL)toLeft move:(BOOL)move
+{
+	FolderComparisonNode* node = self.selectedFileNode;
+	if(!node)
+	{
+		NSBeep();
+		return;
+	}
+	[self performTransferOfNode:node toLeft:toLeft move:move];
+}
+
+- (IBAction)copyChangeToLeft:(id)sender { [self transferSelectedFileToLeft:YES move:NO]; }
+- (IBAction)copyChangeToRight:(id)sender { [self transferSelectedFileToLeft:NO move:NO]; }
+- (IBAction)moveChangeToLeft:(id)sender { [self transferSelectedFileToLeft:YES move:YES]; }
+- (IBAction)moveChangeToRight:(id)sender { [self transferSelectedFileToLeft:NO move:YES]; }
+
+- (void)windowWillClose:(NSNotification*)notification
+{
+	++self.scanGeneration;
+	[NSNotificationCenter.defaultCenter removeObserver:self];
+	_retainedSelf = nil;
+}
+
+- (void)windowDidBecomeKey:(NSNotification*)notification
+{
+	[self refreshComparison];
+}
+
+- (void)windowDidResize:(NSNotification*)notification
+{
+	[self resizeFolderColumnsToFit];
+}
 @end
 
 @implementation DiffCharacterRange
@@ -1085,6 +1751,23 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 
 - (void)loadDocumentAtPath:(NSString*)path intoDocumentView:(OakDocumentView*)documentView sideName:(NSString*)sideName
 {
+	BOOL isDirectory = NO;
+	if(![NSFileManager.defaultManager fileExistsAtPath:path isDirectory:&isDirectory])
+	{
+		OakDocument* document = [OakDocument documentWithString:@"" fileType:@"text.plain" customName:path.lastPathComponent];
+		document.path = path;
+		document.onDisk = NO;
+		documentView.document = document;
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentContentDidChange:) name:OakDocumentContentDidChangeNotification object:document];
+		if(documentView == self.leftDocumentView)
+			self.leftDocumentLoaded = YES;
+		else
+			self.rightDocumentLoaded = YES;
+		[self scheduleDiffUpdate];
+		[document close];
+		return;
+	}
+
 	OakDocument* document = [OakDocument documentWithPath:path];
 	[document loadModalForWindow:self.window completionHandler:^(OakDocumentIOResult result, NSString* errorMessage, oak::uuid_t const& filterUUID) {
 		if(result == OakDocumentIOResultSuccess)

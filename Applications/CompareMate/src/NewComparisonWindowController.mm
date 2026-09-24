@@ -35,9 +35,10 @@
 {
 	NSArray<NSURL*>* URLs = [sender.draggingPasteboard readObjectsForClasses:@[ NSURL.class ] options:@{ NSPasteboardURLReadingFileURLsOnlyKey: @YES }];
 	NSURL* URL = URLs.firstObject;
-	NSNumber* isRegularFile = nil;
+	NSNumber* isRegularFile = nil, *isDirectory = nil;
 	[URL getResourceValue:&isRegularFile forKey:NSURLIsRegularFileKey error:nil];
-	return isRegularFile.boolValue ? URL.path : nil;
+	[URL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+	return isRegularFile.boolValue || isDirectory.boolValue ? URL.path : nil;
 }
 
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender
@@ -67,17 +68,17 @@
 {
 	BOOL isDirectory = NO;
 	NSImage* image = nil;
-	if(path.length && [NSFileManager.defaultManager fileExistsAtPath:path isDirectory:&isDirectory] && !isDirectory)
+	if(path.length && [NSFileManager.defaultManager fileExistsAtPath:path isDirectory:&isDirectory])
 	{
 		image = [NSWorkspace.sharedWorkspace iconForFile:path];
 		self.toolTip = path;
-		self.accessibilityLabel = [NSString stringWithFormat:@"Selected file: %@", path.lastPathComponent];
+		self.accessibilityLabel = [NSString stringWithFormat:@"Selected %@: %@", isDirectory ? @"folder" : @"file", path.lastPathComponent];
 	}
 	else
 	{
-		image = [NSImage imageWithSystemSymbolName:@"doc" accessibilityDescription:@"File"];
-		self.toolTip = @"Drop a file here";
-		self.accessibilityLabel = @"File drop target";
+		image = [NSImage imageWithSystemSymbolName:@"doc.on.doc" accessibilityDescription:@"File or folder"];
+		self.toolTip = @"Drop a file or folder here";
+		self.accessibilityLabel = @"File or folder drop target";
 	}
 
 	self.image = [image copy];
@@ -129,10 +130,13 @@ static NSString* const RightFileHistoryKey = @"CompareMateRightFileHistory";
 	return field.stringValue.stringByExpandingTildeInPath.stringByStandardizingPath;
 }
 
-- (BOOL)isRegularFileAtPath:(NSString*)path
+- (BOOL)pathExists:(NSString*)path isDirectory:(BOOL*)isDirectory
 {
-	BOOL isDirectory = NO;
-	return path.length && [NSFileManager.defaultManager fileExistsAtPath:path isDirectory:&isDirectory] && !isDirectory;
+	BOOL directory = NO;
+	BOOL const exists = path.length && [NSFileManager.defaultManager fileExistsAtPath:path isDirectory:&directory];
+	if(isDirectory)
+		*isDirectory = directory;
+	return exists;
 }
 
 - (void)updateState
@@ -141,7 +145,10 @@ static NSString* const RightFileHistoryKey = @"CompareMateRightFileHistory";
 	NSString* rightPath = [self normalizedPathFromField:self.rightPathField];
 	[self.leftDropImageView setFilePath:leftPath];
 	[self.rightDropImageView setFilePath:rightPath];
-	self.compareButton.enabled = [self isRegularFileAtPath:leftPath] && [self isRegularFileAtPath:rightPath];
+	BOOL leftIsDirectory = NO, rightIsDirectory = NO;
+	BOOL const leftExists = [self pathExists:leftPath isDirectory:&leftIsDirectory];
+	BOOL const rightExists = [self pathExists:rightPath isDirectory:&rightIsDirectory];
+	self.compareButton.enabled = leftExists && rightExists && leftIsDirectory == rightIsDirectory && ![leftPath isEqualToString:rightPath];
 }
 
 - (void)setPath:(NSString*)path forLeftSide:(BOOL)leftSide
@@ -156,7 +163,7 @@ static NSString* const RightFileHistoryKey = @"CompareMateRightFileHistory";
 - (void)rememberPath:(NSString*)path forLeftSide:(BOOL)leftSide
 {
 	NSString* normalizedPath = path.stringByExpandingTildeInPath.stringByStandardizingPath;
-	if(![self isRegularFileAtPath:normalizedPath])
+	if(![self pathExists:normalizedPath isDirectory:nil])
 		return;
 
 	NSString* historyKey = leftSide ? LeftFileHistoryKey : RightFileHistoryKey;
@@ -176,13 +183,17 @@ static NSString* const RightFileHistoryKey = @"CompareMateRightFileHistory";
 {
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
 	panel.canChooseFiles = YES;
-	panel.canChooseDirectories = NO;
+	panel.canChooseDirectories = YES;
 	panel.allowsMultipleSelection = NO;
 	panel.prompt = leftSide ? @"Choose Left" : @"Choose Right";
 
 	NSString* currentPath = [self normalizedPathFromField:(leftSide ? self.leftPathField : self.rightPathField)];
 	if(currentPath.length)
-		panel.directoryURL = [NSURL fileURLWithPath:currentPath.stringByDeletingLastPathComponent isDirectory:YES];
+	{
+		BOOL isDirectory = NO;
+		[NSFileManager.defaultManager fileExistsAtPath:currentPath isDirectory:&isDirectory];
+		panel.directoryURL = [NSURL fileURLWithPath:(isDirectory ? currentPath : currentPath.stringByDeletingLastPathComponent) isDirectory:YES];
+	}
 
 	[panel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
 		if(response == NSModalResponseOK)

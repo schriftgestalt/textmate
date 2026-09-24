@@ -51,7 +51,7 @@
                     </button>
                     <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="left-path">
                         <rect key="frame" x="95" y="101" width="659" height="24"/>
-                        <comboBoxCell key="cell" lineBreakMode="truncatingMiddle" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="Choose the left file" drawsBackground="YES" numberOfVisibleItems="10" id="left-path-cell">
+                        <comboBoxCell key="cell" lineBreakMode="truncatingMiddle" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="Choose the left file or folder" drawsBackground="YES" numberOfVisibleItems="10" id="left-path-cell">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -63,7 +63,7 @@
                     </comboBox>
                     <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="right-path">
                         <rect key="frame" x="95" y="65" width="659" height="24"/>
-                        <comboBoxCell key="cell" lineBreakMode="truncatingMiddle" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="Choose the right file" drawsBackground="YES" numberOfVisibleItems="10" id="right-path-cell">
+                        <comboBoxCell key="cell" lineBreakMode="truncatingMiddle" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="Choose the right file or folder" drawsBackground="YES" numberOfVisibleItems="10" id="right-path-cell">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

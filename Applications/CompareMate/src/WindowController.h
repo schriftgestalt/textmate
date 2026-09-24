@@ -7,3 +7,13 @@
 - (IBAction)saveDocument:(id)sender;
 - (IBAction)saveDocumentAs:(id)sender;
 @end
+
+@interface FolderWindowController : NSWindowController
+- (instancetype)initWithLeftPath:(NSString*)leftPath rightPath:(NSString*)rightPath;
+- (IBAction)nextChange:(id)sender;
+- (IBAction)previousChange:(id)sender;
+- (IBAction)copyChangeToLeft:(id)sender;
+- (IBAction)copyChangeToRight:(id)sender;
+- (IBAction)moveChangeToLeft:(id)sender;
+- (IBAction)moveChangeToRight:(id)sender;
+@end

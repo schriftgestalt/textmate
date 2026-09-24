@@ -6,7 +6,7 @@
 #import <settings/src/settings.h>
 #import <io/src/path.h>
 
-@interface AppDelegate () <NSApplicationDelegate, NSWindowDelegate>
+@interface AppDelegate () <NSApplicationDelegate, NSWindowDelegate, NSMenuItemValidation>
 @property (nonatomic) NSWindow* window;
 @property (nonatomic) NewComparisonWindowController* comparisonChooserController;
 @property (nonatomic) BOOL applicationFinishedLaunching;
@@ -133,6 +133,15 @@
 					.withTarget(self),
 				MBMenuItem{ @"Copy Change to Right", @selector(copyChangeToRight:) }
 					.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption)
+					.withKey(NSRightArrowFunctionKey)
+					.withTarget(self),
+				{ /* -------- */ },
+				MBMenuItem{ @"Move File to Left", @selector(moveChangeToLeft:) }
+					.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption|NSEventModifierFlagShift)
+					.withKey(NSLeftArrowFunctionKey)
+					.withTarget(self),
+				MBMenuItem{ @"Move File to Right", @selector(moveChangeToRight:) }
+					.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption|NSEventModifierFlagShift)
 					.withKey(NSRightArrowFunctionKey)
 					.withTarget(self),
 			}
@@ -274,46 +283,94 @@
 
 	__weak AppDelegate* weakSelf = self;
 	self.comparisonChooserController = [[NewComparisonWindowController alloc] initWithCompletionHandler:^(NSString* leftPath, NSString* rightPath) {
-		WindowController* windowController = [[WindowController alloc] initWithLeftPath:leftPath rightPath:rightPath];
+		BOOL isDirectory = NO;
+		[NSFileManager.defaultManager fileExistsAtPath:leftPath isDirectory:&isDirectory];
+		NSWindowController* windowController = isDirectory ? (NSWindowController*)[[FolderWindowController alloc] initWithLeftPath:leftPath rightPath:rightPath] : (NSWindowController*)[[WindowController alloc] initWithLeftPath:leftPath rightPath:rightPath];
 		[windowController showWindow:weakSelf];
 	}];
 	[self.comparisonChooserController showWindow:sender];
 }
 
-- (WindowController*)activeComparisonWindowController
+- (NSWindowController*)activeComparisonWindowController
 {
 	NSWindowController* windowController = NSApp.keyWindow.windowController;
-	return [windowController isKindOfClass:WindowController.class] ? (WindowController*)windowController : nil;
+	return [windowController isKindOfClass:WindowController.class] || [windowController isKindOfClass:FolderWindowController.class] ? windowController : nil;
 }
 
 - (IBAction)nextChange:(id)sender
 {
-	[[self activeComparisonWindowController] nextChange:sender];
+	[(id)[self activeComparisonWindowController] nextChange:sender];
 }
 
 - (IBAction)previousChange:(id)sender
 {
-	[[self activeComparisonWindowController] previousChange:sender];
+	[(id)[self activeComparisonWindowController] previousChange:sender];
 }
 
 - (IBAction)copyChangeToLeft:(id)sender
 {
-	[[self activeComparisonWindowController] copyChangeToLeft:sender];
+	[(id)[self activeComparisonWindowController] copyChangeToLeft:sender];
 }
 
 - (IBAction)copyChangeToRight:(id)sender
 {
-	[[self activeComparisonWindowController] copyChangeToRight:sender];
+	[(id)[self activeComparisonWindowController] copyChangeToRight:sender];
+}
+
+- (IBAction)moveChangeToLeft:(id)sender
+{
+	NSWindowController* controller = [self activeComparisonWindowController];
+	if([controller respondsToSelector:@selector(moveChangeToLeft:)])
+		[(id)controller moveChangeToLeft:sender];
+	else
+		NSBeep();
+}
+
+- (IBAction)moveChangeToRight:(id)sender
+{
+	NSWindowController* controller = [self activeComparisonWindowController];
+	if([controller respondsToSelector:@selector(moveChangeToRight:)])
+		[(id)controller moveChangeToRight:sender];
+	else
+		NSBeep();
 }
 
 - (IBAction)saveDocument:(id)sender
 {
-	[[self activeComparisonWindowController] saveDocument:sender];
+	NSWindowController* controller = [self activeComparisonWindowController];
+	if([controller respondsToSelector:@selector(saveDocument:)])
+		[(id)controller saveDocument:sender];
 }
 
 - (IBAction)saveDocumentAs:(id)sender
 {
-	[[self activeComparisonWindowController] saveDocumentAs:sender];
+	NSWindowController* controller = [self activeComparisonWindowController];
+	if([controller respondsToSelector:@selector(saveDocumentAs:)])
+		[(id)controller saveDocumentAs:sender];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem*)menuItem
+{
+	NSWindowController* controller = [self activeComparisonWindowController];
+	BOOL const isFolderComparison = [controller isKindOfClass:FolderWindowController.class];
+	SEL const action = menuItem.action;
+	if(action == @selector(copyChangeToLeft:))
+	{
+		menuItem.title = isFolderComparison ? @"Copy File to Left" : @"Copy Change to Left";
+		return controller != nil;
+	}
+	if(action == @selector(copyChangeToRight:))
+	{
+		menuItem.title = isFolderComparison ? @"Copy File to Right" : @"Copy Change to Right";
+		return controller != nil;
+	}
+	if(action == @selector(moveChangeToLeft:) || action == @selector(moveChangeToRight:))
+		return isFolderComparison;
+	if(action == @selector(saveDocument:) || action == @selector(saveDocumentAs:))
+		return [controller isKindOfClass:WindowController.class];
+	if(action == @selector(nextChange:) || action == @selector(previousChange:))
+		return controller != nil;
+	return YES;
 }
 
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication*)app
