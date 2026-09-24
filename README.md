@@ -72,7 +72,7 @@ Some sources are generated and committed to the repository, so a normal build do
 
 # Python Diagnostics
 
-This fork ships a *Python Diagnostics* bundle (in `Bundles/`, copied into the app at build time). Whenever a Python file is saved, it runs [Ruff][] and [Pyright][] and shows the results directly in the editor: a gutter icon, a tinted line, a squiggly underline under the offending range, and an Xcode-style message banner at the right edge. Clicking the banner’s icon opens a popover with all issues on that line — with one-click **Apply** buttons for Ruff’s auto-fixes.
+This fork ships a *Python Diagnostics* bundle (in `Bundles/`, copied into the app at build time). Whenever a Python file is saved, it runs [Ruff][] and [Pyright][] and shows the results directly in the editor: a gutter icon, a tinted line, a squiggly underline under the offending range, and an Xcode-style message banner at the right edge. Clicking the banner’s icon opens a popover with all issues on that line and offers Ruff’s auto-fixes. Option-click the icon to also show Pyright actions that add `# type: ignore` to the affected line or disable the reported rule in the nearest `pyrightconfig.json`.
 
 ## Getting started
 

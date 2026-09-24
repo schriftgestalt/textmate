@@ -1283,8 +1283,9 @@ static size_t OTVDiagnosticSeverity (std::string const& markType)
 }
 
 // Mark content format: “<length>|<message>” optionally followed by U+001F and
-// a JSON fix payload ({ "message": …, "edits": [ { "content": …, "location":
-// { "row": …, "column": … }, "end_location": … } ] }, rows/columns 1-based).
+// a JSON fix payload. A legacy payload is one { "message": …, "edits": … }
+// object; newer payloads use { "fixes": [ … ] } to offer multiple actions.
+// Edit rows/columns are 1-based.
 // The length (in UTF-8 bytes) sizes the squiggle; without it we underline to
 // the end of the word at the mark’s position.
 static size_t OTVParseDiagnosticContent (std::string const& content, std::string& message, std::string& fixJSON)
@@ -1301,6 +1302,64 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 	message = content.substr(i, sep == std::string::npos ? std::string::npos : sep - i);
 	fixJSON = sep == std::string::npos ? std::string() : content.substr(sep + 1);
 	return len;
+}
+
+static NSArray<NSDictionary*>* OTVDiagnosticFixes (std::string const& fixJSON, BOOL includeOptionFixes)
+{
+	if(fixJSON.empty())
+		return @[];
+
+	NSData* data = [NSData dataWithBytes:fixJSON.data() length:fixJSON.size()];
+	id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+	if(![object isKindOfClass:NSDictionary.class])
+		return @[];
+
+	NSDictionary* payload = object;
+	NSArray* fixes = [payload[@"fixes"] isKindOfClass:NSArray.class] ? payload[@"fixes"] : ([payload[@"edits"] isKindOfClass:NSArray.class] ? @[ payload ] : @[]);
+	NSMutableArray<NSDictionary*>* result = [NSMutableArray array];
+	for(id fix in fixes)
+	{
+		if([fix isKindOfClass:NSDictionary.class] && (includeOptionFixes || ![fix[@"requiresOption"] boolValue]))
+			[result addObject:fix];
+	}
+	return result;
+}
+
+static NSString* OTVPyrightConfigByDisablingRule (NSString* contents, NSString* rule)
+{
+	if(!contents || ![rule hasPrefix:@"report"] || [rule rangeOfCharacterFromSet:NSCharacterSet.alphanumericCharacterSet.invertedSet].location != NSNotFound)
+		return nil;
+
+	NSString* escapedRule = [NSRegularExpression escapedPatternForString:rule];
+	NSString* keyPattern = [NSString stringWithFormat:@"\\\"%@\\\"\\s*:", escapedRule];
+	NSRegularExpression* keyExpression = [NSRegularExpression regularExpressionWithPattern:keyPattern options:0 error:nil];
+	if([keyExpression firstMatchInString:contents options:0 range:NSMakeRange(0, contents.length)])
+	{
+		NSString* valuePattern = [NSString stringWithFormat:@"(\\\"%@\\\"\\s*:\\s*)(?:\\\"(?:none|information|warning|error)\\\"|true|false)", escapedRule];
+		NSRegularExpression* valueExpression = [NSRegularExpression regularExpressionWithPattern:valuePattern options:0 error:nil];
+		NSTextCheckingResult* match = [valueExpression firstMatchInString:contents options:0 range:NSMakeRange(0, contents.length)];
+		if(!match)
+			return nil;
+		NSMutableString* result = [contents mutableCopy];
+		[result replaceCharactersInRange:[match rangeAtIndex:0] withString:[NSString stringWithFormat:@"%@\"none\"", [contents substringWithRange:[match rangeAtIndex:1]]]];
+		return result;
+	}
+
+	NSRange openingBrace = [contents rangeOfString:@"{"];
+	NSRange closingBrace = [contents rangeOfString:@"}" options:NSBackwardsSearch];
+	if(openingBrace.location == NSNotFound || closingBrace.location == NSNotFound || openingBrace.location > closingBrace.location)
+		return nil;
+
+	NSString* propertyPattern = @"(?m)^([ \\t]+)\\\"[^\\\"]+\\\"[ \\t]*:";
+	NSRegularExpression* propertyExpression = [NSRegularExpression regularExpressionWithPattern:propertyPattern options:0 error:nil];
+	NSRange const objectRange = NSMakeRange(openingBrace.location + 1, closingBrace.location - openingBrace.location - 1);
+	NSTextCheckingResult* property = [propertyExpression firstMatchInString:contents options:0 range:objectRange];
+	NSRegularExpression* anyPropertyExpression = [NSRegularExpression regularExpressionWithPattern:@"\\\"[^\\\"]+\\\"\\s*:" options:0 error:nil];
+	BOOL const hasProperties = [anyPropertyExpression firstMatchInString:contents options:0 range:objectRange] != nil;
+	NSString* indent = property ? [contents substringWithRange:[property rangeAtIndex:1]] : @"    ";
+	NSString* newline = [contents containsString:@"\r\n"] ? @"\r\n" : @"\n";
+	NSString* insertion = [NSString stringWithFormat:@"%@%@\"%@\": \"none\"%@", newline, indent, rule, hasProperties ? @"," : @""];
+	return [contents stringByReplacingCharactersInRange:NSMakeRange(openingBrace.location + 1, 0) withString:insertion];
 }
 
 - (void)updateDiagnosticMarks
@@ -1531,7 +1590,7 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 	}
 }
 
-- (void)showDiagnosticsPopoverForLine:(size_t)line fromRect:(NSRect)aRect
+- (void)showDiagnosticsPopoverForLine:(size_t)line fromRect:(NSRect)aRect includeOptionFixes:(BOOL)includeOptionFixes
 {
 	auto it = diagnosticsByLine.find(line);
 	if(it == diagnosticsByLine.end())
@@ -1550,17 +1609,27 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 	// unless we measure the content and pin the stack to an explicit width.
 	NSFont* messageFont = [NSFont systemFontOfSize:documentView->font().pointSize * documentView->font_scale_factor()]; // match the editor’s effective text size
 	CGFloat maxMessageWidth = 0;
+	CGFloat maxFixWidth = 0;
 	BOOL anyFix = NO;
 	for(auto const& info : it->second)
 	{
 		NSString* message = [NSString stringWithUTF8String:info.message.c_str()] ?: @"";
 		NSSize const size = [[[NSAttributedString alloc] initWithString:[@"● " stringByAppendingString:message] attributes:@{ NSFontAttributeName: messageFont }] size];
 		maxMessageWidth = std::max(maxMessageWidth, std::ceil(size.width));
-		anyFix = anyFix || !info.fixJSON.empty();
+		for(NSDictionary* fix in OTVDiagnosticFixes(info.fixJSON, includeOptionFixes))
+		{
+			NSString* description = [fix[@"message"] isKindOfClass:NSString.class] ? fix[@"message"] : ([fix[@"title"] isKindOfClass:NSString.class] ? fix[@"title"] : @"Apply fix");
+			NSSize const fixSize = [description sizeWithAttributes:@{ NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize] }];
+			maxFixWidth = std::max(maxFixWidth, std::ceil(fixSize.width));
+			anyFix = YES;
+		}
 	}
-	CGFloat const buttonWidth = anyFix ? 90 : 0;
-	CGFloat const stackWidth  = std::clamp<CGFloat>(maxMessageWidth + buttonWidth + 24, 280, 540);
-	CGFloat const labelWidth  = stackWidth - 24 - buttonWidth;
+	CGFloat const buttonWidth = anyFix ? 64 : 0;
+	CGFloat const fixIndent = anyFix ? 18 : 0;
+	CGFloat const contentWidth = std::max(maxMessageWidth, maxFixWidth + fixIndent + buttonWidth + 12);
+	CGFloat const stackWidth  = std::clamp<CGFloat>(contentWidth + 24, 280, 760);
+	CGFloat const labelWidth  = stackWidth - 24;
+	CGFloat const fixLabelWidth = labelWidth - fixIndent - buttonWidth - 12;
 
 	for(auto const& info : it->second)
 	{
@@ -1576,31 +1645,51 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 		[label setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
 		[label.widthAnchor constraintLessThanOrEqualToConstant:labelWidth].active = YES;
 
-		NSStackView* row = [NSStackView new];
-		row.orientation = NSUserInterfaceLayoutOrientationHorizontal;
-		row.alignment   = NSLayoutAttributeCenterY;
-		row.spacing     = 12;
-		[row addView:label inGravity:NSStackViewGravityLeading];
+		NSStackView* diagnostic = [NSStackView new];
+		diagnostic.orientation = NSUserInterfaceLayoutOrientationVertical;
+		diagnostic.alignment = NSLayoutAttributeWidth;
+		diagnostic.spacing = 4;
+		[diagnostic addArrangedSubview:label];
 
-		if(!info.fixJSON.empty())
+		NSArray<NSDictionary*>* fixes = OTVDiagnosticFixes(info.fixJSON, includeOptionFixes);
+		for(NSDictionary* fix in fixes)
 		{
-			NSData* data = [NSData dataWithBytes:info.fixJSON.data() length:info.fixJSON.size()];
-			if(NSDictionary* fix = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil])
-			{
-				if(NSArray* edits = fix[@"edits"])
-				{
-					label.toolTip = fix[@"message"] ?: @"";
-					NSButton* button = [NSButton buttonWithTitle:@"Apply" target:self action:@selector(applyDiagnosticFix:)];
-					button.controlSize = NSControlSizeSmall;
-					button.tag = diagnosticFixQueue.count;
-					[button setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
-					[diagnosticFixQueue addObject:@{ @"edits": edits, @"type": [NSString stringWithUTF8String:info.type.c_str()] ?: @"", @"index": @(info.index) }];
-					[row addView:button inGravity:NSStackViewGravityTrailing];
-				}
-			}
+			BOOL const hasEdits = [fix[@"edits"] isKindOfClass:NSArray.class];
+			BOOL const disablesPyrightRule = [fix[@"action"] isEqualToString:@"disablePyrightRule"];
+			if(!hasEdits && !disablesPyrightRule)
+				continue;
+
+			NSString* description = [fix[@"message"] isKindOfClass:NSString.class] ? fix[@"message"] : ([fix[@"title"] isKindOfClass:NSString.class] ? fix[@"title"] : @"Apply fix");
+			NSTextField* fixLabel = [NSTextField labelWithString:description];
+			fixLabel.textColor = NSColor.secondaryLabelColor;
+			fixLabel.font = [NSFont systemFontOfSize:NSFont.smallSystemFontSize];
+			fixLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+			fixLabel.toolTip = description;
+			[fixLabel.widthAnchor constraintLessThanOrEqualToConstant:fixLabelWidth].active = YES;
+
+			NSButton* button = [NSButton buttonWithTitle:@"Apply" target:self action:@selector(applyDiagnosticFix:)];
+			button.controlSize = NSControlSizeSmall;
+			button.toolTip = description;
+			button.tag = diagnosticFixQueue.count;
+			[button.widthAnchor constraintEqualToConstant:buttonWidth].active = YES;
+			[button setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
+
+			NSMutableDictionary* queuedFix = [fix mutableCopy];
+			queuedFix[@"type"] = [NSString stringWithUTF8String:info.type.c_str()] ?: @"";
+			queuedFix[@"index"] = @(info.index);
+			[diagnosticFixQueue addObject:queuedFix];
+
+			NSStackView* fixRow = [NSStackView new];
+			fixRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+			fixRow.alignment = NSLayoutAttributeCenterY;
+			fixRow.spacing = 12;
+			fixRow.edgeInsets = NSEdgeInsetsMake(0, fixIndent, 0, 0);
+			[fixRow addView:fixLabel inGravity:NSStackViewGravityLeading];
+			[fixRow addView:button inGravity:NSStackViewGravityTrailing];
+			[diagnostic addArrangedSubview:fixRow];
 		}
 
-		[stack addArrangedSubview:row];
+		[stack addArrangedSubview:diagnostic];
 	}
 
 	[stack.widthAnchor constraintEqualToConstant:stackWidth].active = YES;
@@ -1620,6 +1709,42 @@ static size_t OTVParseDiagnosticContent (std::string const& content, std::string
 		return;
 
 	NSDictionary* info = diagnosticFixQueue[sender.tag];
+	if([info[@"action"] isEqualToString:@"disablePyrightRule"])
+	{
+		NSString* path = [info[@"path"] isKindOfClass:NSString.class] ? info[@"path"] : nil;
+		NSString* rule = [info[@"rule"] isKindOfClass:NSString.class] ? info[@"rule"] : nil;
+		if(!path.isAbsolutePath || !rule)
+			return NSBeep();
+
+		[diagnosticsPopover close];
+		OakDocument* configDocument = [OakDocumentController.sharedInstance documentWithPath:path.stringByStandardizingPath];
+		[configDocument loadModalForWindow:self.window completionHandler:^(OakDocumentIOResult result, NSString* errorMessage, oak::uuid_t const& filterUUID){
+			if(result != OakDocumentIOResultSuccess)
+			{
+				NSError* error = [NSError errorWithDomain:@"OakDiagnosticFix" code:1 userInfo:@{ NSLocalizedDescriptionKey: errorMessage ?: @"Could not open the Pyright configuration." }];
+				[self presentError:error];
+				return;
+			}
+
+			NSString* updated = OTVPyrightConfigByDisablingRule(configDocument.content, rule);
+			if(!updated)
+			{
+				NSError* error = [NSError errorWithDomain:@"OakDiagnosticFix" code:2 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Could not disable %@ in %@.", rule, path.lastPathComponent] }];
+				[self presentError:error];
+				[configDocument close];
+				return;
+			}
+
+			configDocument.content = updated;
+			size_t markIndex = [info[@"index"] unsignedLongValue];
+			[self.document removeMarkOfType:info[@"type"] atPosition:documentView->convert(markIndex)];
+			[OakDocumentController.sharedInstance showDocument:configDocument andSelect:text::range_t::undefined inProject:nil bringToFront:YES];
+			[configDocument close];
+			[self setNeedsDisplay:YES];
+		}];
+		return;
+	}
+
 	NSArray* edits = [info[@"edits"] sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* lhs, NSDictionary* rhs){
 		NSComparisonResult res = [rhs[@"location"][@"row"] compare:lhs[@"location"][@"row"]];
 		return res != NSOrderedSame ? res : [rhs[@"location"][@"column"] compare:lhs[@"location"][@"column"]];
@@ -4672,7 +4797,7 @@ static scope::context_t add_modifiers_to_scope (scope::context_t scope, NSUInteg
 	for(auto const& pair : diagnosticPillRects)
 	{
 		if(NSMouseInRect(clickPos, pair.second, [self isFlipped]))
-			return [self showDiagnosticsPopoverForLine:pair.first fromRect:pair.second];
+			return [self showDiagnosticsPopoverForLine:pair.first fromRect:pair.second includeOptionFixes:([anEvent modifierFlags] & NSEventModifierFlagOption) != 0];
 	}
 	for(auto const& pair : diagnosticBannerRects)
 	{
