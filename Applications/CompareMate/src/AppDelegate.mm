@@ -266,7 +266,7 @@
 
 	for(NSWindow* window in NSApp.windows)
 	{
-		if([window.windowController isKindOfClass:WindowController.class])
+		if([window.windowController isKindOfClass:WindowController.class] || [window.windowController isKindOfClass:FolderWindowController.class])
 			return;
 	}
 

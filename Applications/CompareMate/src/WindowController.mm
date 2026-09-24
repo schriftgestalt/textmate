@@ -8,6 +8,7 @@
 static NSString* const LeftPathRestorationKey = @"CompareMate.leftPath";
 static NSString* const RightPathRestorationKey = @"CompareMate.rightPath";
 static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosition";
+static NSString* const FolderFilterRestorationKey = @"CompareMate.folderFilter";
 static NSString* const FolderIconLeadingConstraintIdentifier = @"CompareMate.folderIconLeading";
 
 @interface DiffCharacterRange : NSObject
@@ -307,6 +308,9 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 		window.delegate = self;
 		window.minSize = NSMakeSize(620, 360);
 		window.identifier = [NSString stringWithFormat:@"CompareMate.FolderComparison.%@", NSUUID.UUID.UUIDString];
+		[window setFrameAutosaveName:window.identifier];
+		window.restorationClass = FolderWindowController.class;
+		window.restorable = YES;
 
 		NSView* contentView = [[NSView alloc] initWithFrame:contentRect];
 		window.contentView = contentView;
@@ -364,8 +368,47 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 		window.initialFirstResponder = self.outlineView;
 		[window center];
 		[self refreshComparison];
+		[self invalidateRestorableState];
 	}
 	return self;
+}
+
++ (void)restoreWindowWithIdentifier:(NSUserInterfaceItemIdentifier)identifier state:(NSCoder*)state completionHandler:(void (^)(NSWindow*, NSError*))completionHandler
+{
+	NSString* leftPath = [state decodeObjectOfClass:NSString.class forKey:LeftPathRestorationKey];
+	NSString* rightPath = [state decodeObjectOfClass:NSString.class forKey:RightPathRestorationKey];
+	BOOL leftIsDirectory = NO, rightIsDirectory = NO;
+	BOOL leftExists = leftPath.length && [NSFileManager.defaultManager fileExistsAtPath:leftPath isDirectory:&leftIsDirectory];
+	BOOL rightExists = rightPath.length && [NSFileManager.defaultManager fileExistsAtPath:rightPath isDirectory:&rightIsDirectory];
+	if(!leftExists || !rightExists || !leftIsDirectory || !rightIsDirectory)
+	{
+		completionHandler(nil, nil);
+		return;
+	}
+
+	FolderWindowController* windowController = [[FolderWindowController alloc] initWithLeftPath:leftPath rightPath:rightPath];
+	windowController.window.identifier = identifier;
+	[windowController.window setFrameAutosaveName:identifier];
+	completionHandler(windowController.window, nil);
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder*)coder
+{
+	[super encodeRestorableStateWithCoder:coder];
+	[coder encodeObject:self.leftPath forKey:LeftPathRestorationKey];
+	[coder encodeObject:self.rightPath forKey:RightPathRestorationKey];
+	[coder encodeInteger:self.filterControl.selectedSegment forKey:FolderFilterRestorationKey];
+}
+
+- (void)restoreStateWithCoder:(NSCoder*)coder
+{
+	[super restoreStateWithCoder:coder];
+	if([coder containsValueForKey:FolderFilterRestorationKey])
+	{
+		NSInteger const selectedSegment = [coder decodeIntegerForKey:FolderFilterRestorationKey];
+		if(selectedSegment >= 0 && selectedSegment < self.filterControl.segmentCount)
+			self.filterControl.selectedSegment = selectedSegment;
+	}
 }
 
 - (void)refreshComparison
@@ -418,6 +461,7 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 {
 	FolderComparisonNode* selectedNode = [self selectedFileNode];
 	[self reloadOutlineKeepingSelection:selectedNode.relativePath];
+	[self invalidateRestorableState];
 }
 
 - (NSInteger)outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item

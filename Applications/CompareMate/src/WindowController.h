@@ -8,7 +8,7 @@
 - (IBAction)saveDocumentAs:(id)sender;
 @end
 
-@interface FolderWindowController : NSWindowController
+@interface FolderWindowController : NSWindowController <NSWindowRestoration>
 - (instancetype)initWithLeftPath:(NSString*)leftPath rightPath:(NSString*)rightPath;
 - (IBAction)nextChange:(id)sender;
 - (IBAction)previousChange:(id)sender;
