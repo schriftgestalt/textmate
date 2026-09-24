@@ -84,6 +84,8 @@ This fork ships a *Python Diagnostics* bundle (in `Bundles/`, copied into the ap
 
 2. Save a Python file. That’s it — diagnostics appear a moment later (Ruff instantly, Pyright after a few seconds). If something is missing, a notification tells you what to install.
 
+To normalize the current document—including indentation inside multiline lists—run *Bundles → Python Diagnostics → Format Python with Ruff*. The command formats the editor buffer, adopts the document’s current tabs/spaces and tab-width settings, and uses the nearest Ruff configuration for all other options.
+
 If neither checker is installed, or the `mate` command-line tool cannot be found, the bundle posts a macOS notification (at most once per hour) explaining what to do. Detailed logging for troubleshooting: `tail -f /tmp/tm-python-diagnostics.log`.
 
 ## Disabling
