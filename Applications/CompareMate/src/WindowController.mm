@@ -18,6 +18,8 @@ static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosi
 static NSString* const FolderFilterRestorationKey = @"CompareMate.folderFilter";
 static NSString* const FolderIconLeadingConstraintIdentifier = @"CompareMate.folderIconLeading";
 static NSWindowFrameAutosaveName const FileComparisonFrameAutosaveName = @"CompareMate.FileComparisonWindowFrame";
+NSString* const CompareMateIgnoredFileNamesDefaultsKey = @"ignoredFileNames";
+NSNotificationName const CompareMateIgnoredFileNamesDidChangeNotification = @"CompareMateIgnoredFileNamesDidChangeNotification";
 
 @interface DiffCharacterRange : NSObject
 @property (nonatomic) NSUInteger line;
@@ -90,7 +92,7 @@ static BOOL FolderFilesAreEqual (NSString* leftPath, NSString* rightPath)
 	return [NSFileManager.defaultManager contentsEqualAtPath:leftPath andPath:rightPath];
 }
 
-static FolderComparisonNode* BuildFolderComparisonNode (NSString* relativePath, NSString* leftRoot, NSString* rightRoot)
+static FolderComparisonNode* BuildFolderComparisonNode (NSString* relativePath, NSString* leftRoot, NSString* rightRoot, NSSet<NSString*>* ignoredFileNames)
 {
 	FolderComparisonNode* node = [[FolderComparisonNode alloc] init];
 	node.relativePath = relativePath;
@@ -131,7 +133,9 @@ static FolderComparisonNode* BuildFolderComparisonNode (NSString* relativePath, 
 		}];
 		for(NSString* name in sortedNames)
 		{
-			FolderComparisonNode* child = BuildFolderComparisonNode([relativePath stringByAppendingPathComponent:name], leftRoot, rightRoot);
+			if([ignoredFileNames containsObject:name])
+				continue;
+			FolderComparisonNode* child = BuildFolderComparisonNode([relativePath stringByAppendingPathComponent:name], leftRoot, rightRoot, ignoredFileNames);
 			if(child)
 				[children addObject:child];
 		}
@@ -153,7 +157,7 @@ static FolderComparisonNode* BuildFolderComparisonNode (NSString* relativePath, 
 	return nil;
 }
 
-static NSArray<FolderComparisonNode*>* BuildFolderComparison (NSString* leftRoot, NSString* rightRoot)
+static NSArray<FolderComparisonNode*>* BuildFolderComparison (NSString* leftRoot, NSString* rightRoot, NSSet<NSString*>* ignoredFileNames)
 {
 	NSMutableSet<NSString*>* names = [NSMutableSet set];
 	NSError* leftError = nil, *rightError = nil;
@@ -170,7 +174,9 @@ static NSArray<FolderComparisonNode*>* BuildFolderComparison (NSString* leftRoot
 	}];
 	for(NSString* name in sortedNames)
 	{
-		FolderComparisonNode* node = BuildFolderComparisonNode(name, leftRoot, rightRoot);
+		if([ignoredFileNames containsObject:name])
+			continue;
+		FolderComparisonNode* node = BuildFolderComparisonNode(name, leftRoot, rightRoot, ignoredFileNames);
 		if(node)
 			[result addObject:node];
 	}
@@ -408,6 +414,7 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 		};
 		self.leftFileSystemObserver = [FSEventsManager.sharedInstance addObserverToDirectoryAtURL:[NSURL fileURLWithPath:leftPath isDirectory:YES] observeSubdirectories:YES usingBlock:folderDidChange];
 		self.rightFileSystemObserver = [FSEventsManager.sharedInstance addObserverToDirectoryAtURL:[NSURL fileURLWithPath:rightPath isDirectory:YES] observeSubdirectories:YES usingBlock:folderDidChange];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(ignoredFileNamesDidChange:) name:CompareMateIgnoredFileNamesDidChangeNotification object:nil];
 
 		[self refreshComparison];
 		[self invalidateRestorableState];
@@ -573,6 +580,11 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 	[self refreshComparison];
 }
 
+- (void)ignoredFileNamesDidChange:(NSNotification*)notification
+{
+	[self refreshComparison];
+}
+
 - (void)refreshComparison
 {
 	NSUInteger const generation = ++self.scanGeneration;
@@ -580,10 +592,12 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 	NSString* rightPath = self.rightPath;
 	NSInteger const selectedRow = self.outlineView.selectedRow;
 	NSString* selectedPath = selectedRow >= 0 ? [(FolderComparisonNode*)[self.outlineView itemAtRow:selectedRow] relativePath] : nil;
+	NSArray<NSString*>* ignoredNames = [NSUserDefaults.standardUserDefaults stringArrayForKey:CompareMateIgnoredFileNamesDefaultsKey] ?: @[];
+	NSSet<NSString*>* ignoredFileNames = [NSSet setWithArray:ignoredNames];
 	self.statusLabel.stringValue = @"Comparing folders…";
 	__weak FolderWindowController* weakSelf = self;
 	dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-		NSArray<FolderComparisonNode*>* allNodes = BuildFolderComparison(leftPath, rightPath);
+		NSArray<FolderComparisonNode*>* allNodes = BuildFolderComparison(leftPath, rightPath, ignoredFileNames);
 		dispatch_async(dispatch_get_main_queue(), ^{
 			FolderWindowController* strongSelf = weakSelf;
 			if(!strongSelf || generation != strongSelf.scanGeneration)

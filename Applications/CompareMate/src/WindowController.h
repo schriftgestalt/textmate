@@ -1,3 +1,6 @@
+extern NSString* const CompareMateIgnoredFileNamesDefaultsKey;
+extern NSNotificationName const CompareMateIgnoredFileNamesDidChangeNotification;
+
 @interface WindowController : NSWindowController <NSWindowRestoration>
 - (instancetype)initWithLeftPath:(NSString*)leftPath rightPath:(NSString*)rightPath;
 - (IBAction)nextChange:(id)sender;

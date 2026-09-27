@@ -1,5 +1,6 @@
 #import "AppDelegate.h"
 #import "NewComparisonWindowController.h"
+#import "SettingsWindowController.h"
 #import "WindowController.h"
 #import <MenuBuilder/src/MenuBuilder.h>
 #import <BundlesManager/src/BundlesManager.h>
@@ -10,6 +11,7 @@
 @interface AppDelegate () <NSApplicationDelegate, NSWindowDelegate, NSMenuItemValidation>
 @property (nonatomic) NSWindow* window;
 @property (nonatomic) NewComparisonWindowController* comparisonChooserController;
+@property (nonatomic) SettingsWindowController* settingsWindowController;
 @property (nonatomic) BOOL applicationFinishedLaunching;
 @property (nonatomic) BOOL applicationFinishedRestoringWindows;
 @end
@@ -20,6 +22,7 @@
 	[NSUserDefaults.standardUserDefaults registerDefaults:@{
 		@"universalThemeUUID": @(kMacClassicThemeUUID),
 		@"darkModeThemeUUID":  @(kTwilightThemeUUID),
+		CompareMateIgnoredFileNamesDefaultsKey: @[ @".DS_Store", @".git" ],
 	}];
 }
 
@@ -35,7 +38,7 @@
 			.submenu = {
 				{ @"About CompareMate", @selector(orderFrontStandardAboutPanel:)         },
 				{ /* -------- */ },
-				{ @"Preferences…",         NULL,                                     @","   },
+				{ @"Settings…",            @selector(showSettings:),                  @",", .target = self },
 				{ /* -------- */ },
 				{ @"Services", .systemMenu = MBMenuTypeServices                             },
 				{ /* -------- */ },
@@ -285,6 +288,14 @@
 	}
 
 	[self newComparison:self];
+}
+
+- (IBAction)showSettings:(id)sender
+{
+	if(!self.settingsWindowController)
+		self.settingsWindowController = [[SettingsWindowController alloc] init];
+	[self.settingsWindowController showWindow:sender];
+	[self.settingsWindowController.window makeKeyAndOrderFront:sender];
 }
 
 - (IBAction)newComparison:(id)sender

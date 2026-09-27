@@ -991,6 +991,8 @@
 		BF9350E694D20C1BB5D6E0D6 /* layout.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D82E2B5959FF0049910C /* layout.cc */; };
 		BFE4E01A9351C1C99E3166EF /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D72F2B5959FE0049910C /* .gitignore */; };
 		C04A0001300D000000000001 /* NewComparisonWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C04A0001300D000000000002 /* NewComparisonWindow.xib */; };
+		C04A0002300D000000000001 /* SettingsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C04A0002300D000000000002 /* SettingsWindowController.mm */; };
+		C04A0002300D000000000004 /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C04A0002300D000000000005 /* SettingsWindow.xib */; };
 		C12FA9EC53D2AABED10BE8DF /* OakCommandRefresh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D8DA2B5959FF0049910C /* OakCommandRefresh.mm */; };
 		C1909A6501E2B8B019A1B54D /* NSSavePanel Additions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D6E02B5959FE0049910C /* NSSavePanel Additions.mm */; };
 		C1ECDB38E788558D318C29D5 /* TableView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D9BD2B595A000049910C /* TableView.mm */; };
@@ -2205,6 +2207,9 @@
 		ABCDEF00000000000000013F /* JavaScript.tmbundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JavaScript.tmbundle; path = ../../Bundles/Core/javascript.tmbundle; sourceTree = "<group>"; };
 		B859C963D4FF719720173012 /* mate.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = mate.mm; sourceTree = "<group>"; };
 		C04A0001300D000000000002 /* NewComparisonWindow.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = NewComparisonWindow.xib; path = en.lproj/NewComparisonWindow.xib; sourceTree = "<group>"; };
+		C04A0002300D000000000002 /* SettingsWindowController.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = SettingsWindowController.mm; sourceTree = "<group>"; };
+		C04A0002300D000000000003 /* SettingsWindowController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SettingsWindowController.h; sourceTree = "<group>"; };
+		C04A0002300D000000000005 /* SettingsWindow.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = SettingsWindow.xib; path = en.lproj/SettingsWindow.xib; sourceTree = "<group>"; };
 		C2DCC1836A2FC9F316575FD9 /* AppDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C47D5A3EBAA5F65B20433519 /* libTextMateQuickLookEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTextMateQuickLookEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC3966BCB37E30893C0717CF /* QuickLookRenderer.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = QuickLookRenderer.mm; sourceTree = "<group>"; };
@@ -4565,6 +4570,7 @@
 				56D2239D300D1FB7006F75AD /* AppIcon.icon */,
 				35DB48B68473F6CF26516974 /* MainMenu.xib */,
 				C04A0001300D000000000002 /* NewComparisonWindow.xib */,
+				C04A0002300D000000000005 /* SettingsWindow.xib */,
 				A79B3841EB3E761D12CC0E2A /* InfoPlist.strings */,
 			);
 			path = resources;
@@ -4594,6 +4600,8 @@
 				1EFDEBAA6741B3596F45FDA2 /* ViewController.mm */,
 				A8471214237C43B7462C105A /* NewComparisonWindowController.h */,
 				36CC25BF908200E4162E218A /* NewComparisonWindowController.mm */,
+				C04A0002300D000000000003 /* SettingsWindowController.h */,
+				C04A0002300D000000000002 /* SettingsWindowController.mm */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -4984,6 +4992,7 @@
 				963E18418CB474B2841DCC63 /* symbolicate in Resources */,
 				6B705F5FD086A56E3C2971F1 /* MainMenu.xib in Resources */,
 				C04A0001300D000000000001 /* NewComparisonWindow.xib in Resources */,
+				C04A0002300D000000000004 /* SettingsWindow.xib in Resources */,
 				75F074D66D711BD4AAA74461 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5931,6 +5940,7 @@
 				B0F2A3011BAC90922B9D8199 /* WindowController.mm in Sources */,
 				CD3D17F6A2510CFF4C0A7044 /* ViewController.mm in Sources */,
 				13CE32A5AD42FC1D9C3094A7 /* NewComparisonWindowController.mm in Sources */,
+				C04A0002300D000000000001 /* SettingsWindowController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
