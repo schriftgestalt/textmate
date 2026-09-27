@@ -232,7 +232,7 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 	return result;
 }
 
-@interface FolderWindowController () <NSWindowDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate>
+@interface FolderWindowController () <NSWindowDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSMenuDelegate>
 @property (nonatomic) FolderWindowController* retainedSelf;
 @property (nonatomic, copy) NSString* leftPath;
 @property (nonatomic, copy) NSString* rightPath;
@@ -348,6 +348,8 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 			pathControl.editable = NO;
 			pathControl.focusRingType = NSFocusRingTypeNone;
 			pathControl.translatesAutoresizingMaskIntoConstraints = NO;
+			pathControl.target = self;
+			pathControl.action = @selector(pathControlClicked:);
 		}
 		leftPathControl.URL = [NSURL fileURLWithPath:leftPath isDirectory:YES];
 		rightPathControl.URL = [NSURL fileURLWithPath:rightPath isDirectory:YES];
@@ -410,6 +412,105 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 		[self invalidateRestorableState];
 	}
 	return self;
+}
+
+- (NSArray<NSURL*>*)subfolderURLsAtURL:(NSURL*)folderURL
+{
+	NSArray<NSURLResourceKey>* resourceKeys = @[ NSURLIsDirectoryKey, NSURLIsPackageKey, NSURLLocalizedNameKey ];
+	NSArray<NSURL*>* contents = [NSFileManager.defaultManager contentsOfDirectoryAtURL:folderURL includingPropertiesForKeys:resourceKeys options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+	NSMutableArray<NSURL*>* result = [NSMutableArray array];
+	for(NSURL* URL in contents)
+	{
+		NSNumber* isDirectory = nil;
+		NSNumber* isPackage = nil;
+		[URL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+		[URL getResourceValue:&isPackage forKey:NSURLIsPackageKey error:nil];
+		if(isDirectory.boolValue && !isPackage.boolValue)
+			[result addObject:URL];
+	}
+	[result sortUsingComparator:^NSComparisonResult(NSURL* leftURL, NSURL* rightURL) {
+		NSString* leftName = [NSFileManager.defaultManager displayNameAtPath:leftURL.path];
+		NSString* rightName = [NSFileManager.defaultManager displayNameAtPath:rightURL.path];
+		return [leftName localizedStandardCompare:rightName];
+	}];
+	return result;
+}
+
+- (NSMenuItem*)addFolderURL:(NSURL*)URL toMenu:(NSMenu*)menu
+{
+	NSString* title = [NSFileManager.defaultManager displayNameAtPath:URL.path];
+	NSMenuItem* item = [menu addItemWithTitle:title action:@selector(openFolderFromPathMenu:) keyEquivalent:@""];
+	item.target = self;
+	item.representedObject = URL;
+	NSImage* icon = [NSWorkspace.sharedWorkspace iconForFile:URL.path].copy;
+	icon.size = NSMakeSize(16, 16);
+	item.image = icon;
+	return item;
+}
+
+- (void)populateMenu:(NSMenu*)menu withSubfoldersOfURL:(NSURL*)folderURL includeEnclosingFolders:(BOOL)includeEnclosingFolders
+{
+	NSArray<NSURL*>* subfolderURLs = [self subfolderURLsAtURL:folderURL];
+	for(NSURL* URL in subfolderURLs)
+	{
+		NSMenuItem* item = [self addFolderURL:URL toMenu:menu];
+		if([self subfolderURLsAtURL:URL].count)
+		{
+			item.submenu = [[NSMenu alloc] initWithTitle:item.title];
+			item.submenu.delegate = self;
+		}
+	}
+
+	if(!includeEnclosingFolders || [folderURL.path isEqualToString:@"/"])
+		return;
+	if(menu.numberOfItems)
+		[menu addItem:NSMenuItem.separatorItem];
+	NSMenuItem* heading = [menu addItemWithTitle:@"Enclosing Folders" action:nil keyEquivalent:@""];
+	heading.enabled = NO;
+	for(NSString* path = folderURL.path.stringByDeletingLastPathComponent; path.length; path = path.stringByDeletingLastPathComponent)
+	{
+		[self addFolderURL:[NSURL fileURLWithPath:path isDirectory:YES] toMenu:menu];
+		if([path isEqualToString:@"/"])
+			break;
+	}
+}
+
+- (void)menuNeedsUpdate:(NSMenu*)menu
+{
+	if(menu.numberOfItems)
+		return;
+	NSInteger const parentIndex = [menu.supermenu indexOfItemWithSubmenu:menu];
+	if(parentIndex < 0)
+		return;
+	NSURL* folderURL = [menu.supermenu itemAtIndex:parentIndex].representedObject;
+	if(folderURL)
+		[self populateMenu:menu withSubfoldersOfURL:folderURL includeEnclosingFolders:NO];
+}
+
+- (IBAction)pathControlClicked:(NSPathControl*)sender
+{
+	NSEvent* event = NSApp.currentEvent;
+	if((event.modifierFlags & NSEventModifierFlagCommand) == 0)
+		return;
+	NSURL* folderURL = sender.clickedPathItem.URL;
+	if(!folderURL.isFileURL)
+		return;
+
+	NSMenu* menu = [[NSMenu alloc] initWithTitle:@""];
+	[self populateMenu:menu withSubfoldersOfURL:folderURL includeEnclosingFolders:YES];
+	NSPoint clickLocation = [sender convertPoint:event.locationInWindow fromView:nil];
+	NSPathCell* pathCell = (NSPathCell*)sender.cell;
+	NSPathComponentCell* pathComponentCell = [pathCell pathComponentCellAtPoint:clickLocation withFrame:sender.bounds inView:sender];
+	NSRect pathComponentRect = pathComponentCell ? [pathCell rectOfPathComponentCell:pathComponentCell withFrame:sender.bounds inView:sender] : sender.bounds;
+	NSPoint location = NSMakePoint(NSMinX(pathComponentRect) - 10, NSMinY(pathComponentRect));
+	[menu popUpMenuPositioningItem:nil atLocation:location inView:sender];
+}
+
+- (IBAction)openFolderFromPathMenu:(NSMenuItem*)sender
+{
+	NSURL* folderURL = sender.representedObject;
+	if(folderURL)
+		[NSWorkspace.sharedWorkspace openURL:folderURL];
 }
 
 + (void)restoreWindowWithIdentifier:(NSUserInterfaceItemIdentifier)identifier state:(NSCoder*)state completionHandler:(void (^)(NSWindow*, NSError*))completionHandler
