@@ -290,7 +290,14 @@
 	self.comparisonChooserController = [[NewComparisonWindowController alloc] initWithCompletionHandler:^(NSString* leftPath, NSString* rightPath) {
 		BOOL isDirectory = NO;
 		[NSFileManager.defaultManager fileExistsAtPath:leftPath isDirectory:&isDirectory];
-		NSWindowController* windowController = isDirectory ? (NSWindowController*)[[FolderWindowController alloc] initWithLeftPath:leftPath rightPath:rightPath] : (NSWindowController*)[[WindowController alloc] initWithLeftPath:leftPath rightPath:rightPath];
+		NSWindowController* windowController = nil;
+		if(isDirectory)
+			windowController = [[FolderWindowController alloc] initWithLeftPath:leftPath rightPath:rightPath];
+		else
+		{
+			windowController = [[WindowController alloc] initWithLeftPath:leftPath rightPath:rightPath];
+			[windowController.window center];
+		}
 		[windowController showWindow:weakSelf];
 	}];
 	[self.comparisonChooserController showWindow:sender];

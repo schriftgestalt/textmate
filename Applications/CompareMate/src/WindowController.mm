@@ -17,6 +17,7 @@ static NSString* const RightPathRestorationKey = @"CompareMate.rightPath";
 static NSString* const DividerPositionRestorationKey = @"CompareMate.dividerPosition";
 static NSString* const FolderFilterRestorationKey = @"CompareMate.folderFilter";
 static NSString* const FolderIconLeadingConstraintIdentifier = @"CompareMate.folderIconLeading";
+static NSWindowFrameAutosaveName const FileComparisonFrameAutosaveName = @"CompareMate.FileComparisonWindowFrame";
 
 @interface DiffCharacterRange : NSObject
 @property (nonatomic) NSUInteger line;
@@ -789,6 +790,7 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 	if(!node || node.leftKind == FolderEntryKindDirectory || node.rightKind == FolderEntryKindDirectory || node.leftKind == FolderEntryKindOther || node.rightKind == FolderEntryKindOther)
 		return;
 	WindowController* controller = [[WindowController alloc] initWithLeftPath:node.leftPath rightPath:node.rightPath];
+	[controller.window center];
 	[controller showWindow:self];
 }
 
@@ -1431,13 +1433,12 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 		window.contentViewController = self.splitViewController;
 		window.initialFirstResponder = self.leftDocumentView.textView;
 		window.identifier = [NSString stringWithFormat:@"CompareMate.Comparison.%@", NSUUID.UUID.UUIDString];
-		[window setFrameAutosaveName:window.identifier];
+		[window setFrameUsingName:FileComparisonFrameAutosaveName];
 		window.restorationClass = WindowController.class;
 		window.restorable = YES;
 
 		[window layoutIfNeeded];
 		[self.splitViewController.splitView setPosition:NSWidth(self.splitViewController.splitView.bounds) / 2 ofDividerAtIndex:0];
-		[window center];
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(splitViewDidResizeSubviews:) name:NSSplitViewDidResizeSubviewsNotification object:self.splitViewController.splitView];
 
 		if(leftPath)
@@ -1465,7 +1466,6 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 
 	WindowController* windowController = [[WindowController alloc] initWithLeftPath:leftPath rightPath:rightPath];
 	windowController.window.identifier = identifier;
-	[windowController.window setFrameAutosaveName:identifier];
 
 	completionHandler(windowController.window, nil);
 }
@@ -2184,6 +2184,11 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 			[alert beginSheetModalForWindow:self.window completionHandler:nil];
 		}
 	}];
+}
+
+- (void)windowDidEndLiveResize:(NSNotification*)notification
+{
+	[self.window saveFrameUsingName:FileComparisonFrameAutosaveName];
 }
 
 - (void)windowWillClose:(NSNotification*)aNotification
