@@ -997,7 +997,7 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 		bool selectedGrammar = false;
 		for(auto item : bundles::query(bundles::kFieldGrammarScope, to_s(self.document.fileType), scope::wildcard, bundles::kItemTypeGrammar, pair.second->uuid(), true, true))
 			selectedGrammar = true;
-		if(!selectedGrammar && pair.second->hidden_from_user() || pair.second->menu().empty())
+		if((!selectedGrammar && pair.second->hidden_from_user()) || pair.second->menu().empty())
 			continue;
 
 		NSMenuItem* menuItem = [bundleItemsMenu addItemWithTitle:[NSString stringWithCxxString:pair.first] action:NULL keyEquivalent:@""];

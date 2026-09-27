@@ -845,7 +845,7 @@ static NSButton* OakCreateHistoryButton (NSString* toolTip)
 + (NSSet*)keyPathsForValuesAffectingReplaceAllButtonTitle { return [NSSet setWithArray:@[ @"countOfMatches", @"countOfExcludedMatches", @"countOfReadOnlyMatches", @"countOfExcludedReadOnlyMatches", @"showsResultsOutlineView" ]]; }
 
 - (BOOL)canReplaceAll                { return _showsResultsOutlineView ? (_countOfExcludedMatches - _countOfExcludedReadOnlyMatches < _countOfMatches - _countOfReadOnlyMatches) : YES; }
-- (NSString*)replaceAllButtonTitle   { return _showsResultsOutlineView && (_countOfExcludedMatches || _countOfReadOnlyMatches && _countOfReadOnlyMatches != _countOfMatches) ? @"Replace Selected" : @"Replace All"; }
+- (NSString*)replaceAllButtonTitle   { return _showsResultsOutlineView && (_countOfExcludedMatches || (_countOfReadOnlyMatches && _countOfReadOnlyMatches != _countOfMatches)) ? @"Replace Selected" : @"Replace All"; }
 
 - (IBAction)countOccurrences:(id)sender   { [self performFindAction:FindActionCountMatches];   }
 - (IBAction)findAll:(id)sender            { [self performFindAction:FindActionFindAll];        }
@@ -885,7 +885,7 @@ static NSButton* OakCreateHistoryButton (NSString* toolTip)
 		_findOptions |= find::all_matches;
 
 	FFSearchTarget searchTarget = self.searchTarget;
-	if(searchTarget != FFSearchTargetSelection && (searchTarget != FFSearchTargetDocument || action == FindActionFindAll && self.documentIdentifier))
+	if(searchTarget != FFSearchTargetSelection && (searchTarget != FFSearchTargetDocument || (action == FindActionFindAll && self.documentIdentifier)))
 	{
 		switch(action)
 		{
@@ -1392,11 +1392,11 @@ static NSButton* OakCreateHistoryButton (NSString* toolTip)
 	else if(aMenuItem.action == @selector(toggleSearchBinaryFiles:))
 		aMenuItem.state = self.searchBinaryFiles ? NSControlStateValueOn : NSControlStateValueOff;
 	else if(aMenuItem.action == @selector(goToParentFolder:))
-		res = self.searchFolder != nil || _searchTarget == FFSearchTargetFileBrowserItems && CommonAncestor(_fileBrowserItems);
+		res = self.searchFolder != nil || (_searchTarget == FFSearchTargetFileBrowserItems && CommonAncestor(_fileBrowserItems));
 	else if(aMenuItem.action == @selector(goBack:))
 		res = [_wherePopUpButton.menu indexOfItemWithTarget:self andAction:aMenuItem.action] != -1;
 	else if(aMenuItem.action == @selector(goForward:))
-		res = [_wherePopUpButton.menu indexOfItemWithTarget:self andAction:aMenuItem.action] != -1 || _searchTarget == FFSearchTargetOther && _otherFolder;
+		res = [_wherePopUpButton.menu indexOfItemWithTarget:self andAction:aMenuItem.action] != -1 || (_searchTarget == FFSearchTargetOther && _otherFolder);
 	return res;
 }
 @end

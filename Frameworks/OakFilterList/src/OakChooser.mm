@@ -392,7 +392,7 @@ static void* kFirstResponderObserverContext = &kFirstResponderObserverContext;
 {
 	NSIndexSet* oldSelectedRowIndexes = _tableView.selectedRowIndexes;
 	NSArray* selectedItems;
-	if([oldSelectedRowIndexes count] > 1 || [oldSelectedRowIndexes count] == 1 && [oldSelectedRowIndexes firstIndex] > 0)
+	if([oldSelectedRowIndexes count] > 1 || ([oldSelectedRowIndexes count] == 1 && [oldSelectedRowIndexes firstIndex] > 0))
 		selectedItems = [_items objectsAtIndexes:oldSelectedRowIndexes];
 
 	_items = anArray;

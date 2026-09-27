@@ -54,7 +54,7 @@ static double calculate_rank (std::string const& lhs, std::string const& rhs, st
 	for(size_t j = 0; j < m; ++j)
 	{
 		char ch = rhs[j];
-		capitals[j] = at_bow && isalnum(ch) || isupper(ch);
+		capitals[j] = (at_bow && isalnum(ch)) || isupper(ch);
 		at_bow = !isalnum(ch) && ch != '\'' && ch != '.';
 	}
 

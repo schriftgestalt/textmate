@@ -219,7 +219,7 @@ namespace path
 			BOOL isInternalVolume = [destURL getResourceValue:&boolean forKey:NSURLVolumeIsInternalKey error:&error] && boolean.boolValue;
 			BOOL isLocalVolume    = [destURL getResourceValue:&boolean forKey:NSURLVolumeIsLocalKey error:&error] && boolean.boolValue;
 
-			if(atomicSave == atomic_t::always || atomicSave == atomic_t::external_volumes && !isInternalVolume || atomicSave == atomic_t::remote_volumes && !isLocalVolume)
+	if(atomicSave == atomic_t::always || (atomicSave == atomic_t::external_volumes && !isInternalVolume) || (atomicSave == atomic_t::remote_volumes && !isLocalVolume))
 					_strategy.reset(new filemanager_strategy_t(destURL));
 			else	_strategy.reset(new non_atomic_strategy_t(dest));
 		}

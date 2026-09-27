@@ -620,7 +620,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 - (IBAction)performCloseTab:(id)sender
 {
 	NSUInteger index = [sender isKindOfClass:[OakTabBarView class]] ? [sender tag] : _selectedTabIndex;
-	if(index == NSNotFound || _documents.count == 0 || _documents.count == 1 && (is_disposable(self.selectedDocument) || !self.fileBrowserVisible))
+	if(index == NSNotFound || _documents.count == 0 || (_documents.count == 1 && (is_disposable(self.selectedDocument) || !self.fileBrowserVisible)))
 		return [self performCloseWindow:sender];
 	[self closeTabsAtIndexes:[NSIndexSet indexSetWithIndex:index] askToSaveChanges:YES createDocumentIfEmpty:YES activate:YES];
 }
@@ -1470,7 +1470,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 
 - (void)setDocumentPath:(NSString*)newDocumentPath
 {
-	if(_documentPath != newDocumentPath && !([_documentPath isEqualToString:newDocumentPath]) || _documentScopeAttributes.empty())
+	if((_documentPath != newDocumentPath && ![_documentPath isEqualToString:newDocumentPath]) || _documentScopeAttributes.empty())
 	{
 		_documentPath = newDocumentPath;
 		_documentScopeAttributes = text::split(file::path_attributes(to_s(_documentPath)), " ");
@@ -2418,7 +2418,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	std::vector<std::string> v;
 	for(auto const& name : candidates)
 	{
-		if(name == documentName || !binaryGlob.does_match(name) && !excludeGlob.does_match(name))
+	if(name == documentName || (!binaryGlob.does_match(name) && !excludeGlob.does_match(name)))
 			v.push_back(name);
 	}
 

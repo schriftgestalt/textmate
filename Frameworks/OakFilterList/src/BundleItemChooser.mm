@@ -993,13 +993,13 @@ static std::vector<bundles::item_ptr> relevant_items_in_scope (scope::context_t 
 - (BOOL)canAccept
 {
 	ActionItem* item = self.tableView.selectedRow != -1 ? self.items[self.tableView.selectedRow] : nil;
-	return item.menuItem || item.action || item.uuid && bundles::lookup(to_s(item.uuid))->kind() != bundles::kItemTypeSettings;
+	return item.menuItem || item.action || (item.uuid && bundles::lookup(to_s(item.uuid))->kind() != bundles::kItemTypeSettings);
 }
 
 - (BOOL)canEdit
 {
 	ActionItem* item = self.tableView.selectedRow != -1 ? self.items[self.tableView.selectedRow] : nil;
-	return item.uuid && self.editAction || item.file;
+	return (item.uuid && self.editAction) || item.file;
 }
 
 - (void)accept:(id)sender

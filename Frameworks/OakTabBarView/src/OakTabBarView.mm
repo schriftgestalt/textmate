@@ -1250,13 +1250,13 @@ static void* kOakTabViewSelectedContext  = &kOakTabViewSelectedContext;
 	std::vector<tab_t> tabs;
 	for(NSUInteger i = 0, j = 0; i < oldLayout.count || j < newLayout.count; )
 	{
-		if(j == newLayout.count || i < oldLayout.count && ![newTabIdentifiers containsObject:oldLayout[i].tabItem.identifier])
+		if(j == newLayout.count || (i < oldLayout.count && ![newTabIdentifiers containsObject:oldLayout[i].tabItem.identifier]))
 		{
 			if(oldLayout[i].width > 0)
 				tabs.emplace_back(oldLayout[i].tabItem, oldLayout[i].width, 0);
 			++i;
 		}
-		else if(i == oldLayout.count || j < newLayout.count && ![oldTabIdentifiers containsObject:newLayout[j].tabItem.identifier])
+		else if(i == oldLayout.count || (j < newLayout.count && ![oldTabIdentifiers containsObject:newLayout[j].tabItem.identifier]))
 		{
 			if(newLayout[j].width > 0)
 				tabs.emplace_back(newLayout[j].tabItem, 0, newLayout[j].width);
