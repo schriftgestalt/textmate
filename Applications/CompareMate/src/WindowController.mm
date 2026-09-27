@@ -1339,6 +1339,10 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 @property (nonatomic) BOOL leftFileSystemNeedsRefresh;
 @property (nonatomic) BOOL rightFileSystemNeedsRefresh;
 @property (nonatomic) BOOL handlingExternalFileChanges;
+@property (nonatomic) NSButton* leftTitlebarFileButton;
+@property (nonatomic) NSButton* rightTitlebarFileButton;
+@property (nonatomic) NSTextField* leftTitlebarFileName;
+@property (nonatomic) NSTextField* rightTitlebarFileName;
 - (OakDocumentView*)activeDocumentView;
 @end
 
@@ -1436,6 +1440,8 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 		[window setFrameUsingName:FileComparisonFrameAutosaveName];
 		window.restorationClass = WindowController.class;
 		window.restorable = YES;
+		[self addComparisonTitleToWindow:window];
+		[self updateTitlebarFileButtons];
 
 		[window layoutIfNeeded];
 		[self.splitViewController.splitView setPosition:NSWidth(self.splitViewController.splitView.bounds) / 2 ofDividerAtIndex:0];
@@ -1450,6 +1456,137 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 		[self invalidateRestorableState];
 	}
 	return self;
+}
+
+- (NSButton*)titlebarFileButtonForLeftSide:(BOOL)leftSide
+{
+	NSButton* button = [[NSButton alloc] initWithFrame:NSZeroRect];
+	button.translatesAutoresizingMaskIntoConstraints = NO;
+	button.bordered = NO;
+	button.imagePosition = NSImageOnly;
+	button.imageScaling = NSImageScaleProportionallyDown;
+	button.target = self;
+	button.action = @selector(titlebarFileButtonClicked:);
+	button.tag = leftSide ? 0 : 1;
+	button.accessibilityLabel = leftSide ? @"Left comparison file" : @"Right comparison file";
+	[NSLayoutConstraint activateConstraints:@[
+		[button.widthAnchor constraintEqualToConstant:18],
+		[button.heightAnchor constraintEqualToConstant:18],
+	]];
+	return button;
+}
+
+- (NSTextField*)titlebarFileNameLabel
+{
+	NSTextField* label = [NSTextField labelWithString:@""];
+	label.translatesAutoresizingMaskIntoConstraints = NO;
+	label.font = [NSFont systemFontOfSize:NSFont.systemFontSize weight:NSFontWeightSemibold];
+	label.lineBreakMode = NSLineBreakByTruncatingMiddle;
+	label.maximumNumberOfLines = 1;
+	[label setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
+	return label;
+}
+
+- (void)addComparisonTitleToWindow:(NSWindow*)window
+{
+	self.leftTitlebarFileButton = [self titlebarFileButtonForLeftSide:YES];
+	self.rightTitlebarFileButton = [self titlebarFileButtonForLeftSide:NO];
+	self.leftTitlebarFileName = [self titlebarFileNameLabel];
+	self.rightTitlebarFileName = [self titlebarFileNameLabel];
+
+	NSTextField* separator = [NSTextField labelWithString:@"↔"];
+	separator.translatesAutoresizingMaskIntoConstraints = NO;
+	separator.textColor = NSColor.secondaryLabelColor;
+
+	NSStackView* titleView = [NSStackView stackViewWithViews:@[
+		self.leftTitlebarFileButton,
+		self.leftTitlebarFileName,
+		separator,
+		self.rightTitlebarFileButton,
+		self.rightTitlebarFileName,
+	]];
+	titleView.translatesAutoresizingMaskIntoConstraints = NO;
+	titleView.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+	titleView.alignment = NSLayoutAttributeCenterY;
+	titleView.spacing = 4;
+	[titleView setCustomSpacing:10 afterView:self.leftTitlebarFileName];
+	[titleView setCustomSpacing:10 afterView:separator];
+
+	NSButton* closeButton = [window standardWindowButton:NSWindowCloseButton];
+	NSButton* zoomButton = [window standardWindowButton:NSWindowZoomButton];
+	NSView* titlebarView = closeButton.superview;
+	[titlebarView addSubview:titleView];
+	window.titleVisibility = NSWindowTitleHidden;
+	[NSLayoutConstraint activateConstraints:@[
+		[titleView.centerXAnchor constraintEqualToAnchor:titlebarView.centerXAnchor],
+		[titleView.centerYAnchor constraintEqualToAnchor:closeButton.centerYAnchor],
+		[titleView.leadingAnchor constraintGreaterThanOrEqualToAnchor:zoomButton.trailingAnchor constant:12],
+		[titleView.trailingAnchor constraintLessThanOrEqualToAnchor:titlebarView.trailingAnchor constant:-12],
+	]];
+}
+
+- (void)updateTitlebarFileButton:(NSButton*)button nameLabel:(NSTextField*)nameLabel path:(NSString*)path
+{
+	button.hidden = path.length == 0;
+	nameLabel.hidden = path.length == 0;
+	button.toolTip = path;
+	nameLabel.toolTip = path;
+	nameLabel.stringValue = path.lastPathComponent ?: @"";
+	if(!path.length)
+	{
+		button.image = nil;
+		return;
+	}
+
+	NSImage* image = [NSWorkspace.sharedWorkspace iconForFile:path].copy;
+	image.size = NSMakeSize(16, 16);
+	button.image = image;
+}
+
+- (void)updateTitlebarFileButtons
+{
+	[self updateTitlebarFileButton:self.leftTitlebarFileButton nameLabel:self.leftTitlebarFileName path:self.leftPath];
+	[self updateTitlebarFileButton:self.rightTitlebarFileButton nameLabel:self.rightTitlebarFileName path:self.rightPath];
+}
+
+- (IBAction)titlebarFileButtonClicked:(NSButton*)sender
+{
+	if((NSApp.currentEvent.modifierFlags & NSEventModifierFlagCommand) == 0)
+		return;
+
+	NSString* path = sender.tag == 0 ? self.leftPath : self.rightPath;
+	if(!path.length)
+		return;
+
+	NSMenu* menu = [[NSMenu alloc] initWithTitle:@""];
+	for(NSString* itemPath = path; itemPath.length; itemPath = itemPath.stringByDeletingLastPathComponent)
+	{
+		NSString* title = [NSFileManager.defaultManager displayNameAtPath:itemPath];
+		NSMenuItem* item = [menu addItemWithTitle:title.length ? title : itemPath action:@selector(openTitlebarPathItem:) keyEquivalent:@""];
+		item.target = self;
+		item.representedObject = [NSURL fileURLWithPath:itemPath];
+		NSImage* image = [NSWorkspace.sharedWorkspace iconForFile:itemPath].copy;
+		image.size = NSMakeSize(16, 16);
+		item.image = image;
+		if([itemPath isEqualToString:@"/"])
+			break;
+	}
+	NSRect bounds = sender.bounds;
+	[menu popUpMenuPositioningItem:nil atLocation:NSMakePoint(NSMinX(bounds) - 14, NSMinY(bounds) - 3) inView:sender];
+}
+
+- (IBAction)openTitlebarPathItem:(NSMenuItem*)sender
+{
+	NSURL* URL = sender.representedObject;
+	if(!URL.isFileURL)
+		return;
+
+	NSNumber* isDirectory = nil;
+	[URL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+	if(isDirectory.boolValue)
+		[NSWorkspace.sharedWorkspace openURL:URL];
+	else
+		[NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[ URL ]];
 }
 
 + (void)restoreWindowWithIdentifier:(NSUserInterfaceItemIdentifier)identifier state:(NSCoder*)state completionHandler:(void (^)(NSWindow*, NSError*))completionHandler
@@ -1905,6 +2042,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 	self.leftPath = leftDocument.path;
 	self.rightPath = rightDocument.path;
 	self.window.title = [NSString stringWithFormat:@"%@ ↔ %@", leftDocument.displayName, rightDocument.displayName];
+	[self updateTitlebarFileButtons];
 	self.window.documentEdited = leftDocument.isDocumentEdited || rightDocument.isDocumentEdited;
 	[self invalidateRestorableState];
 }
