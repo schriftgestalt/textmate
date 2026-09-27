@@ -328,34 +328,51 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 
 		self.filterControl = [NSSegmentedControl segmentedControlWithLabels:@[ @"Changed and Single", @"Changed Only" ] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(changeFolderFilter:)];
 		self.filterControl.selectedSegment = 0;
+		self.filterControl.controlSize = NSControlSizeSmall;
+		if(@available(macOS 26, *)) {
+			self.filterControl.borderShape = NSControlBorderShapeCapsule;
+		}
 		[self.filterControl sizeToFit];
-		self.filterControl.frame = NSMakeRect(12, NSHeight(contentRect) - NSHeight(self.filterControl.frame) - 9, NSWidth(self.filterControl.frame), NSHeight(self.filterControl.frame));
-		self.filterControl.autoresizingMask = NSViewMaxXMargin|NSViewMinYMargin;
-		[contentView addSubview:self.filterControl];
+		CGFloat const bottomBarHeight = MAX(32, NSHeight(self.filterControl.frame) + 8);
+		NSView* bottomBar = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, NSWidth(contentRect), bottomBarHeight)];
+		bottomBar.autoresizingMask = NSViewWidthSizable|NSViewMaxYMargin;
+		self.filterControl.frame = NSMakeRect(6, floor((bottomBarHeight - NSHeight(self.filterControl.frame)) / 2), NSWidth(self.filterControl.frame), NSHeight(self.filterControl.frame));
+		self.filterControl.autoresizingMask = NSViewMaxXMargin;
+		[bottomBar addSubview:self.filterControl];
+		[contentView addSubview:bottomBar];
 
 		NSPathControl* leftPathControl = [[NSPathControl alloc] initWithFrame:NSZeroRect];
 		NSPathControl* rightPathControl = [[NSPathControl alloc] initWithFrame:NSZeroRect];
-		for(NSPathControl* pathControl in @[ leftPathControl, rightPathControl ])
-		{
+		for(NSPathControl* pathControl in @[leftPathControl, rightPathControl]) {
 			pathControl.pathStyle = NSPathStyleStandard;
 			pathControl.editable = NO;
 			pathControl.focusRingType = NSFocusRingTypeNone;
+			pathControl.translatesAutoresizingMaskIntoConstraints = NO;
 		}
 		leftPathControl.URL = [NSURL fileURLWithPath:leftPath isDirectory:YES];
 		rightPathControl.URL = [NSURL fileURLWithPath:rightPath isDirectory:YES];
 		leftPathControl.toolTip = leftPath;
 		rightPathControl.toolTip = rightPath;
-		NSStackView* pathHeader = [NSStackView stackViewWithViews:@[ leftPathControl, rightPathControl ]];
-		pathHeader.orientation = NSUserInterfaceLayoutOrientationHorizontal;
-		pathHeader.distribution = NSStackViewDistributionFillEqually;
-		pathHeader.spacing = 0;
-		pathHeader.frame = NSMakeRect(0, NSMinY(self.filterControl.frame) - 32, NSWidth(contentRect), 24);
+		NSView* pathHeader = [[NSView alloc] initWithFrame:NSZeroRect];
+		pathHeader.frame = NSMakeRect(0, NSHeight(contentRect) - 26, NSWidth(contentRect), 24);
 		pathHeader.autoresizingMask = NSViewWidthSizable|NSViewMinYMargin;
+		[pathHeader addSubview:leftPathControl];
+		[pathHeader addSubview:rightPathControl];
+		[NSLayoutConstraint activateConstraints:@[
+			[leftPathControl.leadingAnchor constraintEqualToAnchor:pathHeader.leadingAnchor],
+			[leftPathControl.topAnchor constraintEqualToAnchor:pathHeader.topAnchor],
+			[leftPathControl.bottomAnchor constraintEqualToAnchor:pathHeader.bottomAnchor],
+			[leftPathControl.trailingAnchor constraintEqualToAnchor:rightPathControl.leadingAnchor],
+			[leftPathControl.widthAnchor constraintEqualToAnchor:rightPathControl.widthAnchor],
+			[rightPathControl.topAnchor constraintEqualToAnchor:pathHeader.topAnchor],
+			[rightPathControl.bottomAnchor constraintEqualToAnchor:pathHeader.bottomAnchor],
+			[rightPathControl.trailingAnchor constraintEqualToAnchor:pathHeader.trailingAnchor],
+		]];
 		[contentView addSubview:pathHeader];
 
 		self.outlineView = [self newOutlineView];
-		CGFloat const outlineTop = NSMinY(pathHeader.frame) - 6;
-		NSScrollView* scrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 28, NSWidth(contentRect), outlineTop - 28)];
+		CGFloat const outlineTop = NSMinY(pathHeader.frame) - 2;
+		NSScrollView* scrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, bottomBarHeight, NSWidth(contentRect), outlineTop - bottomBarHeight)];
 		scrollView.autoresizingMask = NSViewWidthSizable|NSViewHeightSizable;
 		scrollView.hasVerticalScroller = YES;
 		scrollView.hasHorizontalScroller = NO;
@@ -372,11 +389,12 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 		self.dateFormatter.timeStyle = NSDateFormatterShortStyle;
 
 		self.statusLabel = [NSTextField labelWithString:@"Comparing folders…"];
-		self.statusLabel.frame = NSMakeRect(12, 6, NSWidth(contentRect) - 24, 17);
-		self.statusLabel.autoresizingMask = NSViewWidthSizable|NSViewMaxYMargin;
+		CGFloat const statusX = NSMaxX(self.filterControl.frame) + 12;
+		self.statusLabel.frame = NSMakeRect(statusX, floor((bottomBarHeight - 17) / 2), NSWidth(contentRect) - statusX - 12, 17);
+		self.statusLabel.autoresizingMask = NSViewWidthSizable;
 		self.statusLabel.textColor = NSColor.secondaryLabelColor;
 		self.statusLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-		[contentView addSubview:self.statusLabel];
+		[bottomBar addSubview:self.statusLabel];
 
 		window.initialFirstResponder = self.outlineView;
 		[window center];
