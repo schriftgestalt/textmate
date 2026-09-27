@@ -4,6 +4,7 @@
 #import <MenuBuilder/src/MenuBuilder.h>
 #import <BundlesManager/src/BundlesManager.h>
 #import <settings/src/settings.h>
+#import <theme/src/theme.h>
 #import <io/src/path.h>
 
 @interface AppDelegate () <NSApplicationDelegate, NSWindowDelegate, NSMenuItemValidation>
@@ -14,6 +15,14 @@
 @end
 
 @implementation AppDelegate
++ (void)initialize
+{
+	[NSUserDefaults.standardUserDefaults registerDefaults:@{
+		@"universalThemeUUID": @(kMacClassicThemeUUID),
+		@"darkModeThemeUUID":  @(kTwilightThemeUUID),
+	}];
+}
+
 - (void)applicationWillFinishLaunching:(NSNotification*)aNotification
 {
 	settings_t::set_default_settings_path([[[NSBundle mainBundle] pathForResource:@"Default" ofType:@"tmProperties"] fileSystemRepresentation]);
