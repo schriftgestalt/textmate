@@ -79,7 +79,7 @@ static SymbolChooserItem* CreateItem (OakDocument* document, text::pos_t const& 
 
 - (void)setTMDocument:(OakDocument*)aDocument
 {
-	if(_TMDocument = aDocument)
+	if((_TMDocument = aDocument))
 		[self updateItems:self];
 	NSString* title = @"Jump to Symbol";
 	self.window.title = _TMDocument ? [title stringByAppendingFormat:@" — %@", _TMDocument.displayName] : title;

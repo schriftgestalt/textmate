@@ -398,7 +398,7 @@ NSString* const kSoftwareUpdateChannelCanary                                   =
 	if(_updateBadgeVisible == flag)
 		return;
 
-	if(_updateBadgeVisible = flag)
+	if((_updateBadgeVisible = flag))
 	{
 		if(NSImage* dlBadge = [NSImage imageNamed:@"Update Badge" inSameBundleAsClass:[self class]])
 		{
@@ -696,7 +696,7 @@ NSString* const kSoftwareUpdateChannelCanary                                   =
 	if(_progress && !newProgress)
 		[self checkProgressTimerDidFire:nil];
 
-	if(_progress = newProgress)
+	if((_progress = newProgress))
 	{
 		[self checkProgressTimerDidFire:nil];
 

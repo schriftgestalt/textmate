@@ -136,7 +136,7 @@ static void erase_key_path (plist::dictionary_t& plist, std::string const& keyPa
 
 		if(++key == v.end())
 			current->erase(it);
-		else if(current = boost::get<plist::dictionary_t>(&it->second))
+		else if((current = boost::get<plist::dictionary_t>(&it->second)))
 			continue;
 		else if(plist::array_t* array = boost::get<plist::array_t>(&it->second))
 		{
@@ -180,7 +180,7 @@ static void update_key_path (plist::dictionary_t& plist, std::string const& keyP
 		}
 		else
 		{
-			if(current = boost::get<plist::dictionary_t>(&it->second))
+			if((current = boost::get<plist::dictionary_t>(&it->second)))
 				continue;
 			else if(plist::array_t* array = boost::get<plist::array_t>(&it->second))
 				array->push_back(*key);

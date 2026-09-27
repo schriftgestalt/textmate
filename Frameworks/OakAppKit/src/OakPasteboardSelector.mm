@@ -183,7 +183,7 @@ static size_t line_count (std::string const& text)
 		[tableView setNextResponder:[self nextResponder]];
 	}
 
-	if(tableView = aTableView)
+	if((tableView = aTableView))
 	{
 		[tableView setDataSource:self];
 		[tableView setDelegate:self];

@@ -131,7 +131,7 @@ static NSTextField* OakCreateTextField ()
 	if(_indeterminateProgress == newIndeterminateProgress)
 		return;
 
-	if(_indeterminateProgress = newIndeterminateProgress)
+	if((_indeterminateProgress = newIndeterminateProgress))
 	{
 		[_progressIndicator removeFromSuperview];
 		[self addSubview:_spinner];

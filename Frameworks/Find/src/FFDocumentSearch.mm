@@ -87,7 +87,7 @@ static NSDictionary* GlobOptionsForPath (std::string const& path, NSString* glob
 
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		[OakDocumentController.sharedInstance enumerateDocumentsAtPaths:_paths options:options usingBlock:^(OakDocument* document, BOOL* stop){
-			if(*stop = searchToken != _lastSearchToken)
+			if((*stop = searchToken != _lastSearchToken))
 				return;
 
 			self.lastDocumentPath = document.path;

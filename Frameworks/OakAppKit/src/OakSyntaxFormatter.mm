@@ -54,7 +54,7 @@ static size_t kParseSizeLimit = 1024;
 	{
 		for(auto const& bundleItem : bundles::query(bundles::kFieldGrammarScope, to_s(_grammarName), scope::wildcard, bundles::kItemTypeGrammar))
 		{
-			if(_grammar = parse::parse_grammar(bundleItem))
+			if((_grammar = parse::parse_grammar(bundleItem)))
 				break;
 		}
 

@@ -205,7 +205,7 @@ static NSImage* ImageNamed (NSString* imageName)
 						imageName = imageName ?: customBindings[pathName.pathExtension];
 					}
 
-					if(image = ImageNamed(imageName))
+					if((image = ImageNamed(imageName)))
 					{
 						NSURLFileResourceType type;
 						if([url getResourceValue:&type forKey:NSURLFileResourceTypeKey error:&error])

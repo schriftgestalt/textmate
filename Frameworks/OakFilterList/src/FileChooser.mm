@@ -111,7 +111,7 @@ NSUInteger const kFileChooserUncommittedChangesSourceIndex = 2;
 	if(!filter.empty() && filter != NULL_STR)
 	{
 		std::vector<std::pair<size_t, size_t>> cover;
-		if(rank = oak::rank(filter, _file, &_coverFile))
+		if((rank = oak::rank(filter, _file, &_coverFile)))
 		{
 			rank += 1;
 
@@ -119,7 +119,7 @@ NSUInteger const kFileChooserUncommittedChangesSourceIndex = 2;
 			if(it != bindings.end())
 				rank = 2 + (bindings.end() - it) / (double)bindings.size();
 		}
-		else if(rank = oak::rank(filter, _directory + "/" + _file, &cover))
+		else if((rank = oak::rank(filter, _directory + "/" + _file, &cover)))
 		{
 			for(auto pair : cover)
 			{

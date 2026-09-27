@@ -711,7 +711,7 @@ static pid_t run_command (dispatch_group_t rootGroup, std::string const& cmd, in
 			{
 				NSData* data = [NSData dataWithBytes:buf length:len];
 				dispatch_sync(dispatch_get_main_queue(), ^{
-					if(keepRunning = !_stop)
+					if((keepRunning = !_stop))
 						[self.client URLProtocol:self didLoadData:data];
 				});
 			}

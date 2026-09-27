@@ -1445,7 +1445,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	if(_projectPath != newProjectPath && ![_projectPath isEqualToString:newProjectPath])
 	{
 		_projectPath = newProjectPath;
-		if(_projectSCMInfo = scm::info(to_s(_projectPath)))
+		if((_projectSCMInfo = scm::info(to_s(_projectPath))))
 		{
 			__weak DocumentWindowController* weakSelf = self;
 			_projectSCMInfo->push_callback(^(scm::info_t const& info){
@@ -1486,7 +1486,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 
 		self.documentSCMVariables = std::map<std::string, std::string>();
 
-		if(_documentSCMInfo = scm::info(docDirectory))
+		if((_documentSCMInfo = scm::info(docDirectory)))
 		{
 			__weak DocumentWindowController* weakSelf = self;
 			_documentSCMInfo->push_callback(^(scm::info_t const& info){
@@ -1756,7 +1756,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	[OakDocumentController.sharedInstance didTouchDocument:_selectedDocument];
 	[OakDocumentController.sharedInstance didTouchDocument:newDocument];
 
-	if(_selectedDocument = newDocument)
+	if((_selectedDocument = newDocument))
 	{
 		NSString* projectPath = self.defaultProjectPath ?: self.fileBrowser.path ?: [newDocument.path stringByDeletingLastPathComponent];
 		if(projectPath)
@@ -1797,7 +1797,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 		return;
 
 	NSUUID* oldIdentifier = _identifier;
-	if(_identifier = newIdentifier)
+	if((_identifier = newIdentifier))
 		[AllControllers() setObject:self forKey:newIdentifier];
 
 	if(oldIdentifier)
@@ -2166,7 +2166,7 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 	if(_htmlOutputInWindow == showInWindowFlag)
 		return;
 
-	if(_htmlOutputInWindow = showInWindowFlag)
+	if((_htmlOutputInWindow = showInWindowFlag))
 	{
 		self.layoutView.htmlOutputView = nil;
 		self.htmlOutputView = nil;

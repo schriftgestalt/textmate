@@ -160,7 +160,7 @@ static bool paths_share_inode (NSString* lhs, NSString* rhs)
 	if(_accessible == isAccessible)
 		return;
 
-	if(_accessible = isAccessible)
+	if((_accessible = isAccessible))
 	{
 		[self setUpEventSource];
 

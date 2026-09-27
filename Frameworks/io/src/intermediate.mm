@@ -113,7 +113,7 @@ namespace path
 		char const* setup (std::string* errorMsg)
 		{
 			NSError* error;
-			if(_tempDirectoryURL = [NSFileManager.defaultManager URLForDirectory:NSItemReplacementDirectory inDomain:NSUserDomainMask appropriateForURL:_destURL create:YES error:&error])
+			if((_tempDirectoryURL = [NSFileManager.defaultManager URLForDirectory:NSItemReplacementDirectory inDomain:NSUserDomainMask appropriateForURL:_destURL create:YES error:&error]))
 			{
 				_tempURL = [_tempDirectoryURL URLByAppendingPathComponent:_destURL.lastPathComponent];
 				return _tempURL.fileSystemRepresentation;

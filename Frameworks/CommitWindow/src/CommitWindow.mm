@@ -824,7 +824,7 @@ static void* kOakCommitWindowIncludeItemObserverContext = &kOakCommitWindowInclu
 		actionCommandObj* cmd = [menuItem representedObject];
 
 		std::map<std::string, std::string> variables;
-		if(active = [cmd.targetStatuses containsObject:cwItem.scmStatus])
+		if((active = [cmd.targetStatuses containsObject:cwItem.scmStatus]))
 			variables = { { "TM_DISPLAYNAME", path::display_name(to_s(cwItem.path)) } };
 
 		menuItem.title = [NSString stringWithCxxString:format_string::expand(to_s(cmd.name), variables)];

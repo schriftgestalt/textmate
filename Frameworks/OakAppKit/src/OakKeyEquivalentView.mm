@@ -76,7 +76,7 @@ static NSString* const kRecordingPlaceholderString = @"…";
 	if(_showClearButton == flag)
 		return;
 
-	if(_showClearButton = flag)
+	if((_showClearButton = flag))
 	{
 		if(!_clearButton)
 		{

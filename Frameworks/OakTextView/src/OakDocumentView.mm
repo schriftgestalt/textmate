@@ -710,7 +710,7 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 		[aDocument reloadIndentationSettings];
 	}
 
-	if(_document = aDocument)
+	if((_document = aDocument))
 	{
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentMarksDidChange:) name:OakDocumentMarksDidChangeNotification object:self.document];
 		for(NSString* key in documentKeys)
@@ -894,7 +894,7 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 		_symbolChooser.TMDocument = nil;
 	}
 
-	if(_symbolChooser = aSymbolChooser)
+	if((_symbolChooser = aSymbolChooser))
 	{
 		_symbolChooser.target          = self;
 		_symbolChooser.action          = @selector(symbolChooserDidSelectItems:);

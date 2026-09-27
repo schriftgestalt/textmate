@@ -315,7 +315,7 @@ namespace encoding
 		_saveDatabaseTimer = nil;
 	}
 
-	if(_needsSaveDatabase = flag)
+	if((_needsSaveDatabase = flag))
 		_saveDatabaseTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(saveDatabaseTimerDidFire:) userInfo:nil repeats:NO];
 }
 

@@ -41,7 +41,7 @@ struct socket_callback_t
 	{
 		helper = std::make_shared<helper_t>(f, fd, this);
 
-		if(_dispatchSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, (int)fd, 0, dispatch_get_main_queue()))
+		if((_dispatchSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, (int)fd, 0, dispatch_get_main_queue())))
 		{
 			dispatch_source_set_event_handler(_dispatchSource, ^{
 				(*helper)();

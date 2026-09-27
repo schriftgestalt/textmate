@@ -171,7 +171,7 @@
 	if(self = [super init])
 	{
 		self.exitHandler = aHandler;
-		if(process = io::spawn(std::vector<std::string>{ "/bin/sh", "-c", to_s(aCommand) }, someEnvironment))
+		if((process = io::spawn(std::vector<std::string>{ "/bin/sh", "-c", to_s(aCommand) }, someEnvironment)))
 		{
 			auto runLoop = std::make_shared<cf::run_loop_t>(kCFRunLoopDefaultMode, 15);
 			auto weakRunLoop = std::weak_ptr<cf::run_loop_t>(runLoop);
@@ -318,13 +318,13 @@
 
 - (void)setOnreadoutput:(id)aHandler
 {
-	if(onreadoutput = aHandler)
+	if((onreadoutput = aHandler))
 		[onreadoutput callWebScriptMethod:@"call" withArguments:@[ onreadoutput, [self outputString] ]];
 }
 
 - (void)setOnreaderror:(id)aHandler
 {
-	if(onreaderror = aHandler)
+	if((onreaderror = aHandler))
 		[onreaderror callWebScriptMethod:@"call" withArguments:@[ onreaderror, [self errorString] ]];
 }
 

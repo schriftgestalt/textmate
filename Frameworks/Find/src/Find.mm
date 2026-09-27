@@ -670,7 +670,7 @@ static NSButton* OakCreateHistoryButton (NSString* toolTip)
 	if(_showsResultsOutlineView == flag)
 		return;
 
-	if(_showsResultsOutlineView = flag)
+	if((_showsResultsOutlineView = flag))
 	{
 		_resultsViewController.view.frame = { .size = NSMakeSize(NSWidth(_transitionViewController.view.frame), MAX(50, self.findResultsHeight)) };
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(resultsFrameDidChange:) name:NSViewFrameDidChangeNotification object:_resultsViewController.view];
@@ -1108,7 +1108,7 @@ static NSButton* OakCreateHistoryButton (NSString* toolTip)
 		[_documentSearch stop];
 	}
 
-	if(_documentSearch = newSearcher)
+	if((_documentSearch = newSearcher))
 	{
 		_statusBarViewController.progressIndicatorVisible = YES;
 		self.statusString            = @"Searching…";

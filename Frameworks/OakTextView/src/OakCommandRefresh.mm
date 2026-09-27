@@ -166,7 +166,7 @@ static NSMutableSet<OakCommandRefresher*>* CommandRefreshers = [NSMutableSet set
 
 - (void)execute
 {
-	if(_shouldRun = (_running == YES))
+	if((_shouldRun = (_running == YES)))
 		return;
 
 	NSFileHandle* stdinFH;

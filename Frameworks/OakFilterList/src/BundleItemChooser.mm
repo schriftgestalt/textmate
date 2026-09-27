@@ -98,7 +98,7 @@ static NSString* OakMenuItemIdentifier (NSMenuItem* menuItem)
 			std::vector<std::pair<size_t, size_t>> cover;
 			if(searchSource & (kSearchSourceActionItems|kSearchSourceMenuItems|kSearchSourceKeyBindingItems))
 			{
-				if(rank = oak::rank(filter, name, &cover))
+				if((rank = oak::rank(filter, name, &cover)))
 						rank += 1;
 				else	rank = oak::rank(filter, path + " " + name, &cover);
 			}
@@ -138,7 +138,7 @@ static NSString* OakMenuItemIdentifier (NSMenuItem* menuItem)
 			rank = OakContainsString(_scopeSelector, to_ns(filter)) ? rank : 0;
 	}
 
-	if(_matched = (rank > 0 ? YES : NO))
+	if((_matched = (rank > 0 ? YES : NO)))
 	{
 		if(bundleItemField == kBundleItemTitleField)
 		{
