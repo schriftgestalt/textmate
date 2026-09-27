@@ -201,7 +201,7 @@
 		54BC8F15B35C400423510AFC /* glob.cc in Sources */ = {isa = PBXBuildFile; fileRef = 56A4D7382B5959FE0049910C /* glob.cc */; };
 		557E034636107525AE1393EC /* Bundle Support.tmbundle in Copy Bundles */ = {isa = PBXBuildFile; fileRef = ABCDEF00000000000000013D /* Bundle Support.tmbundle */; };
 		558215103ADA06D367828A02 /* TabCloseThin_ModifiedPressed_Template.png in Resources */ = {isa = PBXBuildFile; fileRef = 56A4D8A82B5959FF0049910C /* TabCloseThin_ModifiedPressed_Template.png */; };
-		561C468A2DF0F9C300D6568C /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 561C46892DF0F9C300D6568C /* Icons.xcassets */; };
+		4C6F1D0298A74CF7A0B0C001 /* DocumentIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C6F1D0298A74CF7A0B0C002 /* DocumentIcons.xcassets */; };
 		5656C4232DF04F8E00DCE20D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4222DF04F8E00DCE20D /* Cocoa.framework */; };
 		5656C4272DF05D2E00DCE20D /* libonig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5656C4262DF05D2E00DCE20D /* libonig.a */; };
 		5656C4302DF07D8B00DCE20D /* frequencies.capnp.c++ in Sources */ = {isa = PBXBuildFile; fileRef = 5656C42F2DF07D8B00DCE20D /* frequencies.capnp.c++ */; };
@@ -1338,7 +1338,7 @@
 		378D2D67D4D92A8FCEB06514 /* QuickLookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookUI.framework; path = System/Library/Frameworks/QuickLookUI.framework; sourceTree = SDKROOT; };
 		3E6B2A118D6A47B58B016A64 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = System/Library/Frameworks/ExceptionHandling.framework; sourceTree = SDKROOT; };
 		459247091B895CB06FFDCC1F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		561C46892DF0F9C300D6568C /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
+		4C6F1D0298A74CF7A0B0C002 /* DocumentIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DocumentIcons.xcassets; sourceTree = "<group>"; };
 		5656C4222DF04F8E00DCE20D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5656C4262DF05D2E00DCE20D /* libonig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libonig.a; path = Onigmo/vendor/.libs/libonig.a; sourceTree = "<group>"; };
 		5656C42F2DF07D8B00DCE20D /* frequencies.capnp.c++ */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "frequencies.capnp.c++"; sourceTree = "<group>"; };
@@ -2454,6 +2454,7 @@
 		56A4D5FD2B5959410049910C /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				4C6F1D0298A74CF7A0B0C002 /* DocumentIcons.xcassets */,
 				56A4DC8E2B595B820049910C /* Info.plist */,
 				56A4D5FE2B5959410049910C /* InfoPlist.strings */,
 				56A4D6002B5959410049910C /* MainMenu.xib */,
@@ -2555,7 +2556,6 @@
 				56A4D67E2B5959640049910C /* TextMate Command.icns */,
 				56A4D6802B5959640049910C /* TextMate Bundle Item.icns */,
 				5697238630017190005DC1DD /* AppIcon.icon */,
-				561C46892DF0F9C300D6568C /* Icons.xcassets */,
 			);
 			path = icons;
 			sourceTree = "<group>";
@@ -5037,7 +5037,7 @@
 				56A4DB8A2B595A010049910C /* TabCloseThin_Modified_Template.png in Resources */,
 				56A4DBDD2B595A010049910C /* small-angle-brackets-brown.icns in Resources */,
 				56A4DBF02B595A010049910C /* small-text.icns in Resources */,
-				561C468A2DF0F9C300D6568C /* Icons.xcassets in Resources */,
+				4C6F1D0298A74CF7A0B0C001 /* DocumentIcons.xcassets in Resources */,
 				56A4DB7E2B595A010049910C /* TabOverflowThinTemplate.png in Resources */,
 				56A4D6442B5959560049910C /* contributions.css in Resources */,
 				56A4D61D2B5959420049910C /* WKWebView.js in Resources */,
