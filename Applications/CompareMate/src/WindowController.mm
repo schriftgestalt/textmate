@@ -774,9 +774,17 @@ static NSArray<FolderComparisonNode*>* FilterFolderComparison (NSArray<FolderCom
 	return node.representsFile && node.relativePath.length ? node : nil;
 }
 
+- (BOOL)canOpenSelectedFile
+{
+	FolderComparisonNode* node = self.selectedFileNode;
+	return node && node.leftKind != FolderEntryKindDirectory && node.rightKind != FolderEntryKindDirectory && node.leftKind != FolderEntryKindOther && node.rightKind != FolderEntryKindOther;
+}
+
 - (IBAction)openSelectedFile:(id)sender
 {
-	NSInteger row = self.outlineView.clickedRow >= 0 ? self.outlineView.clickedRow : self.outlineView.selectedRow;
+	NSEventType const eventType = NSApp.currentEvent.type;
+	BOOL const openedWithMouse = eventType == NSEventTypeLeftMouseDown || eventType == NSEventTypeLeftMouseUp;
+	NSInteger row = openedWithMouse && self.outlineView.clickedRow >= 0 ? self.outlineView.clickedRow : self.outlineView.selectedRow;
 	FolderComparisonNode* node = row >= 0 ? [self.outlineView itemAtRow:row] : nil;
 	if(!node || node.leftKind == FolderEntryKindDirectory || node.rightKind == FolderEntryKindDirectory || node.leftKind == FolderEntryKindOther || node.rightKind == FolderEntryKindOther)
 		return;

@@ -118,6 +118,11 @@
 		},
 		{ @"Changes",
 			.submenu = {
+				MBMenuItem{ @"Open File Comparison", @selector(openSelectedFile:) }
+					.withModifierFlags(NSEventModifierFlagCommand)
+					.withKey(NSDownArrowFunctionKey)
+					.withTarget(self),
+				{ /* -------- */ },
 				MBMenuItem{ @"Previous Change", @selector(previousChange:) }
 					.withModifierFlags(NSEventModifierFlagCommand|NSEventModifierFlagOption)
 					.withKey(NSUpArrowFunctionKey)
@@ -302,6 +307,13 @@
 	[(id)[self activeComparisonWindowController] nextChange:sender];
 }
 
+- (IBAction)openSelectedFile:(id)sender
+{
+	NSWindowController* controller = [self activeComparisonWindowController];
+	if([controller isKindOfClass:FolderWindowController.class])
+		[(FolderWindowController*)controller openSelectedFile:sender];
+}
+
 - (IBAction)previousChange:(id)sender
 {
 	[(id)[self activeComparisonWindowController] previousChange:sender];
@@ -354,6 +366,8 @@
 	NSWindowController* controller = [self activeComparisonWindowController];
 	BOOL const isFolderComparison = [controller isKindOfClass:FolderWindowController.class];
 	SEL const action = menuItem.action;
+	if(action == @selector(openSelectedFile:))
+		return isFolderComparison && [(FolderWindowController*)controller canOpenSelectedFile];
 	if(action == @selector(copyChangeToLeft:))
 	{
 		menuItem.title = isFolderComparison ? @"Copy File to Left" : @"Copy Change to Left";

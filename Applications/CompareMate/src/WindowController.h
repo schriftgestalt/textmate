@@ -10,6 +10,8 @@
 
 @interface FolderWindowController : NSWindowController <NSWindowRestoration>
 - (instancetype)initWithLeftPath:(NSString*)leftPath rightPath:(NSString*)rightPath;
+- (BOOL)canOpenSelectedFile;
+- (IBAction)openSelectedFile:(id)sender;
 - (IBAction)nextChange:(id)sender;
 - (IBAction)previousChange:(id)sender;
 - (IBAction)copyChangeToLeft:(id)sender;
