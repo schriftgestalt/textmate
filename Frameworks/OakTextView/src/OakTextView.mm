@@ -3924,7 +3924,6 @@ static char const* kOakMenuItemTitle = "OakMenuItemTitle";
 	ng::index_t visibleIndex = documentView->index_at_point([self visibleRect].origin);
 	documentView->set_wrapping(flag, documentView->wrap_column());
 	[self scrollIndexToFirstVisible:documentView->begin(documentView->convert(visibleIndex.index).line)];
-	settings_t::set(kSettingsSoftWrapKey, (bool)flag, documentView->file_type());
 }
 
 - (void)setSoftTabs:(BOOL)flag
@@ -4004,7 +4003,9 @@ static char const* kOakMenuItemTitle = "OakMenuItemTitle";
 
 - (IBAction)toggleSoftWrap:(id)sender
 {
-	self.softWrap = !self.softWrap;
+	BOOL const softWrap = !self.softWrap;
+	self.softWrap = softWrap;
+	settings_t::set(kSettingsSoftWrapKey, (bool)softWrap, documentView->file_type());
 }
 
 - (IBAction)toggleShowWrapColumn:(id)sender

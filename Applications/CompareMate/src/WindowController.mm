@@ -1366,12 +1366,12 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 
 		self.leftDocumentView = [[OakDocumentView alloc] initWithFrame:NSZeroRect];
 		self.leftDocumentView.document = [OakDocument documentWithString:@"" fileType:@"text.plain" customName:@"Left"];
-		self.leftDocumentView.textView.softWrap = NO;
+		self.leftDocumentView.textView.softWrap = YES;
 		self.leftDocumentView.textView.scrollPastEnd = YES;
 
 		self.rightDocumentView = [[OakDocumentView alloc] initWithFrame:NSZeroRect];
 		self.rightDocumentView.document = [OakDocument documentWithString:@"" fileType:@"text.plain" customName:@"Right"];
-		self.rightDocumentView.textView.softWrap = NO;
+		self.rightDocumentView.textView.softWrap = YES;
 		self.rightDocumentView.textView.scrollPastEnd = YES;
 
 		self.leftDiffHighlightView = [[DiffHighlightView alloc] initWithTextView:self.leftDocumentView.textView color:[NSColor.systemRedColor colorWithAlphaComponent:0.16]];
@@ -1693,8 +1693,10 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 	CGFloat targetY = [self yPositionForLineBoundary:targetPosition lineCount:targetLineCount textView:targetTextView];
 	if(!mapsToGap && targetPosition < targetLineCount)
 	{
-		CGFloat const sourceLineHeight = sourceLine.lastY - sourceLine.firstY;
-		CGFloat const fraction = sourceLineHeight > 0 ? std::clamp((sourceAnchorY - sourceLine.firstY) / sourceLineHeight, (CGFloat)0, (CGFloat)1) : 0;
+		CGFloat const sourceTop = [self yPositionForLineBoundary:sourceLine.lineNumber lineCount:lineMap.count textView:sourceTextView];
+		CGFloat const sourceBottom = [self bottomForLine:sourceLine.lineNumber lineCount:lineMap.count textView:sourceTextView];
+		CGFloat const sourceLineHeight = sourceBottom - sourceTop;
+		CGFloat const fraction = sourceLineHeight > 0 ? std::clamp((sourceAnchorY - sourceTop) / sourceLineHeight, (CGFloat)0, (CGFloat)1) : 0;
 		CGFloat const targetBottom = [self bottomForLine:targetPosition lineCount:targetLineCount textView:targetTextView];
 		targetY += fraction * MAX(0, targetBottom - targetY);
 	}
@@ -2150,6 +2152,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 		document.path = path;
 		document.onDisk = NO;
 		documentView.document = document;
+		documentView.textView.softWrap = YES;
 		document.observeFileSystem = NO;
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentContentDidChange:) name:OakDocumentContentDidChangeNotification object:document];
 		if(documentView == self.leftDocumentView)
@@ -2166,6 +2169,7 @@ static void AppendCharacterDifferences (NSString* leftLine, NSString* rightLine,
 		if(result == OakDocumentIOResultSuccess)
 		{
 			documentView.document = document;
+			documentView.textView.softWrap = YES;
 			document.observeFileSystem = NO;
 			[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentContentDidChange:) name:OakDocumentContentDidChangeNotification object:document];
 			if(documentView == self.leftDocumentView)
