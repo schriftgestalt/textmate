@@ -1109,6 +1109,7 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 	{
 		switch([_textView foldingStateForLine:lineNumber])
 		{
+			case kFoldingNone:      return nil;
 			case kFoldingTop:       return [self gutterImage:rowState == GutterViewRowStateRegular ? @"Folding Top Template"       : @"Folding Top Hover Template"];
 			case kFoldingCollapsed: return [self gutterImage:rowState == GutterViewRowStateRegular ? @"Folding Collapsed Template" : @"Folding Collapsed Hover Template"];
 			case kFoldingBottom:    return [self gutterImage:rowState == GutterViewRowStateRegular ? @"Folding Bottom Template"    : @"Folding Bottom Hover Template"];

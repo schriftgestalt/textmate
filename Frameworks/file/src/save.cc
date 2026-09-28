@@ -162,6 +162,10 @@ namespace
 		{
 			switch(_state)
 			{
+				case kStateIdle:
+				case kStateDone:
+					return;
+
 				case kStateStart:
 				{
 					_state      = kStateIdle;
@@ -219,6 +223,7 @@ namespace
 						break;
 
 						case kFileTestReadOnly:
+						case kFileTestUnhandled:
 							// TODO show error
 						break;
 					}

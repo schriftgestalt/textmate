@@ -65,6 +65,8 @@ namespace
 			std::string res;
 			switch(_type)
 			{
+				case kRoot:
+				case kExclude: break;
 				case kText:
 				{
 					for(auto const& ch : _text)

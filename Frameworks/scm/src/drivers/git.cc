@@ -194,6 +194,7 @@ static scm::status::type status_for (entry_t const& root)
 	{
 		switch(status_for(entry))
 		{
+			case scm::status::unknown:      break;
 			case scm::status::conflicted:   ++conflicted;break;
 			case scm::status::unversioned:  ++untracked; break;
 			case scm::status::ignored:      ++ignored;   break;

@@ -255,6 +255,10 @@ namespace
 		{
 			switch(_state)
 			{
+				case kStateIdle:
+				case kStateDone:
+					return;
+
 				case kStateStart:
 				{
 					_state      = kStateIdle;

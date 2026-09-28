@@ -106,6 +106,7 @@ namespace ng
 
 		switch(_type)
 		{
+			case kNodeTypeNewline: break;
 			case kNodeTypeText:
 			{
 				_line = std::make_shared<ct::line_t>(buffer.substr(bufferOffset, bufferOffset + _length), buffer.scopes(bufferOffset, bufferOffset + _length), theme, tabSize, metrics, nullptr);
@@ -162,6 +163,7 @@ namespace ng
 			scope::scope_t scope = _type == kNodeTypeSoftBreak ? buffer.scope(bufferOffset).left : buffer.scope(bufferOffset).right;
 			switch(_type)
 			{
+				case kNodeTypeNewline:     break;
 				case kNodeTypeUnprintable: scope.push_scope("deco.unprintable");   break;
 				case kNodeTypeFolding:     scope.push_scope("deco.folding");       break;
 				case kNodeTypeSoftBreak:   scope.push_scope("deco.indented-wrap"); break;
@@ -188,6 +190,9 @@ namespace ng
 			scope::scope_t scope = buffer.scope(bufferOffset).right;
 			switch(_type)
 			{
+				case kNodeTypeText:
+				case kNodeTypeUnprintable:
+				case kNodeTypeSoftBreak: break;
 				case kNodeTypeNewline:
 					str = context.newline();
 					scope.push_scope("deco.invisible.newline");

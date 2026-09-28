@@ -555,6 +555,9 @@ namespace ng
 
 		switch(unit)
 		{
+			case kSelectionMoveToBeginOfSelection:
+			case kSelectionMoveToEndOfSelection:
+			case kSelectionMoveNowhere:             return index;
 			case kSelectionMoveToBeginOfDocument:     return 0;
 			case kSelectionMoveToEndOfDocument:       return buffer.size();
 			case kSelectionMoveToBeginOfParagraph:    return buffer.begin(line);

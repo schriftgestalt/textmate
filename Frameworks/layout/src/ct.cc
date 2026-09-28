@@ -50,6 +50,7 @@ namespace ng
 			{
 				switch(state)
 				{
+					case kWaiting: break;
 					case kExclude:
 					{
 						switch(ch)
