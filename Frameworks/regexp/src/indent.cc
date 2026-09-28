@@ -87,7 +87,7 @@ namespace indent
 
 	size_t fsm_t::scan_line (std::string const& line, std::map<pattern_type, regexp::pattern_t> const& patterns)
 	{
-		int type = classify(line, patterns);
+		size_t type = classify(line, patterns);
 		ssize_t res = _level + _carry;
 		if(type & kZeroIndent)
 		{
