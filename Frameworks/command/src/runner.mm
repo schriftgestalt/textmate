@@ -6,6 +6,7 @@
 #include <io/src/pipe.h>
 #include <regexp/src/format_string.h>
 #include <oak/datatypes.h>
+#include <climits>
 
 static std::string trim_right (std::string const& str, std::string const& trimChars = " \t\n")
 {
@@ -140,7 +141,18 @@ namespace command
 	static NSString* hash (NSData* data)
 	{
 		uint8_t digest[CC_SHA1_DIGEST_LENGTH];
-		CC_SHA1(data.bytes, data.length, digest);
+		CC_SHA1_CTX context;
+		CC_SHA1_Init(&context);
+		uint8_t const* bytes = static_cast<uint8_t const*>(data.bytes);
+		NSUInteger remaining = data.length;
+		while(remaining)
+		{
+			CC_LONG const length = static_cast<CC_LONG>(std::min<NSUInteger>(remaining, UINT_MAX));
+			CC_SHA1_Update(&context, bytes, length);
+			bytes += length;
+			remaining -= length;
+		}
+		CC_SHA1_Final(digest, &context);
 
 		NSMutableString* output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
 		for(int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++)
