@@ -34,6 +34,7 @@ NSMenuItem* MBCreateMenuItem (MBMenuItem const& item)
 
 		switch(item.systemMenu)
 		{
+			case MBMenuTypeRegular:  break;
 			case MBMenuTypeServices:   NSApp.servicesMenu                       = submenu; break;
 			case MBMenuTypeFont:       NSFontManager.sharedFontManager.fontMenu = submenu; break;
 			case MBMenuTypeWindows:    NSApp.windowsMenu                        = submenu; break;
