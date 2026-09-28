@@ -132,7 +132,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 
 + (void)initialize
 {
-	[NSApplication.sharedApplication registerServicesMenuSendTypes:@[ NSFilenamesPboardType, NSPasteboardTypeURL ] returnTypes:@[ ]];
+	[NSApplication.sharedApplication registerServicesMenuSendTypes:@[ NSPasteboardTypeFileURL, NSPasteboardTypeURL ] returnTypes:@[ ]];
 
 	[NSUserDefaults.standardUserDefaults registerDefaults:@{
 		kUserDefaultsFoldersOnTopKey: [[[NSUserDefaults alloc] initWithSuiteName:@"com.apple.finder"] objectForKey:@"_FXSortFoldersFirst"] ?: @NO,
@@ -931,7 +931,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 
 - (NSArray<NSURL*>*)URLsFromPasteboard:(NSPasteboard*)pboard
 {
-	return [pboard readObjectsForClasses:@[ [NSURL class] ] options:nil];
+	return [pboard readObjectsForClasses:@[ [NSURL class] ] options:@{ NSPasteboardURLReadingFileURLsOnlyKey: @YES }];
 }
 
 - (void)didChangeFinderTag:(OFBFinderTagsChooser*)finderTagsChooser
@@ -2186,7 +2186,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 
 - (id)validRequestorForSendType:(NSString*)sendType returnType:(NSString*)returnType
 {
-	return returnType == nil && sendType != nil && [@[ NSFilenamesPboardType, NSPasteboardTypeURL ] containsObject:sendType] ? self : nil;
+	return returnType == nil && sendType != nil && [@[ NSPasteboardTypeFileURL, NSPasteboardTypeURL ] containsObject:sendType] ? self : nil;
 }
 
 - (BOOL)writeSelectionToPasteboard:(NSPasteboard*)pboard types:(NSArray*)types
@@ -2210,15 +2210,16 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 		return NSDragOperationNone;
 
 	NSPasteboard* pboard  = info.draggingPasteboard;
-	NSArray* draggedPaths = [pboard propertyListForType:NSFilenamesPboardType];
+	NSArray<NSURL*>* draggedURLs = [self URLsFromPasteboard:pboard];
 
 	dev_t targetDevice   = path::device(dropURL.fileSystemRepresentation);
 	BOOL linkOperation   = (NSApp.currentEvent.modifierFlags & NSEventModifierFlagControl) == NSEventModifierFlagControl;
 	BOOL toggleOperation = (NSApp.currentEvent.modifierFlags & NSEventModifierFlagOption) == NSEventModifierFlagOption;
 
 	// We accept the drop as long as it is valid for at least one of the items
-	for(NSString* draggedPath in draggedPaths)
+	for(NSURL* draggedURL in draggedURLs)
 	{
+		NSString* draggedPath = draggedURL.path;
 		BOOL sameSource = (path::device(draggedPath.fileSystemRepresentation) == targetDevice);
 		NSDragOperation operation = linkOperation ? NSDragOperationLink : ((sameSource != toggleOperation) ? NSDragOperationMove : NSDragOperationCopy);
 
