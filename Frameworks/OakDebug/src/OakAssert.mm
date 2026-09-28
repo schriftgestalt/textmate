@@ -28,7 +28,7 @@ std::string OakStackDump (int linesToSkip)
 	int output[2];
 	pipe(&output[0]);
 
-	pid_t pid = vfork();
+	pid_t pid = fork();
 	if(pid == 0)
 	{
 		close(STDOUT_FILENO); close(STDERR_FILENO);
