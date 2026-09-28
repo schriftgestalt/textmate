@@ -80,11 +80,9 @@
 	}
 }
 
-- (id)accessibilityAttributeValue:(NSString*)attribute
+- (NSArray*)accessibilityChildren
 {
-	if([attribute isEqualToString:NSAccessibilityChildrenAttribute])
-			return @[ self.textField.cell, self.folderTextField.cell, self.closeButton.cell, self.imageView.cell ];
-	else	return [super accessibilityAttributeValue:attribute];
+	return @[ self.textField.cell, self.folderTextField.cell, self.closeButton.cell, self.imageView.cell ];
 }
 @end
 

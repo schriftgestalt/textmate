@@ -399,11 +399,9 @@ static std::vector<bundles::item_ptr> relevant_items_in_scope (scope::context_t 
 	}
 }
 
-- (id)accessibilityAttributeValue:(NSString*)attribute
+- (NSArray*)accessibilityChildren
 {
-	if([attribute isEqualToString:NSAccessibilityChildrenAttribute])
-			return @[ self.textField.cell, self.imageView.cell, self.contextTextField.cell, self.shortcutTextField.cell ];
-	else	return [super accessibilityAttributeValue:attribute];
+	return @[ self.textField.cell, self.imageView.cell, self.contextTextField.cell, self.shortcutTextField.cell ];
 }
 @end
 
