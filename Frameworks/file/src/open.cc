@@ -74,7 +74,6 @@ namespace
 			kStateEstimateLineFeeds,
 			kStateHarmonizeLineFeeds,
 			kStateExecuteTextImportFilter,
-			kStateEstimateFileType,
 			kStateEstimateTabSettings,
 			kStateShowContent,
 			kStateDone
