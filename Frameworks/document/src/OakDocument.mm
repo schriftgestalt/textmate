@@ -655,7 +655,10 @@ static void* kDocumentEditedObserverContext = &kDocumentEditedObserverContext;
 		close(fd);
 
 		if(error)
-			return unlink(temp.c_str()), NO;
+		{
+			unlink(temp.c_str());
+			return NO;
+		}
 
 		auto attr = [self extendedAttributeds];
 

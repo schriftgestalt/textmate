@@ -88,7 +88,10 @@ static bool swap_and_unlink (std::string const& src, std::string const& dst, std
 static std::string create_path (std::string const& path)
 {
 	if(!path::exists(path))
-		return path::make_dir(path::parent(path)), path;
+	{
+		path::make_dir(path::parent(path));
+		return path;
+	}
 	else if(path::device(path) != path::device(path::temp()) && access(path::parent(path).c_str(), W_OK) == 0)
 		return path + "~";
 	return path::temp("atomic_save");

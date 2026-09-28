@@ -42,9 +42,15 @@ namespace network
 	bool check_signature_t::receive_end (std::string& error)
 	{
 		if(_signee == NULL_STR)
-			return (error = "Missing signee."), false;
+		{
+			error = "Missing signee.";
+			return false;
+		}
 		if(_signature == NULL_STR)
-			return (error = "Missing signature."), false;
+		{
+			error = "Missing signature.";
+			return false;
+		}
 
 		bool res = false;
 

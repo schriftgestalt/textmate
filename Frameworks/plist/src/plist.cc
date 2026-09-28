@@ -291,7 +291,7 @@ namespace plist
 	static bool convert_to (std::string const& from, bool& to)               { to = from != "0" ? true : false;         return true; }
 	static bool convert_to (std::string const& from, int32_t& to)            { to = strtol(from.c_str(), nullptr, 0);   return true; }
 	static bool convert_to (std::string const& from, uint64_t& to)           { to = strtoull(from.c_str(), nullptr, 0); return true; }
-	static bool convert_to (std::string const& from, oak::uuid_t& to)        { return oak::uuid_t::is_valid(from) ? (to = from), true : false; }
+	static bool convert_to (std::string const& from, oak::uuid_t& to)        { if(!oak::uuid_t::is_valid(from)) return false; to = from; return true; }
 
 	static bool convert_to (bool from, plist::any_t& to)                       { to = from; return true; }
 	static bool convert_to (int32_t from, plist::any_t& to)                    { to = from; return true; }

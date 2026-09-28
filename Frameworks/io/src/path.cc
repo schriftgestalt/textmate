@@ -489,7 +489,8 @@ namespace path
 		{
 			if(*s1First != *s2First)
 				break;
-			++s1First, ++s2First;
+			++s1First;
+			++s2First;
 		}
 		return std::count(s1.rbegin(), s1First, '/');
 	}
@@ -508,7 +509,8 @@ namespace path
 					return true;
 				else if(*s1First != *s2First)
 					return false;
-				++s1First, ++s2First;
+				++s1First;
+				++s2First;
 			}
 			return s1First == s1Last && s2First != s2Last;
 		});

@@ -199,7 +199,10 @@ static void* kFirstResponderContext = &kFirstResponderContext;
 		NSRange insertionPoint = textView.selectedRanges.lastObject.rangeValue;
 
 		if(lastNewline.location == NSNotFound || lastNewline.location < NSMaxRange(insertionPoint))
-			return [self showHistory:self], YES;
+		{
+			[self showHistory:self];
+			return YES;
+		}
 	}
 	return NO;
 }

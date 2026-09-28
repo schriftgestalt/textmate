@@ -78,7 +78,10 @@ namespace
 	private:
 		static bool parse_char (char const*& it, char const* last, char ch)
 		{
-			return it != last && *it == ch ? (++it, true) : false;
+			if(it == last || *it != ch)
+				return false;
+			++it;
+			return true;
 		}
 
 		struct record_t

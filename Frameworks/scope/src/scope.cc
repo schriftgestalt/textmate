@@ -206,7 +206,10 @@ namespace scope
 
 		auto fromIter = fromScopes.rbegin(), toIter = toScopes.rbegin();
 		while(fromIter != fromScopes.rend() && toIter != toScopes.rend() && *fromIter == *toIter)
-			++fromIter, ++toIter;
+		{
+			++fromIter;
+			++toIter;
+		}
 
 		std::string res = "";
 		for(auto it = fromScopes.begin(); it != fromIter.base(); ++it)

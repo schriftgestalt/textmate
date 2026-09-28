@@ -409,7 +409,10 @@ namespace bundles
 		}
 
 		if(!plist::save(destPath, newPlist, plist::kPlistFormatXML))
-			return os_log_error(OS_LOG_DEFAULT, "Failed to save ‘%{public}s’", destPath.c_str()), false;
+		{
+			os_log_error(OS_LOG_DEFAULT, "Failed to save ‘%{public}s’", destPath.c_str());
+			return false;
+		}
 
 		if(!_local)
 		{
@@ -427,7 +430,10 @@ namespace bundles
 	{
 		std::string const path = _kind == kItemTypeBundle ? path::join(folder, "info.plist") : path_for_kind(folder, name(), _kind);
 		if(!plist::save(path, erase_false_values(plist()), plist::kPlistFormatXML))
-			return os_log_error(OS_LOG_DEFAULT, "Failed to save ‘%{public}s’", path.c_str()), false;
+		{
+			os_log_error(OS_LOG_DEFAULT, "Failed to save ‘%{public}s’", path.c_str());
+			return false;
+		}
 		return true;
 	}
 

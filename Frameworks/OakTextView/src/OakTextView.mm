@@ -2782,7 +2782,10 @@ static void update_menu_key_equivalents (NSMenu* menu, std::multimap<std::string
 	{
 		plist::dictionary_t::const_iterator pair = KeyBindings.find(eventString);
 		if(pair != KeyBindings.end())
-			return [self handleKeyBindingAction:pair->second], YES;
+		{
+			[self handleKeyBindingAction:pair->second];
+			return YES;
+		}
 	}
 
 	return NO;
@@ -3450,11 +3453,20 @@ static void update_menu_key_equivalents (NSMenu* menu, std::multimap<std::string
 - (BOOL)control:(NSControl*)aControl textView:(NSTextView*)aTextView doCommandBySelector:(SEL)aCommand
 {
 	if(aCommand == @selector(insertNewline:) || aCommand == @selector(cancelOperation:))
-		return [self setShowLiveSearch:NO], YES;
+	{
+		[self setShowLiveSearch:NO];
+		return YES;
+	}
 	if(aCommand == @selector(insertTab:))
-		return [self findNext:self], YES;
+	{
+		[self findNext:self];
+		return YES;
+	}
 	if(aCommand == @selector(insertBacktab:))
-		return [self findPrevious:self], YES;
+	{
+		[self findPrevious:self];
+		return YES;
+	}
 	return NO;
 }
 

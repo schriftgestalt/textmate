@@ -189,7 +189,15 @@ namespace command
 
 		int stdinRead, stdinWrite;
 		std::tie(stdinRead, stdinWrite) = io::create_pipe();
-		_input_ranges = _command.input == input::nothing ? (close(stdinWrite), ng::ranges_t()) : _delegate->write_unit_to_fd(stdinWrite, _command.input, _command.input_fallback, _command.input_format, _command.scope_selector, _environment, &_input_was_selection);
+		if(_command.input == input::nothing)
+		{
+			close(stdinWrite);
+			_input_ranges = ng::ranges_t();
+		}
+		else
+		{
+			_input_ranges = _delegate->write_unit_to_fd(stdinWrite, _command.input, _command.input_fallback, _command.input_format, _command.scope_selector, _environment, &_input_was_selection);
+		}
 
 		auto textOutHandler = ^(char const* bytes, size_t len) { _out.insert(_out.end(), bytes, bytes + len); };
 		auto htmlOutHandler = ^(char const* bytes, size_t len) { send_html_data(bytes, len); };
