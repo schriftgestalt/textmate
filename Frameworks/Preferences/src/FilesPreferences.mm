@@ -53,9 +53,9 @@
 	NSPopUpButton* lineEndingsPopUp          = OakCreatePopUpButton();
 
 	MBMenu const items = {
-		{ @"LF (recommended)", .tag = 0 },
-		{ @"CR (Mac Classic)", .tag = 1 },
-		{ @"CRLF (Windows)",   .tag = 2 },
+		MBMenuItem{ @"LF (recommended)" }.withTag(0),
+		MBMenuItem{ @"CR (Mac Classic)" }.withTag(1),
+		MBMenuItem{ @"CRLF (Windows)" }.withTag(2),
 	};
 	MBCreateMenu(items, lineEndingsPopUp.menu);
 

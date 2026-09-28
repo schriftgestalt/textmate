@@ -1923,15 +1923,15 @@ static NSArray* const kObservedKeyPaths = @[ @"arrayController.arrangedObjects.p
 
 	SEL closeSingleTabSelector = tabIndex == _selectedTabIndex ? @selector(performCloseTab:) : @selector(takeTabsToCloseFrom:);
 	MBMenu const items = {
-		{ @"New Tab",                  @selector(takeNewTabIndexFrom:),    .representedObject = newTabAtTab   },
-		{ @"Move Tab to New Window",   @selector(takeTabsToTearOffFrom:),  .representedObject = total > 1 ? clickedTab : [NSIndexSet indexSet] },
+		MBMenuItem{ @"New Tab",                  @selector(takeNewTabIndexFrom:) }.withRepresentedObject(newTabAtTab),
+		MBMenuItem{ @"Move Tab to New Window",   @selector(takeTabsToTearOffFrom:) }.withRepresentedObject(total > 1 ? clickedTab : [NSIndexSet indexSet]),
 		{ /* -------- */ },
-		{ @"Close Tab",                closeSingleTabSelector,                                                                           .representedObject = clickedTab    },
-		{ @"Close Other Tabs",         @selector(takeTabsToCloseFrom:),                                                                  .representedObject = otherTabs     },
-		{ @"Close Tabs to the Right",  @selector(takeTabsToCloseFrom:),                                                                  .representedObject = rightSideTabs },
-		{ @"Close Tabs to the Left",   @selector(takeTabsToCloseFrom:),    .modifierFlags = NSEventModifierFlagOption, .alternate = YES, .representedObject = leftSideTabs  },
+		MBMenuItem{ @"Close Tab",                closeSingleTabSelector }.withRepresentedObject(clickedTab),
+		MBMenuItem{ @"Close Other Tabs",         @selector(takeTabsToCloseFrom:) }.withRepresentedObject(otherTabs),
+		MBMenuItem{ @"Close Tabs to the Right",  @selector(takeTabsToCloseFrom:) }.withRepresentedObject(rightSideTabs),
+		MBMenuItem{ @"Close Tabs to the Left",   @selector(takeTabsToCloseFrom:) }.withModifierFlags(NSEventModifierFlagOption).withAlternate(YES).withRepresentedObject(leftSideTabs),
 		{ /* -------- */ },
-		{ @"Sticky",                   @selector(toggleSticky:),           .representedObject = clickedTab    },
+		MBMenuItem{ @"Sticky",                   @selector(toggleSticky:) }.withRepresentedObject(clickedTab),
 	};
 
 	NSMenu* menu = MBCreateMenu(items);

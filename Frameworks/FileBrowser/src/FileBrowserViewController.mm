@@ -485,7 +485,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 
 	MBMenu const items = {
 		{ @"Open",                    @selector(openSelectedItems:)           },
-		{ openWithTitle,              @selector(openWithMenuAction:), .delegate = _openWithMenuDelegate, .representedObject = openWithAppURL },
+		MBMenuItem{ openWithTitle,              @selector(openWithMenuAction:) }.withDelegate(_openWithMenuDelegate).withRepresentedObject(openWithAppURL),
 		{ /* -------- */ },
 		{ @"Show Original",           @selector(showOriginal:)                },
 		{ @"Show Enclosing Folder",   @selector(showEnclosingFolder:)         },
@@ -504,12 +504,12 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 		{ /* -------- */ .ref = &insertBundleItemsMenuItem },
 		{ /* -------- */ },
 		{ @"Copy",                    @selector(copy:)                                                                            },
-		{ @"Copy as Pathname",        @selector(copyAsPathname:),      @"",  NSEventModifierFlagOption, .tag = kRequiresSelectionTag, .alternate = YES },
+		MBMenuItem{ @"Copy as Pathname",        @selector(copyAsPathname:),      @"",  NSEventModifierFlagOption }.withTag(kRequiresSelectionTag).withAlternate(YES),
 		{ @"Paste",                   @selector(paste:),                      },
 		{ @"Move Items Here",         @selector(pasteNext:),                  },
 		{ @"Create Link to Items",    @selector(createLinkToPasteboardItems:) },
 		{ /* -------- */ },
-		{ @"Finder Tag", .tag = kRequiresSelectionTag, .ref = &finderTagsMenuItem },
+		MBMenuItem{ @"Finder Tag" }.withTag(kRequiresSelectionTag).withRef(&finderTagsMenuItem),
 		{ /* -------- */ },
 		{ @"Undo",                    @selector(undo:) },
 		{ @"Redo",                    @selector(redo:) },

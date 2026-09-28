@@ -134,9 +134,9 @@
 	NSPopUpButton* showCommandOutputPopUp              = OakCreatePopUpButton();
 
 	MBMenu const showCommandOutputMenuItems = {
-		{ @"Below text view",    .tag = 0 },
-		{ @"Right of text view", .tag = 1 },
-		{ @"New window",         .tag = 2 },
+		MBMenuItem{ @"Below text view" }.withTag(0),
+		MBMenuItem{ @"Right of text view" }.withTag(1),
+		MBMenuItem{ @"New window" }.withTag(2),
 	};
 	MBCreateMenu(showCommandOutputMenuItems, showCommandOutputPopUp.menu);
 

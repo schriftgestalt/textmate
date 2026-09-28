@@ -22,6 +22,7 @@ struct MBMenuItem
 	MBMenuItem withRepresentedObject (id value) const          { MBMenuItem res = *this; res.representedObject = value; return res; }
 	MBMenuItem withTarget (id value) const                     { MBMenuItem res = *this; res.target = value; return res; }
 	MBMenuItem withDelegate (id value) const                   { MBMenuItem res = *this; res.delegate = value; return res; }
+	MBMenuItem withRef (NSMenuItem* __strong* value) const      { MBMenuItem res = *this; res.ref = value; return res; }
 	MBMenuItem withSubmenuRef (NSMenu* __strong* value) const  { MBMenuItem res = *this; res.submenuRef = value; return res; }
 	MBMenuItem withSubmenu (MBMenu const& value) const         { MBMenuItem res = *this; res.submenu = value; return res; }
 
