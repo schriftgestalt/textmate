@@ -410,7 +410,7 @@ int main (int argc, char const* argv[])
 	strcpy(addr.sun_path, socket_path());
 	addr.sun_len = SUN_LEN(&addr);
 
-	int rc;
+	int rc = -1;
 	for(size_t i = 0; i < 10; ++i)
 	{
 		rc = connect(fd, (sockaddr*)&addr, sizeof(addr));
