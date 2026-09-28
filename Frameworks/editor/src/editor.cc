@@ -1295,11 +1295,17 @@ namespace ng
 		for(auto const& pair : clips)
 		{
 			text::pos_t pos = _buffer.convert(pair.first);
-			int line        = pos.line;
-			int col         = visual_distance(_buffer, _buffer.begin(line), pair.first, false);
+			size_t line     = pos.line;
+			size_t col      = visual_distance(_buffer, _buffer.begin(line), pair.first, false);
 
-			line = std::clamp(line + deltaY, 0, int(_buffer.lines()-1));
-			col  = std::max(col + deltaX, 0);
+			if(deltaY < 0)
+				line -= std::min(line, static_cast<size_t>(-static_cast<int64_t>(deltaY)));
+			else
+				line += std::min(static_cast<size_t>(deltaY), _buffer.lines() - 1 - line);
+			if(deltaX < 0)
+				col -= std::min(col, static_cast<size_t>(-static_cast<int64_t>(deltaX)));
+			else
+				col += static_cast<size_t>(deltaX);
 			replacements.emplace(visual_advance(_buffer, _buffer.begin(line), col, false), pair.second);
 		}
 		_selections = this->replace(replacements, true);
