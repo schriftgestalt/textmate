@@ -14,7 +14,8 @@
 
 static bool backtrack (char const*& p, char const* bt)
 {
-	return (p = bt), false;
+	p = bt;
+	return false;
 }
 
 static bool parse_ws (char const*& p, char const* pe)
@@ -26,7 +27,10 @@ static bool parse_ws (char const*& p, char const* pe)
 
 static bool parse_char (char const*& p, char const*& pe, char const* ch)
 {
-	return parse_ws(p, pe) && p != pe && strchr(ch, *p) ? (++p, true) : false;
+	if(!parse_ws(p, pe) || p == pe || !strchr(ch, *p))
+		return false;
+	++p;
+	return true;
 }
 
 static bool parse_until (char const*& p, char const*& pe, char const* stopChars, std::string& res)

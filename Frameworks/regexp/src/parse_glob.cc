@@ -110,7 +110,8 @@ namespace
 					;
 				return add_node(new node_t(node_t::kText, std::string(backtrack, it)));
 			}
-			return (it = backtrack), false;
+			it = backtrack;
+			return false;
 		}
 
 		bool parse_brace_expansion ()
@@ -156,7 +157,8 @@ namespace
 
 			_root = oldRoot;
 			_last = oldLast;
-			return (it = backtrack), false;
+			it = backtrack;
+			return false;
 		}
 
 		bool add_node (node_t* node)
@@ -200,7 +202,8 @@ namespace
 			char const* backtrack = it;
 			if(parse_char("\\") && it != last && strchr("\\{,}", *it))
 				return add_node(new node_t(node_t::kText, std::string(1, *it++)));
-			return it = backtrack, false;
+			it = backtrack;
+			return false;
 		}
 	};
 
@@ -268,7 +271,8 @@ namespace
 				}
 			}
 		}
-		return it = backtrack, false;
+		it = backtrack;
+		return false;
 	}
 
 	bool parse_glob_t::parse_optional ()
@@ -290,7 +294,8 @@ namespace
 		char const* backtrack = it;
 		if(parse_char("*") && parse_char("*"))
 			return add_node(new node_t(node_t::kAnyRecursive, parse_char("/") ? "/" : ""));
-		return it = backtrack, false;
+		it = backtrack;
+		return false;
 	}
 
 	bool parse_glob_t::parse_character_class ()
@@ -299,7 +304,8 @@ namespace
 		std::string group;
 		if(parse_char("[") && parse_until("]", group))
 			return add_node(new node_t(node_t::kCharClass, group));
-		return (it = backtrack), false;
+		it = backtrack;
+		return false;
 	}
 
 	bool parse_glob_t::parse_exclude ()
@@ -311,7 +317,8 @@ namespace
 			_last = &_root->_left;
 			return true;
 		}
-		return (it = backtrack), false;
+		it = backtrack;
+		return false;
 	}
 }
 

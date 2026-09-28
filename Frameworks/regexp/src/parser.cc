@@ -123,7 +123,8 @@ bool parse_context_t::parse_variable_simple (nodes_t& nodes)
 		if(parse_chars("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_abcdefghijklmnopqrstuvwxyz", variable))
 			return nodes.push_back((variable_t){ variable }), true;
 	}
-	return it = backtrack, false;
+	it = backtrack;
+	return false;
 }
 
 bool parse_context_t::parse_variable_complex (bool(parse_context_t::*parse_content)(char const* stopChars, nodes_t& nodes), nodes_t& nodes)
@@ -207,7 +208,8 @@ bool parse_context_t::parse_variable_complex (bool(parse_context_t::*parse_conte
 			}
 		}
 	}
-	return it = backtrack, false;
+	it = backtrack;
+	return false;
 }
 
 bool parse_context_t::parse_condition (nodes_t& nodes)
@@ -221,7 +223,8 @@ bool parse_context_t::parse_condition (nodes_t& nodes)
 		if(parse_format_string(":)", res.if_set) && (it[-1] == ')' || (it[-1] == ':' && parse_format_string(")", res.if_not_set) && it[-1] == ')')))
 			return nodes.push_back(res), true;
 	}
-	return it = backtrack, false;
+	it = backtrack;
+	return false;
 }
 
 bool parse_context_t::parse_case_change (nodes_t& nodes)
@@ -239,7 +242,8 @@ bool parse_context_t::parse_case_change (nodes_t& nodes)
 		}
 		return true;
 	}
-	return it = backtrack, false;
+	it = backtrack;
+	return false;
 }
 
 bool parse_context_t::parse_control_code (nodes_t& nodes)
@@ -273,20 +277,28 @@ bool parse_context_t::parse_control_code (nodes_t& nodes)
 			break;
 		}
 	}
-	return it = backtrack, false;
+	it = backtrack;
+	return false;
 }
 
 bool parse_context_t::parse_escape (char const* escapeChars, nodes_t& nodes)
 {
 	char const* backtrack = it;
 	if(parse_char("\\") && parse_char(escapeChars))
-		return text_node(nodes) += it[-1], true;
-	return it = backtrack, false;
+	{
+		text_node(nodes) += it[-1];
+		return true;
+	}
+	it = backtrack;
+	return false;
 }
 
 bool parse_context_t::parse_text (nodes_t& nodes)
 {
-	return it != last ? (text_node(nodes) += *it++, true) : false;
+	if(it == last)
+		return false;
+	text_node(nodes) += *it++;
+	return true;
 }
 
 bool parse_context_t::parse_format_string (char const* stopChars, nodes_t& nodes)
@@ -307,7 +319,10 @@ bool parse_context_t::parse_format_string (char const* stopChars, nodes_t& nodes
 		break;
 	}
 
-	return (it == last && strlen(stopChars) == 0) || parse_char(stopChars) ? true : (it = backtrack, false);
+	if((it == last && strlen(stopChars) == 0) || parse_char(stopChars))
+		return true;
+	it = backtrack;
+	return false;
 }
 
 // ==========================
@@ -357,7 +372,8 @@ bool parse_context_t::parse_placeholder (nodes_t& nodes)
 			return nodes.push_back((placeholder_t){ index }), true;
 		}
 	}
-	return it = backtrack, false;
+	it = backtrack;
+	return false;
 }
 
 bool parse_context_t::parse_code (nodes_t& nodes)
@@ -366,7 +382,8 @@ bool parse_context_t::parse_code (nodes_t& nodes)
 	code_t res;
 	if(parse_char("`") && parse_until("`", res.code))
 		return nodes.push_back(res), true;
-	return it = backtrack, false;
+	it = backtrack;
+	return false;
 }
 
 bool parse_context_t::parse_snippet (char const* stopChars, nodes_t& nodes)
@@ -386,7 +403,10 @@ bool parse_context_t::parse_snippet (char const* stopChars, nodes_t& nodes)
 		break;
 	}
 
-	return (it == last && strlen(stopChars) == 0) || parse_char(stopChars) ? true : (it = backtrack, false);
+	if((it == last && strlen(stopChars) == 0) || parse_char(stopChars))
+		return true;
+	it = backtrack;
+	return false;
 }
 
 // =================
