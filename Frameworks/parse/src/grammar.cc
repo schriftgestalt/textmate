@@ -203,8 +203,9 @@ namespace parse
 		auto it = _grammars.find(scope);
 		if(it != _grammars.end())
 			return it->second;
-		for(auto item : bundles::query(bundles::kFieldGrammarScope, scope, scope::wildcard, bundles::kItemTypeGrammar))
-			return add_grammar(scope, item->plist(), base);
+		auto grammars = bundles::query(bundles::kFieldGrammarScope, scope, scope::wildcard, bundles::kItemTypeGrammar);
+		if(!grammars.empty())
+			return add_grammar(scope, grammars.front()->plist(), base);
 		return rule_ptr();
 	}
 

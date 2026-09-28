@@ -250,11 +250,9 @@ static void* kDocumentEditedObserverContext = &kDocumentEditedObserverContext;
 	if(!_fileType || !_buffer)
 		return;
 
-	for(auto const& item : bundles::query(bundles::kFieldGrammarScope, to_s(_fileType), scope::wildcard, bundles::kItemTypeGrammar))
-	{
-		_buffer->set_grammar(item);
-		break;
-	}
+	auto grammars = bundles::query(bundles::kFieldGrammarScope, to_s(_fileType), scope::wildcard, bundles::kItemTypeGrammar);
+	if(!grammars.empty())
+		_buffer->set_grammar(grammars.front());
 }
 
 - (void)snapshot

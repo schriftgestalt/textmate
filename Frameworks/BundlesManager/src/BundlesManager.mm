@@ -191,9 +191,10 @@ static NSString* SafeBasename (NSString* name)
 	{
 		if(NSString* bundleUUID = [[bundleChooser selectedItem] representedObject])
 		{
-			for(auto item : bundles::query(bundles::kFieldAny, NULL_STR, scope::wildcard, bundles::kItemTypeBundle, to_s(bundleUUID)))
+			auto items = bundles::query(bundles::kFieldAny, NULL_STR, scope::wildcard, bundles::kItemTypeBundle, to_s(bundleUUID));
+			if(!items.empty())
 			{
-				*res = item;
+				*res = items.front();
 				return YES;
 			}
 		}
