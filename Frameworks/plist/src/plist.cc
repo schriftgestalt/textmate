@@ -285,11 +285,11 @@ namespace plist
 	static bool convert_to (int32_t from, std::string& to)                   { to = std::to_string(from);       return true; }
 
 	static bool convert_to (uint64_t from, bool& to)                         { to = from ? true : false;        return true; }
-	static bool convert_to (uint64_t from, int32_t& to)                      { to = from;                       return from <= INT32_MAX; }
+	static bool convert_to (uint64_t from, int32_t& to)                      { if(from > INT32_MAX) return false; to = static_cast<int32_t>(from); return true; }
 	static bool convert_to (uint64_t from, std::string& to)                  { to = std::to_string(from);       return true; }
 
 	static bool convert_to (std::string const& from, bool& to)               { to = from != "0" ? true : false;         return true; }
-	static bool convert_to (std::string const& from, int32_t& to)            { to = strtol(from.c_str(), nullptr, 0);   return true; }
+	static bool convert_to (std::string const& from, int32_t& to)            { long value = strtol(from.c_str(), nullptr, 0); if(value < INT32_MIN || value > INT32_MAX) return false; to = static_cast<int32_t>(value); return true; }
 	static bool convert_to (std::string const& from, uint64_t& to)           { to = strtoull(from.c_str(), nullptr, 0); return true; }
 	static bool convert_to (std::string const& from, oak::uuid_t& to)        { if(!oak::uuid_t::is_valid(from)) return false; to = from; return true; }
 

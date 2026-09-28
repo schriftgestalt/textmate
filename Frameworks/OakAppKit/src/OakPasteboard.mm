@@ -84,7 +84,7 @@ static NSArray* RunSQLStatement (sqlite3* db, char const* query, std::map<std::s
 					}
 					else if([value isKindOfClass:[NSData class]])
 					{
-						sqlite3_bind_blob(stmt, i+1, [value bytes], [value length], SQLITE_STATIC);
+						sqlite3_bind_blob64(stmt, i+1, [value bytes], [value length], SQLITE_STATIC);
 					}
 					else if([value isKindOfClass:[NSNumber class]])
 					{

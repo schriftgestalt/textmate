@@ -703,7 +703,7 @@ static pid_t run_command (dispatch_group_t rootGroup, std::string const& cmd, in
 	[self.client URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
 
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		int len;
+		ssize_t len;
 		char buf[8192];
 		__block BOOL keepRunning = YES;
 		@try {
