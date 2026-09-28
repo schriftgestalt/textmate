@@ -1,4 +1,5 @@
 #import "BundleItemChooser.h"
+#import <oak/TextMateResponderActions.h>
 #import "OakAbbreviations.h"
 #import <OakAppKit/src/OakAppKit.h>
 #import <OakAppKit/src/OakUIConstructionFunctions.h>

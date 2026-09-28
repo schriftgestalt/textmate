@@ -1,4 +1,5 @@
 #import "OakTextView.h"
+#import <oak/TextMateResponderActions.h>
 #import "OakChoiceMenu.h"
 #import "OakDocumentView.h" // addAuxiliaryView:atEdge: signature
 #import "OakCommandRefresh.h"

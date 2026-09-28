@@ -1,4 +1,5 @@
 #import "InstallBundleItems.h"
+#import <oak/TextMateResponderActions.h>
 #import "BundlesManager.h"
 #import <OakAppKit/src/NSAlert Additions.h>
 #import <OakFoundation/src/NSString Additions.h>

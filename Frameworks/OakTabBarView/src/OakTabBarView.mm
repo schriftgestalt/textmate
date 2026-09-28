@@ -1,4 +1,5 @@
 #import "OakTabBarView.h"
+#import <oak/TextMateResponderActions.h>
 #import <OakAppKit/src/NSImage Additions.h>
 #import <OakAppKit/src/OakUIConstructionFunctions.h>
 #import <OakAppKit/src/OakAppKit.h>

@@ -1,4 +1,5 @@
 #import "FileBrowserViewController.h"
+#import <oak/TextMateResponderActions.h>
 #import "FileBrowserView.h"
 #import "FileBrowserOutlineView.h"
 #import "FileBrowserNotifications.h"

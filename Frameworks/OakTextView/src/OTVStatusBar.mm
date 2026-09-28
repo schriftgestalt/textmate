@@ -1,4 +1,5 @@
 #import "OTVStatusBar.h"
+#import <oak/TextMateResponderActions.h>
 #import <OakAppKit/src/OakAppKit.h>
 #import <OakAppKit/src/NSImage Additions.h>
 #import <OakAppKit/src/NSMenuItem Additions.h>

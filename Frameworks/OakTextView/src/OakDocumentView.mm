@@ -1,4 +1,5 @@
 #import "OakDocumentView.h"
+#import <oak/TextMateResponderActions.h>
 #import "GutterView.h"
 #import "OTVStatusBar.h"
 #import <document/src/OakDocument.h>
