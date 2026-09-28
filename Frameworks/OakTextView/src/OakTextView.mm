@@ -2553,7 +2553,8 @@ static NSString* OTVPyrightConfigByDisablingRule (NSString* contents, NSString* 
 
 		case bundles::kItemTypeCommand:
 		{
-			[self recordSelector:@selector(executeCommandWithOptions:) withArgument:ns::to_dictionary(item->plist())];
+			// Macro command names are dispatched by the editor, not Objective-C methods.
+			[self recordSelector:NSSelectorFromString(@"executeCommandWithOptions:") withArgument:ns::to_dictionary(item->plist())];
 
 			auto command = parse_command(item);
 			command.name = name_with_selection(item, self.hasSelection);
@@ -2563,7 +2564,7 @@ static NSString* OTVPyrightConfigByDisablingRule (NSString* contents, NSString* 
 
 		case bundles::kItemTypeMacro:
 		{
-			[self recordSelector:@selector(playMacroWithOptions:) withArgument:ns::to_dictionary(item->plist())];
+			[self recordSelector:NSSelectorFromString(@"playMacroWithOptions:") withArgument:ns::to_dictionary(item->plist())];
 			AUTO_REFRESH;
 			documentView->macro_dispatch(item->plist(), [self variablesForBundleItem:item]);
 		}
@@ -3246,7 +3247,7 @@ static void update_menu_key_equivalents (NSMenu* menu, std::multimap<std::string
 		}
 
 		if(dict[@"action"])
-			[self recordSelector:@selector(findWithOptions:) withArgument:dict];
+			[self recordSelector:NSSelectorFromString(@"findWithOptions:") withArgument:dict];
 	}
 
 	AUTO_REFRESH;
@@ -3699,7 +3700,7 @@ static NSTouchBarItemIdentifier kOTVTouchBarItemIdentifierAddRemoveBookmark  = @
 	std::vector<bundles::item_ptr> const& items = items_for_tab_expansion(documentView, documentView->ranges(), to_s([self scopeAttributes]), &range);
 	if(bundles::item_ptr item = [self showMenuForBundleItems:items])
 	{
-		[self recordSelector:@selector(deleteTabTrigger:) withArgument:[NSString stringWithCxxString:documentView->substr(range.first.index, range.last.index)]];
+		[self recordSelector:NSSelectorFromString(@"deleteTabTrigger:") withArgument:[NSString stringWithCxxString:documentView->substr(range.first.index, range.last.index)]];
 		documentView->delete_tab_trigger(documentView->substr(range.first.index, range.last.index));
 		[self performBundleItem:item];
 	}
@@ -4991,7 +4992,7 @@ static scope::context_t add_modifiers_to_scope (scope::context_t scope, NSUInteg
 }
 
 #define ACTION(NAME)      (void)NAME:(id)sender { [self handleAction:ng::to_action(#NAME ":") forSelector:@selector(NAME:)]; }
-#define ALIAS(NAME, REAL) (void)NAME:(id)sender { [self handleAction:ng::to_action(#REAL ":") forSelector:@selector(REAL:)]; }
+#define ALIAS(NAME, REAL) (void)NAME:(id)sender { [self handleAction:ng::to_action(#REAL ":") forSelector:sel_registerName(#REAL ":")]; }
 
 // =========================
 // = Scroll Action Methods =
