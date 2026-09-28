@@ -4333,8 +4333,8 @@ static char const* kOakMenuItemTitle = "OakMenuItemTitle";
 
 + (NSArray*)dropTypes
 {
-	return @[ NSColorPboardType, NSFilenamesPboardType,
-		@"WebURLsWithTitlesPboardType", (NSString*)kUTTypeURL, @"public.url-name", NSURLPboardType,
+	return @[ NSPasteboardTypeColor, NSFilenamesPboardType,
+		@"WebURLsWithTitlesPboardType", NSPasteboardTypeURL, @"public.url-name",
 		NSPasteboardTypeString ];
 }
 
