@@ -207,7 +207,7 @@ static void* kFirstResponderContext = &kFirstResponderContext;
 	return NO;
 }
 
-- (void)textStorageDidProcessEditing:(NSNotification*)aNotification
+- (void)textStorage:(NSTextStorage*)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
 	[self addStylesToFieldEditor];
 }
