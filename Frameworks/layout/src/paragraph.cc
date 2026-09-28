@@ -163,6 +163,7 @@ namespace ng
 			scope::scope_t scope = _type == kNodeTypeSoftBreak ? buffer.scope(bufferOffset).left : buffer.scope(bufferOffset).right;
 			switch(_type)
 			{
+				case kNodeTypeText:        break; // Handled by the enclosing condition.
 				case kNodeTypeNewline:     break;
 				case kNodeTypeUnprintable: scope.push_scope("deco.unprintable");   break;
 				case kNodeTypeFolding:     scope.push_scope("deco.folding");       break;
