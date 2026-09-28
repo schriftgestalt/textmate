@@ -89,7 +89,7 @@ BOOL HasDocumentWindow (NSArray* windows)
 	return NO;
 }
 
-@interface AppController () <OakUserDefaultsObserver>
+@interface AppController () <OakUserDefaultsObserver, NSMenuItemValidation>
 @property (nonatomic) BOOL didFinishLaunching;
 @property (nonatomic) BOOL keyWindowHasBackAndForwardActions;
 @end

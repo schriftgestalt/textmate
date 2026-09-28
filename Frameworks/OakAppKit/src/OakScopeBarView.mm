@@ -18,7 +18,7 @@ static NSButton* OakCreateScopeButton (NSString* label, NSUInteger tag, SEL acti
 	return res;
 }
 
-@interface OakScopeBarViewController ()
+@interface OakScopeBarViewController () <NSMenuItemValidation>
 @property (nonatomic) NSStackView* stackView;
 @end
 

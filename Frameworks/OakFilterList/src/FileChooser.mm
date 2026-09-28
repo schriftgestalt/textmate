@@ -220,7 +220,7 @@ static NSDictionary* globs_for_path (std::string const& path)
 	return res;
 }
 
-@interface FileChooser ()
+@interface FileChooser () <NSMenuItemValidation>
 {
 	scm::info_ptr                     _scmInfo;
 	NSMutableArray<FileChooserItem*>* _records;

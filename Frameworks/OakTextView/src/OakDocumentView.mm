@@ -312,7 +312,7 @@ static NSString* OTVPlistScopePath (NSString* content, NSUInteger caretLine, BOO
 }
 @end
 
-@interface OakDocumentView () <NSAccessibilityGroup, GutterViewDelegate, GutterViewColumnDataSource, GutterViewColumnDelegate, OTVStatusBarDelegate>
+@interface OakDocumentView () <NSAccessibilityGroup, NSFontChanging, NSMenuItemValidation, GutterViewDelegate, GutterViewColumnDataSource, GutterViewColumnDelegate, OTVStatusBarDelegate>
 {
 	GutterView* gutterView;
 	NSMutableDictionary* gutterImages;

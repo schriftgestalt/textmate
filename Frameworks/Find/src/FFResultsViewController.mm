@@ -20,7 +20,7 @@ static FFResultNode* PreviousNode (FFResultNode* node)
 	return index > 0 ? node.parent.children[index - 1] : nil;
 }
 
-@interface FFResultsViewController () <NSOutlineViewDataSource, NSOutlineViewDelegate>
+@interface FFResultsViewController () <NSOutlineViewDataSource, NSOutlineViewDelegate, NSMenuItemValidation>
 {
 	NSScrollView*  _scrollView;
 	NSOutlineView* _outlineView;

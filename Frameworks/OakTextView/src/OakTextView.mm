@@ -467,7 +467,7 @@ private:
 	ng::layout_t* _layout;
 };
 
-@interface OakTextView () <NSTextInputClient, NSDraggingSource, NSIgnoreMisspelledWords, NSChangeSpelling, NSTextFieldDelegate, NSTouchBarDelegate, NSAccessibilityCustomRotorItemSearchDelegate, OakUserDefaultsObserver>
+@interface OakTextView () <NSTextInputClient, NSDraggingSource, NSIgnoreMisspelledWords, NSChangeSpelling, NSTextFieldDelegate, NSTouchBarDelegate, NSAccessibilityCustomRotorItemSearchDelegate, OakUserDefaultsObserver, NSMenuItemValidation>
 {
 	std::shared_ptr<document_view_t> documentView;
 	ng::callback_t* callback;

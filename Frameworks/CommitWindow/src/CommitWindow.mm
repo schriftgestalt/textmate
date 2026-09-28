@@ -82,7 +82,7 @@ static CGFloat const kOakCommitWindowTableViewHeight = 190;
 
 static void* kOakCommitWindowIncludeItemObserverContext = &kOakCommitWindowIncludeItemObserverContext;
 
-@interface OakCommitWindow : NSWindowController <NSWindowDelegate, NSTableViewDelegate, NSMenuDelegate, OakTextViewDelegate>
+@interface OakCommitWindow : NSWindowController <NSWindowDelegate, NSTableViewDelegate, NSMenuDelegate, NSMenuItemValidation, OakTextViewDelegate>
 {
 	id _eventMonitor;
 }

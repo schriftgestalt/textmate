@@ -407,7 +407,7 @@ static std::vector<bundles::item_ptr> relevant_items_in_scope (scope::context_t 
 }
 @end
 
-@interface BundleItemChooser () <NSToolbarDelegate>
+@interface BundleItemChooser () <NSToolbarDelegate, NSMenuItemValidation>
 {
 	NSArray<ActionItem*>* _unfilteredItems;
 }

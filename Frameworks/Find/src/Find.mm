@@ -76,7 +76,7 @@ static NSButton* OakCreateHistoryButton (NSString* toolTip)
 	return res;
 }
 
-@interface Find () <OakFindServerProtocol, OakUserDefaultsObserver, NSWindowDelegate, NSMenuDelegate, NSEditor>
+@interface Find () <OakFindServerProtocol, OakUserDefaultsObserver, NSWindowDelegate, NSMenuDelegate, NSMenuItemValidation, NSEditor>
 {
 	NSObjectController*        _objectController;
 

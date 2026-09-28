@@ -84,7 +84,7 @@ static NSMutableIndexSet* MutableLongestCommonSubsequence (NSArray* lhs, NSArray
 	return res;
 }
 
-@interface FileBrowserViewController () <NSMenuDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSTextFieldDelegate, QLPreviewPanelDataSource, OakUserDefaultsObserver>
+@interface FileBrowserViewController () <NSMenuDelegate, NSMenuItemValidation, NSOutlineViewDataSource, NSOutlineViewDelegate, NSTextFieldDelegate, QLPreviewPanelDataSource, OakUserDefaultsObserver>
 {
 	NSUndoManager* _fileBrowserUndoManager;
 	NSArray<FileItem*>* _previewItems;
